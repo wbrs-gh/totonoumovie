@@ -1,0 +1,4 @@
+#!/bin/bash
+# totonoumovie 起動用コマンド（このファイルへのリンクを PATH に置く）
+DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+exec python3 "$DIR/totonoumovie.py" "$@"

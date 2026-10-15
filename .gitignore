@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+__pycache__/
+*.pyc
+
+# 他社の配布物・個人用（リポジトリに入れない）
+_docs/TotonouMovie/
+_docs/元マニュアル/
+_docs/vedit_original/
+tools/
+
+# データファイルの書き換え前の控え
+*.bak
