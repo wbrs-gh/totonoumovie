@@ -114,6 +114,7 @@ class Run:
         self.updated = time.time()
         self.proc = None
         self.error = None
+        self.system_extra = ""   # このアプリが前提文に足す決まり（作業フォルダなど）
 
     def add(self, role, text):
         text = (text or "").strip()
@@ -135,6 +136,7 @@ class Run:
         d = self.to_dict()
         d["cwd"] = self.cwd
         d["turns"] = self.turns
+        d["systemExtra"] = self.system_extra
         with open(os.path.join(RUNS_DIR, self.id + ".json"), "w", encoding="utf-8") as f:
             json.dump(d, f, ensure_ascii=False)
 
@@ -154,6 +156,7 @@ class Run:
         r.created = d.get("created") or time.time()
         r.updated = d.get("updated") or r.created
         r.error = d.get("error")
+        r.system_extra = d.get("systemExtra") or ""
         return r
 
 
@@ -188,8 +191,9 @@ class AgentManager:
                     pass
 
     # ---- 開始・再開 ----
-    def start(self, kind, title, cwd, prompt, project=None):
+    def start(self, kind, title, cwd, prompt, project=None, system_extra=""):
         r = Run(kind, title, cwd, project)
+        r.system_extra = system_extra
         with self.lock:
             self.runs[r.id] = r
         self._launch(r, prompt, resume=False)
@@ -235,7 +239,7 @@ class AgentManager:
             return
         prompts = load_prompts()
         cmd = [exe, "-p", message, "--output-format", "stream-json", "--verbose",
-               "--append-system-prompt", prompts.get("system", "")]
+               "--append-system-prompt", prompts.get("system", "") + (r.system_extra or "")]
         tools = prompts.get("allowedTools") or []
         if tools:
             cmd += ["--allowedTools", ",".join(tools)]

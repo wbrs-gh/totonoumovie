@@ -207,7 +207,8 @@ footer { text-align: center; color: var(--muted); font-size: 13px; padding: 20px
         <pre><code>echo 'export PATH="$HOME/totonoumovie:$PATH"' &gt;&gt; ~/.zshrc
 source ~/.zshrc</code></pre></li>
       <li><b>起動して確かめる</b>
-        <pre><code>totonoumovie</code></pre>
+        <pre><code>mkdir -p ~/Movies/totonou &amp;&amp; cd ~/Movies/totonou
+totonoumovie</code></pre>
         ブラウザが開き、上に <b>「TotonouMovie 2.2.0 を使います」</b>と緑の帯が出れば完了です。</li>
     </ol>
   </div>
@@ -229,20 +230,28 @@ winget install --id=Python.Python.3.12 -e</code></pre>
 [Environment]::SetEnvironmentVariable("Path", "$p;$HOME\totonoumovie", "User")</code></pre>
         終わったら PowerShell を閉じて開き直します。</li>
       <li><b>起動して確かめる</b>
-        <pre><code>totonoumovie</code></pre>
+        <pre><code>mkdir "$HOME\Videos\totonou" -Force; cd "$HOME\Videos\totonou"
+totonoumovie</code></pre>
         ブラウザが開き、上に <b>「TotonouMovie 2.2.0 を使います」</b>と緑の帯が出れば完了です。</li>
     </ol>
   </div>
 
   <div class="caution"><b>赤い帯で「TotonouMovie プラグインが見つかりません」と出たとき</b>：TotonouMovie の導入（配布元ガイドの手順4「プラグインを入れる」）が済んでいません。済ませてから totonoumovie を開き直してください。</div>
-  <div class="note">作業フォルダ（動画のプロジェクトが入る場所）は TotonouMovie の設定と同じです（Mac は <code>~/Movies/totonou</code>、Windows は <code>C:\Users\あなたの名前\Videos\totonou</code>）。<b>Dropbox・Google ドライブ・OneDrive・iCloud などの同期フォルダの外</b>に置いてください。</div>
+  <div class="note"><b>作業フォルダ＝totonoumovie を起動したフォルダ</b>です。動画のプロジェクトはそのフォルダの中に作られ、一覧にも出ます。おすすめは Mac なら <code>~/Movies/totonou</code>、Windows なら <code>C:\Users\あなたの名前\Videos\totonou</code> です。<b>Dropbox・Google ドライブ・OneDrive・iCloud などの同期フォルダの中では起動しないでください</b>（書き出し中に同期とぶつかって止まることがあります。その場合は画面に赤い帯で知らせます）。</div>
 </section>
 
 <!-- ================================================================ -->
 <section id="start">
   <h2>4. 起動と終了</h2>
   <ul>
-    <li><b>起動</b>：ターミナル（Windows は PowerShell）で <code>totonoumovie</code> と入れて Enter。ブラウザで編集画面が開きます。</li>
+    <li><b>起動</b>：ターミナル（Windows は PowerShell）で、作業フォルダに移動してから <code>totonoumovie</code> と入れて Enter。ブラウザで編集画面が開きます。
+      <pre class="os-mac"><code>mkdir -p ~/Movies/totonou
+cd ~/Movies/totonou
+totonoumovie</code></pre>
+      <pre class="os-win"><code>mkdir "$HOME\Videos\totonou" -Force
+cd "$HOME\Videos\totonou"
+totonoumovie</code></pre>
+      移動せずに <code>totonoumovie ~/Movies/totonou</code> のようにフォルダを付けて起動してもかまいません。プロジェクトのフォルダの中で起動すると、そのプロジェクトがすぐ開けます。</li>
     <li><b>終了</b>：起動したターミナルで <code>Ctrl</code>＋<code>C</code>。ブラウザのタブは閉じてかまいません（編集は自動で保存されています）。</li>
     <li>ブラウザを閉じてしまったときは、ターミナルに出ている <code>http://127.0.0.1:8780/</code> を開けば戻れます。</li>
     <li>AI の作業はアプリの裏で続きます。ただし<b>ターミナルを閉じると AI の作業も止まる</b>ので、作業中は開いたままにしておきます。</li>

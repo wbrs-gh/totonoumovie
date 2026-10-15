@@ -147,12 +147,23 @@ def probe_cached(full):
     return PROBE_CACHE[key]
 
 
+def cloud_sync_folder(path):
+    """Dropbox・iCloud・Google ドライブ・OneDrive などの同期フォルダの中か"""
+    p = os.path.realpath(path).replace("\\", "/")
+    keys = ("/Dropbox", "/Library/CloudStorage/", "/Library/Mobile Documents/", "/OneDrive", "/Google Drive", "/GoogleDrive")
+    return any(k in p for k in keys)
+
+
 def list_projects():
     ws = workspace()
     out = []
     if not os.path.isdir(ws):
         return out
-    for name in sorted(os.listdir(ws)):
+    names = sorted(os.listdir(ws))
+    # 起動したフォルダそのものがプロジェクトなら、それも一覧に出す
+    if os.path.exists(os.path.join(ws, "src", "project-config.json")):
+        names = [ws] + names
+    for name in names:
         P = os.path.join(ws, name)
         cfgp = os.path.join(P, "src", "project-config.json")
         if not os.path.exists(cfgp):
@@ -309,11 +320,11 @@ def waveform(src, per_sec=50):
 def engine_job(P, kind, title, steps, on_done=None):
     root = plugin_root()
     real = []
-    for label, step in steps:
+    for entry in steps:
+        label, step = entry[0], entry[1]
         if isinstance(step, tuple) and step and step[0] == "E":
-            real.append((label, pluginmod.engine_cmd(root, step[1], *step[2:])))
-        else:
-            real.append((label, step))
+            step = pluginmod.engine_cmd(root, step[1], *step[2:])
+        real.append((label, step) + tuple(entry[2:]))
     return JOBS.start(P, kind, title, real, env=pluginmod.engine_env(root), cwd=P, on_done=on_done)
 
 
@@ -371,17 +382,19 @@ def start_action(P, action, body):
                       ("BGM を重ねる", ("E", "mix_bgm.py", "--project", P, "--input", voice, "--output", final))]
         if body.get("verify", True):
             vargs = ["--project", P, "--video", final] + (["--voice", voice] if use_bgm else [])
-            steps.append(("自動検査（verify_render）", ("E", "verify_render.py", *vargs)))
+            steps.append(("自動検査（verify_render）", ("E", "verify_render.py", *vargs), {1}))
 
         def done(job):
             job.result["video"] = os.path.relpath(final, P) if os.path.exists(final) else None
-            if job.status == "error" and job.result.get("exitCode") == 2 and "verify" in (job.log[-1] if job.log else ""):
-                job.result["note"] = "検査で問題が見つかりました（ログを確認してください）"
+            if job.status == "error" and "verify_render" in (job.result.get("error") or ""):
+                job.result["note"] = "書き出しはできましたが、検査で問題が見つかりました（ログを確認してください）"
+            elif job.result.get("warnings"):
+                job.result["note"] = "書き出しました。検査で確認してほしい点があります（ログを確認してください）"
         return engine_job(P, "render", "書き出し", steps, done)
     if action == "qa":
         return engine_job(P, "qa", "検査（qa_static・lint）",
-                          [("字幕の点検（lint）", ("E", "lint_telopdata.py", "--project", P)),
-                           ("書き出し前の検査（qa_static）", ("E", "qa_static.py", "--project", P))])
+                          [("字幕の点検（lint）", ("E", "lint_telopdata.py", "--project", P), {1}),
+                           ("書き出し前の検査（qa_static）", ("E", "qa_static.py", "--project", P), {1})])
     if action == "contrast":
         return engine_job(P, "contrast", "字幕の読みやすさ補正",
                           [("字幕の読みやすさを補正", ("E", "check_caption_contrast.py", "--project", P, "--apply"))])
@@ -561,7 +574,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_file(f)
             if u.path == "/api/status":
                 st = settings()
-                d = {"workspace": workspace(), "settingsFileExists": st.get("_settingsFileExists"),
+                d = {"workspace": workspace(), "cloudSync": cloud_sync_folder(workspace()), "settingsFileExists": st.get("_settingsFileExists"),
                      "reviewerName": st.get("reviewerName"), "claude": agentmod.claude_bin()}
                 try:
                     root = plugin_root()
@@ -765,7 +778,11 @@ class Handler(BaseHTTPRequestHandler):
         if b.get("dryRun"):
             return {"prompt": build}
         os.makedirs(workspace(), exist_ok=True)
-        r = AGENTS.start(kind, title, workspace(), prompt, project=P)
+        ws = workspace()
+        system_extra = (f"\n\n## 作業フォルダ（このアプリの決まり）\n- 作業フォルダは {ws} です。新しいプロジェクトは、"
+                        f"init_project.py に --output \"{ws}/<プロジェクト名>\" を付けて、必ずこのフォルダの中に作ってください"
+                        "（TotonouMovie の設定 workspaceDir ではなく、こちらを使う）。")
+        r = AGENTS.start(kind, title, ws, prompt, project=P, system_extra=system_extra)
         return {"run": {k: v for k, v in r.to_dict().items() if k != "events"}}
 
     def run_cut_answer(self, b):
@@ -801,12 +818,13 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     ap = argparse.ArgumentParser(description="TotonouMovie の動画を作る・直すブラウザ編集アプリ")
-    ap.add_argument("--workspace", default=None, help="プロジェクトのある作業フォルダ（既定は TotonouMovie の設定）")
+    ap.add_argument("folder", nargs="?", default=None, help="作業フォルダ（省略時は起動したフォルダ）")
+    ap.add_argument("--workspace", default=None, help="作業フォルダ（folder と同じ。互換のため残す）")
     ap.add_argument("--port", type=int, default=8780)
     ap.add_argument("--no-open", action="store_true", help="ブラウザを自動で開かない")
     args = ap.parse_args()
-    if args.workspace:
-        STATE["workspace_override"] = os.path.abspath(os.path.expanduser(args.workspace))
+    # 作業フォルダは「起動したフォルダ」（引数で指定もできる）。プロジェクトはこの中に作る
+    STATE["workspace_override"] = os.path.abspath(os.path.expanduser(args.folder or args.workspace or os.getcwd()))
     os.makedirs(CACHE_DIR, exist_ok=True)
     try:
         root = plugin_root()
@@ -814,6 +832,8 @@ def main():
     except pluginmod.PluginNotFound as e:
         print("⚠ " + str(e))
     print(f"作業フォルダ: {workspace()}")
+    if cloud_sync_folder(workspace()):
+        print("⚠ 作業フォルダがクラウド同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります")
     port = args.port
     for _ in range(20):
         try:

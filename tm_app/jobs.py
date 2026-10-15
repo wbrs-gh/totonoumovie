@@ -46,7 +46,7 @@ class Jobs:
         self.lock = threading.Lock()
 
     def start(self, project, kind, title, steps, env=None, cwd=None, on_done=None):
-        """steps: [(説明, コマンドのリスト or 関数(job)->None)] を順に実行する"""
+        """steps: [(説明, コマンドのリスト or 関数(job)->None[, 警告として続ける終了コードの集合])] を順に実行する"""
         job = Job(project, kind, title)
         with self.lock:
             self.jobs[job.id] = job
@@ -56,7 +56,9 @@ class Jobs:
     def _run(self, job, steps, env, cwd, on_done):
         job.status = "running"
         try:
-            for label, step in steps:
+            for entry in steps:
+                label, step = entry[0], entry[1]
+                warn_codes = entry[2] if len(entry) > 2 else ()
                 if job.cancel_flag:
                     job.status = "canceled"
                     break
@@ -73,6 +75,11 @@ class Jobs:
                     job.add_log(line)
                 code = job.proc.wait()
                 job.result.setdefault("outputs", []).append("".join(out)[-20000:])
+                if code in warn_codes and not job.cancel_flag:
+                    # 検査の「警告だけ」（終了コード 1 など）は止めずに続け、結果に残す
+                    job.result.setdefault("warnings", []).append(label)
+                    job.add_log(f"⚠ 「{label}」で警告があります（続けます）")
+                    continue
                 if code != 0 and not job.cancel_flag:
                     job.status = "error"
                     job.result["error"] = f"「{label}」で止まりました（終了コード {code}）"

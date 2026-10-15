@@ -20,6 +20,7 @@ window.renderHome = async function () {
     notes.push(`<div class="notice good">TotonouMovie ${esc(st.plugin.version || "")} を使います <span class="muted small">${esc(st.plugin.root)}</span></div>`);
   }
   if (!st.claude) notes.push(`<div class="notice bad">claude コマンドが見つかりません。「AIで作る」には Claude Code が必要です。</div>`);
+  if (st.cloudSync) notes.push(`<div class="notice bad">作業フォルダが Dropbox・iCloud などの同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります。同期フォルダの外（例：~/Movies/totonou）で <code>totonoumovie</code> を起動してください。</div>`);
   if (st.plugin && !st.settingsFileExists) notes.push(`<div class="notice">TotonouMovie の初期設定がまだのようです。Claude Code で「TotonouMovie のセットアップをして」と話しかけてください（または「AIで作る」の最初に AI が案内します）。</div>`);
   $("#statusBox").innerHTML = notes.join("");
   $("#wsPath").textContent = "作業フォルダ: " + (st.workspace || "");
@@ -271,7 +272,7 @@ function watchJob(job, done) {
 function renderJobBar() {
   $("#jobBar").innerHTML = [...watching.values()].map(({ job }) => `
     <div class="jobcard" data-id="${job.id}">
-      <div><b>${job.status === "done" ? "✅" : job.status === "error" ? "⚠" : "⏳"} ${esc(job.title)}</b>
+      <div><b>${job.status === "done" ? (job.result?.warnings ? "🟡" : "✅") : job.status === "error" ? "⚠" : "⏳"} ${esc(job.title)}</b>
       <button class="small" data-log="${job.id}">ログ</button>${job.status === "running" ? `<button class="small danger" data-cancel="${job.id}">中止</button>` : ""}</div>
       <div class="last">${esc(job.result?.error || (job.log || []).slice(-1)[0] || "")}</div></div>`).join("");
   $$("#jobBar [data-log]").forEach((b) => b.onclick = () => showJobLog(b.dataset.log));
@@ -292,6 +293,8 @@ function afterJob(job) {
     openModal(`<h2>${job.status === "done" ? "✅ 書き出しました" : "⚠ 書き出しましたが、検査で指摘があります"}</h2>
       <video src="${enc(job.result.video)}&v=${Date.now()}" controls></video>
       <div class="small muted">${esc(job.result.video)}</div>
+      ${job.result.note ? `<div class="notice small">${esc(job.result.note)}</div>` : ""}
+      ${job.result.warnings ? `<pre class="log">${esc((job.log || []).slice(-30).join("\n"))}</pre>` : ""}
       ${job.status !== "done" ? `<pre class="log">${esc((job.log || []).slice(-40).join("\n"))}</pre>` : ""}
       <div class="btnrow"><button id="rvReveal">Finder で表示</button><button onclick="closeModal()">閉じる</button></div>`);
     $("#rvReveal").onclick = () => api("/api/reveal", { p: S.P, path: job.result.video });
