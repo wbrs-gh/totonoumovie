@@ -1,0 +1,234 @@
+{
+ "speaker": 14,
+ "label": "Mac への入れかた",
+ "scenes": [
+  {
+   "type": "title",
+   "title": "Mac に入れる",
+   "sub": "コピーして、貼って、Enter。これだけです",
+   "image": "../img/hero.jpg",
+   "kicker": "totonoumovie 使い方動画 ・ 約4分",
+   "say": "このビデオでは、マックに TotonouMovie と totonoumovie を入れる手順を、最初から最後まで説明します。コマンドは、マニュアルのページから、コピーボタンで写せます。"
+  },
+  {
+   "type": "card",
+   "title": "全体の流れ",
+   "points": [
+    "道具を入れる（1回だけ）",
+    "Claude Code のターミナル版を入れる",
+    "TotonouMovie を入れて、セットアップ",
+    "totonoumovie を入れて、起動する"
+   ],
+   "say": "流れは4つです。道具を入れて、クロードコードを入れて、ととのうムービーのプラグインを入れて、最後に画面のアプリを入れます。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 1 ターミナルを開く",
+   "lines": [
+    [
+     "out",
+     "⌘ + スペース →「ターミナル」と入力 → Enter"
+    ],
+    [
+     "cmd",
+     "brew -v"
+    ],
+    [
+     "out",
+     "Homebrew 4.4.2"
+    ]
+   ],
+   "say": "コマンドとスペースを押して、ターミナルと入力し、エンターで開きます。まず、ブルー ハイフン ブイ と打って、ホームブルーが入っているかを確かめます。バージョンが出れば大丈夫です。"
+  },
+  {
+   "type": "card",
+   "title": "「command not found」と出たら",
+   "points": [
+    "マニュアルの1行で Homebrew を入れる",
+    "パスワードを聞かれたら入力して Enter（文字は見えません）",
+    "最後に出る「Next steps」の2行も実行して、ターミナルを開き直す"
+   ],
+   "say": "コマンド ノット ファウンド と出たら、マニュアルにある1行で、ホームブルーを入れます。最後に、ネクストステップスとして2行が出たら、それも実行して、ターミナルを開き直します。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 2 道具をまとめて入れる",
+   "lines": [
+    [
+     "cmd",
+     "brew install uv ffmpeg node gh python"
+    ],
+    [
+     "out",
+     "==> Downloading ..."
+    ],
+    [
+     "out",
+     "==> Pouring ffmpeg--7.1.arm64_sequoia.bottle.tar.gz"
+    ],
+    [
+     "out",
+     "✔ Successfully installed uv ffmpeg node gh python"
+    ]
+   ],
+   "say": "次に、動画の処理に使う道具を、この1行でまとめて入れます。数分かかります。最後に、パーセントの記号が戻れば完了です。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 3 Claude Code を入れる",
+   "lines": [
+    [
+     "cmd",
+     "claude --version"
+    ],
+    [
+     "out",
+     "zsh: command not found: claude"
+    ],
+    [
+     "cmd",
+     "curl -fsSL https://claude.ai/install.sh | bash"
+    ],
+    [
+     "out",
+     "✔ Claude Code successfully installed!"
+    ]
+   ],
+   "say": "クロードコードのターミナル版が入っているかを確かめます。入っていなければ、この1行で入れます。終わったら、ターミナルを開き直します。"
+  },
+  {
+   "type": "card",
+   "title": "STEP 4 TotonouMovie のフォルダを置く",
+   "points": [
+    "zip をダブルクリックして展開",
+    "Finder で ⌘＋Shift＋H → ホームフォルダへ移す",
+    "中に README.md と plugins が見えれば正解",
+    "このフォルダは、消したり動かしたりしない"
+   ],
+   "say": "配布されたジップファイルを展開して、できたフォルダを、ホームフォルダに移します。このフォルダは、入れたあとも、消したり動かしたりしないでください。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 5 プラグインを入れる",
+   "lines": [
+    [
+     "cmd",
+     "claude plugin marketplace add ~/TotonouMovie"
+    ],
+    [
+     "out",
+     "✔ Successfully added marketplace: totonou"
+    ],
+    [
+     "cmd",
+     "claude plugin install totonou-movie@totonou"
+    ],
+    [
+     "out",
+     "✔ Successfully installed plugin: totonou-movie@totonou"
+    ]
+   ],
+   "say": "ターミナルに、この2行を、1行ずつ送ります。サクセスフリーと出れば成功です。"
+  },
+  {
+   "type": "card",
+   "title": "STEP 6 セットアップ（Claude Code に話しかける）",
+   "points": [
+    "Claude Code を開いて「TotonouMovie のセットアップをして」",
+    "作業フォルダはそのまま、名前を答える",
+    "コマンドの許可は「Yes」",
+    "最後に PASS が出れば完了"
+   ],
+   "say": "クロードコードを開いて、ととのうムービーのセットアップをして、と話しかけます。聞かれたことに答えていけば、最後にパスと出て完了です。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 7 totonoumovie を入れる",
+   "lines": [
+    [
+     "cmd",
+     "gh auth login"
+    ],
+    [
+     "out",
+     "✓ Logged in as your-account"
+    ],
+    [
+     "cmd",
+     "gh repo clone wbrs-gh/totonoumovie ~/totonoumovie"
+    ],
+    [
+     "out",
+     "Cloning into '/Users/you/totonoumovie'..."
+    ],
+    [
+     "cmd",
+     "echo 'export PATH=\"$HOME/totonoumovie:$PATH\"' >> ~/.zshrc"
+    ]
+   ],
+   "say": "次は、画面のアプリです。ギットハブにログインして、ととのうムービーを入れ、どこからでも起動できるように設定します。招待メールの、アクセプトを押しておくのを忘れずに。"
+  },
+  {
+   "type": "terminal",
+   "os": "mac",
+   "step": "STEP 8 起動する",
+   "lines": [
+    [
+     "cmd",
+     "mkdir -p ~/Movies/totonou && cd ~/Movies/totonou"
+    ],
+    [
+     "cmd",
+     "totonoumovie"
+    ],
+    [
+     "out",
+     "totonoumovie を起動しました → http://127.0.0.1:8780/"
+    ]
+   ],
+   "say": "作業フォルダに移動して、ととのうムービー、と打てば起動します。起動したフォルダが、作業フォルダになります。"
+  },
+  {
+   "type": "shot",
+   "image": "../img/app-home.png",
+   "cam": [
+    [
+     0,
+     0,
+     1,
+     1
+    ],
+    [
+     0.12,
+     0,
+     0.76,
+     0.4
+    ]
+   ],
+   "hl": [
+    [
+     0.177,
+     0.06,
+     0.645,
+     0.045
+    ]
+   ],
+   "hlLabel": [
+    "この緑の帯が出れば成功"
+   ],
+   "step": "完了",
+   "say": "ブラウザが開いて、ととのうムービー 2.2.0 を使います、と緑の帯が出れば、準備は完了です。"
+  },
+  {
+   "type": "end",
+   "title": "おつかれさまでした",
+   "sub": "次は「はじめての1本」を作ってみましょう",
+   "credit": "ナレーション VOICEVOX:冥鳴ひまり"
+  }
+ ]
+}

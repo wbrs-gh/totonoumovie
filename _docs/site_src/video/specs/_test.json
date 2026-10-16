@@ -1,0 +1,6 @@
+{"speaker":14,"label":"テスト","scenes":[
+ {"type":"title","title":"はじめての1本","sub":"動画を渡して、完成まで","say":"このビデオでは、はじめての1本を作る流れを説明します。"},
+ {"type":"terminal","os":"mac","lines":[["cmd","brew install gh python"],["out","==> Pouring gh--2.62.0.arm64_sonoma.bottle.tar.gz"],["out","✔ Successfully installed"]],"say":"ターミナルにこの1行を貼り付けて、エンターを押します。","step":"STEP 1 道具を入れる"},
+ {"type":"shot","image":"../img/02_editor.png","cam":[[0,0,1,1],[0,0,0.32,0.6]],"hl":[[0.005,0.12,0.2,0.52]],"hlLabel":["字幕の一覧"],"cursor":[[0.5,0.5],[0.1,0.3]],"click":[0.6],"say":"左の一覧で、字幕の文字をそのまま書き換えられます。直した内容は自動で保存されます。","step":"STEP 2 字幕を直す"},
+ {"type":"end","title":"おつかれさまでした","sub":"次は、カットの承認です","credit":"ナレーション VOICEVOX:冥鳴ひまり"}
+]}

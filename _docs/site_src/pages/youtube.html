@@ -1,0 +1,97 @@
+<!--meta {"title": "YouTube（横動画）", "desc": "横に撮った動画を YouTube 向けのロング動画にする。冒頭ハイライト・章タイトル・章カード・チャプター・字幕ファイル・対談の話者分け。"} -->
+<header class="page-head">
+  <div class="eyebrow">使い方</div>
+  <h1>YouTube 動画を作る</h1>
+  <p class="lead">横に撮った動画（16:9）を渡すと、YouTube 向けのロング動画の作り方になります。カットと字幕に加えて、長い動画では冒頭のハイライト、画面の章タイトル、概要欄に貼るチャプター、字幕ファイル（SRT）まで作ります。</p>
+</header>
+
+<section>
+  <h2 id="ask">頼み方</h2>
+  <p>「🎬 AIで作る」で横の動画を選びます。3分を超える横の動画なら、自動でロングになります。3分以下のときは「ロングにするか、縦のショートにするか」を1回聞かれます（追加の指示に「YouTube 用」と書けば聞かれません）。</p>
+  <div class="cmd cc os-mac"><span class="lab">チャットで頼むとき（Claude Code）</span><pre>この動画を YouTube 用に編集して /Users/あなたの名前/Movies/talk.mp4</pre></div>
+  <div class="cmd cc os-win"><span class="lab">チャットで頼むとき（Claude Code）</span><pre>この動画を YouTube 用に編集して C:\Users\あなたの名前\Videos\talk.mp4</pre></div>
+</section>
+
+<section>
+  <h2 id="default">聞かずに決まること（既定）</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>項目</th><th>既定</th></tr></thead><tbody>
+    <tr><td>冒頭ハイライト</td><td>5分を超える動画で、3つの型から候補を作り、③で選びます。5分以下は作りません</td></tr>
+    <tr><td>章タイトル・チャプター</td><td>5分を超える動画で作ります</td></tr>
+    <tr><td>章カード</td><td>撮影中に「編集さん、ここに章」と言った所に、2秒のカードを挟みます</td></tr>
+    <tr><td>字幕</td><td>標準（横書き・画面の下）</td></tr>
+    <tr><td>効果音</td><td>標準（8秒に1音ほど・ビジネス向け）</td></tr>
+    <tr><td>美肌</td><td>弱め（40）。メインの出演者が女性なら60</td></tr>
+    <tr><td>画像</td><td>画像フォルダを渡したか、「編集さん、ここに画像」と言ったときだけ</td></tr>
+    <tr><td>BGM</td><td>曲を持ち込んだときだけ（控えめ）</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="four">4回の確認</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>確認</th><th>内容</th></tr></thead><tbody>
+    <tr><td>① 対談かどうか＋持ち込み</td><td>話している人が2人以上なら、話者を分けて字幕に付けます。画像フォルダ・BGM・人名や用語の表記もここで伝えます</td></tr>
+    <tr><td>② カットの承認</td><td>ロングの既定は「0.6秒以上の無音＋フィラー＋言い直し」。撮影中の合図の声と、話し始めの「はい」も候補に入ります</td></tr>
+    <tr><td>③ 仕上がりの確認</td><td>本編を書き出す前に、30〜45秒の試作を音付きで作ります。字幕の見た目、口と声のずれ、章の切り替わりを確かめ、冒頭ハイライトの型（このまま／ほかの型／なし）も選びます</td></tr>
+    <tr><td>④ 完成の視聴</td><td>完成した動画を見て OK と答えます</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="structure">完成動画の構成</h2>
+  <div class="fig-svg">
+  <svg viewBox="0 0 900 230" role="img" aria-label="ロング動画の構成：冒頭ハイライト、本編、章カードで区切られた章、左上の章タイトル">
+    <g font-family="sans-serif">
+      <rect x="10" y="60" width="120" height="56" rx="10" fill="#ff7a30"/><text x="70" y="84" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">冒頭ハイライト</text><text x="70" y="103" text-anchor="middle" font-size="11.5" fill="#fff">見どころ3つ</text>
+      <rect x="140" y="60" width="230" height="56" rx="10" fill="#e5f0ec"/><text x="255" y="93" text-anchor="middle" font-size="14" fill="#1f4f46" font-weight="700">第1章</text>
+      <rect x="380" y="52" width="60" height="72" rx="10" fill="#1f4f46"/><text x="410" y="84" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd34d">章</text><text x="410" y="101" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd34d">カード</text>
+      <rect x="450" y="60" width="230" height="56" rx="10" fill="#e5f0ec"/><text x="565" y="93" text-anchor="middle" font-size="14" fill="#1f4f46" font-weight="700">第2章</text>
+      <rect x="690" y="52" width="60" height="72" rx="10" fill="#1f4f46"/><text x="720" y="84" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd34d">章</text><text x="720" y="101" text-anchor="middle" font-size="12" font-weight="800" fill="#ffd34d">カード</text>
+      <rect x="760" y="60" width="130" height="56" rx="10" fill="#e5f0ec"/><text x="825" y="93" text-anchor="middle" font-size="14" fill="#1f4f46" font-weight="700">第3章</text>
+      <g font-size="12.5" fill="#4a515b"><text x="410" y="152" text-anchor="middle">「編集さん、ここに章」の所</text><text x="410" y="170" text-anchor="middle">2秒・動画はその分長くなる</text></g>
+      <path d="M140 40 H890" stroke="#2d6b5f" stroke-width="2" stroke-dasharray="4 4"/><text x="515" y="30" text-anchor="middle" font-size="12.5" fill="#2d6b5f" font-weight="700">本編の間ずっと、画面の左上に「今の話題」（章のバッジ＋節のタイトル）</text>
+      <text x="450" y="212" text-anchor="middle" font-size="13" fill="#1d2126">チャプターと字幕ファイルの時刻は、ハイライト・カット・章カードをすべて計算に入れて書き出します</text>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<section>
+  <h2 id="upload">YouTube に上げるもの</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>ファイル</th><th>YouTube のどこに</th></tr></thead><tbody>
+    <tr><td><code>out/〇〇.mp4</code></td><td>動画として上げます</td></tr>
+    <tr><td><code>output/youtube_chapters.txt</code></td><td>中身を概要欄に貼ります。動画にチャプター（目次）が付きます</td></tr>
+    <tr><td><code>out/〇〇.srt</code></td><td>字幕ファイルとして上げます（YouTube Studio の「字幕」）</td></tr>
+  </tbody></table></div>
+  <div class="callout ok"><b>チャプターの時刻は自動で合わせます</b><p>カット・冒頭ハイライト・オープニング・章カードをすべて計算に入れた完成動画の時刻で書き出します。YouTube の条件（最初が 0:00、3つ以上、それぞれ10秒以上）も満たすようにします。手で直す必要はありません。</p></div>
+  <p>SRT とチャプターは、AI に「仕上げて」「SRT とチャプターを作って」と頼むと作ります（totonoumovie の書き出しボタンは、完成動画まで）。</p>
+</section>
+
+<section>
+  <h2 id="images">画像と BGM</h2>
+  <ul>
+    <li><b>画像</b>：縦長のスクショやグラフは人物の横に並べる「分割」、横長の画面は「収める」、写真は「全画面」でゆっくり寄ります。「収める」「全画面」の間は、左上の章タイトルを隠します</li>
+    <li><b>BGM</b>：声より小さく流し、話している間はさらに下げ、章カードの間は止めます。権利を確認した曲だけを使います</li>
+  </ul>
+  <p>くわしくは <a href="materials.html">合図と持ち込み素材</a>。</p>
+</section>
+
+<section>
+  <h2 id="talk">対談の動画</h2>
+  <p>①で「対談」と答えると、誰がいつ話しているかを判別して、字幕に話者を付けます（話者ごとに色を分けるなど）。このためのモデルは無料ですが、はじめて使うときに次の準備が要ります。</p>
+  <ol>
+    <li>Hugging Face のアカウントを作る</li>
+    <li>話者分離のモデルのページで、利用規約に同意する</li>
+    <li>アクセストークンを作り、Claude Code が用意する <code>.env</code> ファイルに貼る</li>
+  </ol>
+  <p>手順は Claude Code が案内します（「対談動画を編集したい」と伝えます）。トークンの値は、あなた自身がファイルに貼ります（チャットには書きません）。声紋を登録するのは、本人の同意を得た人だけです。話者が逆になっていたら「3分あたりから話者が逆」と AI に伝えると直します。</p>
+</section>
+
+<section>
+  <h2 id="time">時間の目安と注意</h2>
+  <p>10分の動画（画像3枚・BGM・章カードあり）で、機械の処理の合計は約24分です（Apple M5 Pro での実測）。書き出しはほかの重い処理と重なると30〜40分かかることがあるので、その間は別の作業をしていて大丈夫です。</p>
+  <ul>
+    <li><b>長い動画</b>：30分なら、およそ3倍の時間を見込みます</li>
+    <li><b>容量</b>：10分の動画1本で、動画ごとのフォルダは約2.5GB。長いほど増えます</li>
+    <li><b>スリープ</b>：パソコンがスリープすると処理が止まります。長い動画のときは電源につなぎ、スリープしない設定にします</li>
+  </ul>
+</section>

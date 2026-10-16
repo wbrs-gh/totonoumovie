@@ -629,7 +629,9 @@ class Handler(BaseHTTPRequestHandler):
                 full = os.path.realpath(q.get("path", ""))
                 home = os.path.realpath(os.path.expanduser("~"))
                 ext = full.lower().rsplit(".", 1)[-1]
-                if not full.startswith(home) or ext not in IMAGE_EXT | VIDEO_EXT | AUDIO_EXT:
+                ws = os.path.realpath(workspace())
+                inside = full.startswith(home + os.sep) or full.startswith(ws + os.sep)
+                if not inside or ext not in IMAGE_EXT | VIDEO_EXT | AUDIO_EXT:
                     return self.send_json({"error": "開けないファイルです"}, 403)
                 return self.send_file(full)
             if u.path == "/api/sefile":

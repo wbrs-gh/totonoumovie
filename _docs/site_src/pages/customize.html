@@ -1,0 +1,103 @@
+<!--meta {"title": "自分好みに育てる", "desc": "マイスタイル・設定・表記辞書・効果音・プロンプトとオリジナルの指示・直し方のコツ。"} -->
+<header class="page-head">
+  <div class="eyebrow">もっと活かす</div>
+  <h1>自分好みに育てる</h1>
+  <p class="lead">使うほど自分に合うようにできます。見た目は「マイスタイル」に、言い方や秒数は「設定」に、人名や用語は「表記辞書」に、毎回の頼みごとは totonoumovie の「オリジナルの指示」に覚えさせます。</p>
+</header>
+
+<section>
+  <h2 id="cycle">育て方の流れ</h2>
+  <div class="fig-svg">
+  <svg viewBox="0 0 900 260" role="img" aria-label="育て方の流れ：作る、気づく、直す、残す、呼び出す、を繰り返す">
+    <g font-family="sans-serif" text-anchor="middle">
+      <path d="M150 180 C150 250 750 250 750 180" stroke="#ff7a30" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
+      <text x="450" y="250" font-size="13" fill="#c4551a" font-weight="700">2本目からは①の質問が減り、直しも少なくなっていく</text>
+      <g font-size="14">
+        <circle cx="90" cy="110" r="60" fill="#2d6b5f"/><text x="90" y="104" fill="#fff" font-size="26">🎬</text><text x="90" y="132" fill="#fff" font-weight="800">1. 作る</text>
+        <circle cx="270" cy="110" r="60" fill="#3a7b6e"/><text x="270" y="104" fill="#fff" font-size="26">👀</text><text x="270" y="132" fill="#fff" font-weight="800">2. 気づく</text>
+        <circle cx="450" cy="110" r="60" fill="#468b7d"/><text x="450" y="104" fill="#fff" font-size="26">✏️</text><text x="450" y="132" fill="#fff" font-weight="800">3. 直す</text>
+        <circle cx="630" cy="110" r="60" fill="#539b8c"/><text x="630" y="104" fill="#fff" font-size="26">💾</text><text x="630" y="132" fill="#fff" font-weight="800">4. 残す</text>
+        <circle cx="810" cy="110" r="60" fill="#ff7a30"/><text x="810" y="104" fill="#fff" font-size="26">⚡</text><text x="810" y="132" fill="#fff" font-weight="800">5. 呼び出す</text>
+      </g>
+      <g font-size="12" fill="#4a515b"><text x="90" y="196">1本仕上げる</text><text x="270" y="196">④の視聴でメモ</text><text x="450" y="196">画面で直す・4点で頼む</text><text x="630" y="196">マイスタイルに保存</text><text x="810" y="196">「前回と同じで」</text></g>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<section>
+  <h2 id="mystyle">マイスタイル</h2>
+  <p>気に入った見た目を、名前を付けて保存しておく機能です。</p>
+  <ul>
+    <li><b>保存する</b>：完成のあとに「この見た目をマイスタイルとして保存しますか」と聞かれたら、名前を答えます（例「語りのリール」「講座の YouTube」）。同じ名前があるときは、上書きするか別の名前にするかを聞かれます</li>
+    <li><b>呼び出す</b>：マイスタイルがあると、次の動画の最初に「前回と同じ（〇〇）で／別のマイスタイル／新しく決める」と1問だけ聞かれます。最初から「マイスタイル『語りのリール』で」と追加の指示に書いてもかまいません</li>
+  </ul>
+  <div class="scroll"><table class="tbl"><thead><tr><th>保存される</th><th>保存されない（動画ごとに聞かれる）</th></tr></thead><tbody>
+    <tr><td style="font-weight:400">雰囲気・テンポ・字幕のスタイル・効果音・画像のレイアウト・BGM・章カード・美肌の強さ・人名や用語の表記</td><td style="font-weight:400">動画の長さ、最後の案内文（CTA）、無音を切るかどうか</td></tr>
+  </tbody></table></div>
+  <ul>
+    <li>ショート用・ロング用・アフレコ用は別々に作ります（種類の違うマイスタイルは使えません）</li>
+    <li>BGM は曲の名前だけを覚えています。次に使うときは、同じ曲を置くように頼まれます</li>
+    <li>一覧は「マイスタイルの一覧を見せて」、消すときは「マイスタイル『〇〇』を消して」と AI に頼みます</li>
+  </ul>
+</section>
+
+<section>
+  <h2 id="prompts">オリジナルの指示とプロンプト（totonoumovie）</h2>
+  <p>上の <b>✍ プロンプト</b> で、AI に渡す文章を自分好みにできます。保存先はあなたのパソコンの中（<code>~/.totonoumovie/prompts.json</code>）です。</p>
+  <figure><img src="images/app-prompts.jpg" alt="プロンプトの画面"><figcaption>プロンプトの画面。いちばん上がオリジナルの指示。</figcaption></figure>
+  <div class="scroll"><table class="tbl"><thead><tr><th>欄</th><th>使いどころ</th></tr></thead><tbody>
+    <tr><td>オリジナルの指示</td><td>名前を付けて保存し、「AIで作る」「AI に頼む」のときにチェックで足せます。例「テンポよく：迷ったらテンポを詰める方向で提案して」「固有名詞：人名は必ず確認してから字幕にして」</td></tr>
+    <tr><td>毎回足す指示</td><td>すべての依頼の最後に足されます</td></tr>
+    <tr><td>AIで作る／直してもらう／自由に頼む</td><td>種類ごとに渡す文章そのもの。<code>{video}</code> などは実行時に置き換わります</td></tr>
+    <tr><td>AI への前提（上級者向け）</td><td>AI が画面で確認を出すための決まり（tm-ask）が書いてあります。<b>消すと確認が画面に出なくなります</b></td></tr>
+  </tbody></table></div>
+  <p>書き換えたものは「既定に戻す」でいつでも元に戻せます。</p>
+</section>
+
+<section>
+  <h2 id="settings">設定を変える</h2>
+  <p>セットアップで決めたことや既定の値は、AI に言葉で頼めば変えてくれます（totonoumovie の「AI」タブの「自由に頼む」でも、Claude Code でも）。</p>
+  <div class="scroll"><table class="tbl"><thead><tr><th>変えたいこと</th><th>頼み方の例</th></tr></thead><tbody>
+    <tr><td>作業フォルダ・完成動画のコピー先・名前</td><td>「TotonouMovie の作業フォルダを変えたい」（totonoumovie は起動したフォルダが作業フォルダです）</td></tr>
+    <tr><td>美肌の強さ（既定は縦60・横40。横は出演者が女性なら60）</td><td>「縦動画の美肌を40にしたい」</td></tr>
+    <tr><td>撮影中の合図の言い方</td><td>「合図の言い方を『カメラさん、ここに章』に変えたい」</td></tr>
+    <tr><td>章カードの秒数と効果音</td><td>「章カードを3秒にしたい」「章カードの効果音をなしにしたい」</td></tr>
+    <tr><td>いまの設定を見る</td><td>「TotonouMovie の設定を見せて」</td></tr>
+  </tbody></table></div>
+  <p>設定は、作業フォルダや作った動画とは別の場所に保存されます。新しい版に入れ替えても消えません。</p>
+</section>
+
+<section>
+  <h2 id="dict">表記辞書を育てる</h2>
+  <p>人名・社名・商品名・専門用語の正しい表記を伝えると、その動画の辞書に入り、文字起こし・誤字の修正・字幕・検査で使われます。2本以上の動画で同じ直しが出ると、全部の動画で使う共通の辞書に足すかを提案されます。</p>
+  <div class="cmd tm"><span class="lab">例</span><pre>表記は「山田太郎」（「山田たろう」「山田太朗」と出ることがある）</pre></div>
+</section>
+
+<section>
+  <h2 id="se">効果音を自分の音にする</h2>
+  <p>同梱の効果音の代わりに、自分で用意した音（効果音ラボなどで手に入れた音）を使えます。設定フォルダの <code>se-library</code> に、同梱の音と同じファイル名で置くと、そちらが優先されます。置き場所とファイル名は、AI に「自分の効果音を使いたい」と伝えると案内します。量は動画ごとに「効果音を少なめに」「効果音なしで」と頼めます。totonoumovie の編集画面でも、1つずつ足したり消したりできます。</p>
+</section>
+
+<section>
+  <h2 id="fixtips">直し方のコツ</h2>
+  <p>字幕の誤字やタイミング、効果音の位置などは<a href="editor.html">編集画面</a>で自分で直すのが確実です。AI に頼むときは、<b>どの場面か・その時の発言・直したいこと・残したいこと</b>の4点で伝えます。</p>
+  <div class="scroll"><table class="tbl"><thead><tr><th>直したいこと</th><th>頼み方の例</th></tr></thead><tbody>
+    <tr><td>字幕の誤字</td><td>「2分10秒あたりの『確立』を『確率』に」</td></tr>
+    <tr><td>字幕のタイミング</td><td>「45秒あたりの字幕が声より早い。声に合わせて」</td></tr>
+    <tr><td>話者の取り違え（対談）</td><td>「3分あたりから話者が逆になっている」</td></tr>
+    <tr><td>カットを戻す</td><td>「1分05秒あたりで切った言い直しを戻して」（画面のカット承認でも戻せます）</td></tr>
+    <tr><td>演出の量</td><td>「効果音を半分くらいに」「強調を減らして」</td></tr>
+    <tr><td>画像</td><td>「2枚目の画像を外して」「この写真を最初の章に」</td></tr>
+    <tr><td>BGM の音量</td><td>「BGM を標準にして」</td></tr>
+  </tbody></table></div>
+  <h3 id="undo-cut">切りすぎを戻す</h3>
+  <p>カットの承認のあと、「切りすぎた」と思ったら、その候補のチェックを外して承認し直すと、消えた字幕と一緒に戻ります。ロングは完成のあとでも戻して書き出し直せます。ショートは、冒頭のつかみ（フック）を入れる前までです（フックを「なし」にしたときは、あとからでも戻せます）。</p>
+  <h3>頼み方のコツ</h3>
+  <ul>
+    <li><b>1回に1つ</b>：直したいことが多いときは、大事なものから1つずつ</li>
+    <li><b>理由を聞く</b>：「なぜこの候補を切ろうとしたの？」と聞くと、根拠を教えてくれます</li>
+    <li><b>案を出してもらう</b>：「最後の案内文の案を3つ出して」のように、選べる形で頼みます</li>
+    <li><b>自分のルールを残す</b>：毎回伝えたいことは、totonoumovie の「オリジナルの指示」に保存しておきます</li>
+  </ul>
+</section>

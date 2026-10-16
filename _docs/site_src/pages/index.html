@@ -1,0 +1,138 @@
+<!--meta {"title": "トップ", "desc": "撮った動画を渡すだけで、カット・字幕・効果音・音声の仕上げまで済んだ完成動画に。画面で見ながら直せる totonoumovie の使い方マニュアル。", "bodyClass": "home"} -->
+<section class="hero" style="background-image:url(images/hero.jpg)">
+  <div class="in">
+    <div class="eyebrow">totonoumovie ・ TotonouMovie v2.2.0 対応 ・ Mac／Windows</div>
+    <h1>撮った動画を1本渡すだけ。<br>完成まで、画面で見ながら。</h1>
+    <p>カット・字幕・効果音・音声の仕上げは AI が進めます。あなたは、出てきた確認に答えて、気になる所を画面で直すだけです。</p>
+    <div class="btns">
+      <a class="btn primary" href="install.html">いまから入れる →</a>
+      <a class="btn ghost" href="#movie">▶ 3分の動画で見る</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 id="where">あなたはどこから？</h2>
+  <p>いまの状態に近いものを選んでください。必要なページだけを順番に案内します。</p>
+  <div class="route">
+    <a href="start.html"><b>🆕 はじめて</b><span>TotonouMovie も totonoumovie もまだ入れていない</span><em>準備から始める →</em></a>
+    <a href="install.html#app"><b>🎬 TotonouMovie は使っている</b><span>Claude Code で動画を作ったことがある。画面で直せるようにしたい</span><em>totonoumovie だけ入れる →</em></a>
+    <a href="first.html"><b>✅ もう両方入れた</b><span>入れ終わった。最初の1本を作りたい</span><em>はじめての1本へ →</em></a>
+  </div>
+</section>
+
+<section>
+  <h2 id="movie">3分でわかる totonoumovie</h2>
+  <div class="video"><video id="v01" src="videos/v01-overview.mp4" poster="videos/v01-overview.jpg" controls preload="none" playsinline></video></div>
+  <div class="video-meta" data-chapters="v01"><span>🔊 音声あり・字幕つき</span></div>
+</section>
+
+<section>
+  <h2 id="make">作れる動画は3種類</h2>
+  <p>動画の向きを見て、作り方は自動で決まります。迷ったら「この動画を編集して」と渡すだけで大丈夫です。</p>
+  <div class="cards">
+    <a class="card" href="reels.html"><div class="ph" style="background-image:url(images/type-shorts.jpg)"></div><div class="bd"><span class="tag">縦の動画</span><h3>リール・ショート</h3><p>Instagram リール・YouTube Shorts・TikTok 向け。字幕の雰囲気を選べて、冒頭のつかみや最後の案内も入れられます。</p></div></a>
+    <a class="card" href="youtube.html"><div class="ph" style="background-image:url(images/type-youtube.jpg)"></div><div class="bd"><span class="tag">横の動画</span><h3>YouTube 動画</h3><p>長い動画のカット、章のタイトル、概要欄のチャプター、字幕ファイル（SRT）まで作ります。</p></div></a>
+    <a class="card" href="voiceover.html"><div class="ph" style="background-image:url(images/type-voiceover.jpg)"></div><div class="bd"><span class="tag">声＋素材</span><h3>アフレコ動画</h3><p>声の録音と、風景や手元の動画・写真から、字幕と映像が同時に切り替わる縦動画を作ります。</p></div></a>
+  </div>
+</section>
+
+<section>
+  <h2 id="before-after">こう変わります（実際に作ったサンプル）</h2>
+  <p>同じ撮影素材を TotonouMovie で仕上げた例です。左が撮ったまま、右が完成です。無音と「えーっと」が切られ、字幕・強調・効果音・画像・寄りが入っています。</p>
+  <div class="ba">
+    <figure><video src="videos/sample-before.mp4" poster="videos/sample-before.jpg" controls preload="none" playsinline></video><figcaption>撮ったまま</figcaption></figure>
+    <figure><video src="videos/sample-after.mp4" poster="videos/sample-after.jpg" controls preload="none" playsinline></video><figcaption>完成（TotonouMovie で仕上げ）</figcaption></figure>
+  </div>
+  <p class="muted" style="font-size:13.5px">※ 説明のためのサンプルです。人物の写真は AI で作り、声は合成音声（VOICEVOX:もち子さん）です。</p>
+</section>
+
+<section>
+  <h2 id="how">どう動くの？</h2>
+  <p>totonoumovie は、あなたのパソコンに入っている <b>Claude Code</b> と <b>TotonouMovie</b> を、ブラウザの画面から動かすアプリです。動画はパソコンの中で処理され、編集の内容もパソコンの中に保存されます。</p>
+  <div class="fig-svg">
+  <svg viewBox="0 0 960 360" role="img" aria-label="totonoumovie の仕組み：撮った動画を totonoumovie に渡すと、Claude Code と TotonouMovie が編集し、確認と手直しを画面で行い、完成動画ができる">
+    <defs>
+      <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2d6b5f"/></marker>
+      <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#2d6b5f"/><stop offset="1" stop-color="#3f8c7c"/></linearGradient>
+    </defs>
+    <g font-family="sans-serif">
+      <!-- 1 撮る -->
+      <rect x="10" y="110" width="150" height="150" rx="18" fill="#fff" stroke="#e1dbcf" stroke-width="2"/>
+      <rect x="62" y="132" width="46" height="80" rx="9" fill="#26303a"/><rect x="67" y="140" width="36" height="62" rx="4" fill="#9fd4c6"/><circle cx="85" cy="206" r="3" fill="#fff"/>
+      <text x="85" y="238" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2126">1. 撮る</text>
+      <text x="85" y="300" text-anchor="middle" font-size="13" fill="#7a818c">スマホ・カメラで</text>
+      <!-- 2 totonoumovie -->
+      <rect x="215" y="40" width="300" height="290" rx="22" fill="url(#g1)"/>
+      <text x="365" y="78" text-anchor="middle" font-size="21" font-weight="800" fill="#fff">2. totonoumovie</text>
+      <text x="365" y="100" text-anchor="middle" font-size="13" fill="#cfe9e1">ブラウザの画面（あなたが操作）</text>
+      <g font-size="14.5" fill="#fff">
+        <rect x="238" y="118" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="144">🎬 動画を渡して「AI で作る」</text>
+        <rect x="238" y="166" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="192">✋ 確認に答える（4回）</text>
+        <rect x="238" y="214" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="240">✏️ 字幕・カット・演出を直す</text>
+        <rect x="238" y="262" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="288">⬇ 静止画・試作・書き出し</text>
+      </g>
+      <!-- 3 Claude Code -->
+      <rect x="575" y="40" width="210" height="290" rx="22" fill="#fff" stroke="#2d6b5f" stroke-width="2.5" stroke-dasharray="7 6"/>
+      <text x="680" y="78" text-anchor="middle" font-size="17" font-weight="800" fill="#2d6b5f">3. あなたの Claude Code</text>
+      <rect x="595" y="98" width="170" height="86" rx="12" fill="#e5f0ec"/>
+      <text x="680" y="132" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2126">TotonouMovie</text>
+      <text x="680" y="156" text-anchor="middle" font-size="12.5" fill="#4a515b">編集の手順と部品</text>
+      <rect x="595" y="196" width="170" height="116" rx="12" fill="#f6f4ef"/>
+      <text x="680" y="224" text-anchor="middle" font-size="13" fill="#4a515b">文字起こし</text>
+      <text x="680" y="248" text-anchor="middle" font-size="13" fill="#4a515b">カット候補・字幕</text>
+      <text x="680" y="272" text-anchor="middle" font-size="13" fill="#4a515b">書き出し・検査</text>
+      <text x="680" y="298" text-anchor="middle" font-size="11.5" fill="#7a818c">（パソコンの中で処理）</text>
+      <!-- 4 完成 -->
+      <rect x="840" y="110" width="110" height="150" rx="18" fill="#fff" stroke="#e1dbcf" stroke-width="2"/>
+      <circle cx="895" cy="160" r="26" fill="#2f8a5b"/><path d="M882 160l9 9 17-18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <text x="895" y="218" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2126">4. 完成</text>
+      <text x="895" y="240" text-anchor="middle" font-size="13" fill="#7a818c">MP4</text>
+      <!-- 矢印 -->
+      <g stroke="#2d6b5f" stroke-width="3" fill="none" marker-end="url(#a1)">
+        <line x1="163" y1="185" x2="208" y2="185"/>
+        <path d="M518 150 C540 150 548 150 568 150"/>
+        <path d="M572 230 C550 230 542 230 522 230"/>
+        <line x1="788" y1="185" x2="833" y2="185"/>
+      </g>
+      <text x="545" y="140" text-anchor="middle" font-size="12" fill="#7a818c">お願い</text>
+      <text x="545" y="250" text-anchor="middle" font-size="12" fill="#7a818c">結果・確認</text>
+    </g>
+  </svg>
+  </div>
+  <div class="callout info"><b>決めるのは、いつもあなた</b><p>AI はカットの候補を出すだけで、切るかどうかはあなたが選びます。完成の確認も、あなたが最後まで見て OK を出します。</p></div>
+</section>
+
+<section>
+  <h2 id="does">TotonouMovie がしてくれること</h2>
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>作業</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>✂️ カット</td><td>無音・「えー」「あのー」・言い直しの候補を AI が出し、あなたが選んだものだけ切ります。勝手には削りません</td></tr>
+      <tr><td>💬 字幕</td><td>文節の区切りで読みやすく出します。明るい背景でも読めるよう、縁取りを自動で強めます</td></tr>
+      <tr><td>✨ 演出</td><td>効果音、つなぎ目を目立たなくする寄りの切り替え、強調の動きを入れます</td></tr>
+      <tr><td>🔊 音声</td><td>雑音を減らし、YouTube の標準の音量（-14 LUFS）にそろえます</td></tr>
+      <tr><td>🖼 持ち込み素材</td><td>画像・写真・スクショを話の内容に合わせて差し込み、持ち込んだ曲を BGM として控えめに流します</td></tr>
+      <tr><td>🎙 撮影中の合図</td><td>撮りながら「編集さん、ここに章」などと言うと、その場所に章のカードや画像が入ります</td></tr>
+      <tr><td>🔍 検査</td><td>書き出した動画を自動で検査し、完成した音を文字起こしし直して、字幕の抜けや遅れを確かめます</td></tr>
+      <tr><td>🎨 マイスタイル</td><td>気に入った見た目を名前を付けて保存し、次の動画で「前回と同じで」と呼び出せます</td></tr>
+    </tbody>
+  </table></div>
+  <p>くわしくは <a href="features.html">機能の一覧</a> を見てください。</p>
+</section>
+
+<section>
+  <h2 id="plus">totonoumovie で、さらにできること</h2>
+  <div class="cards">
+    <div class="card"><div class="bd"><span class="tag">見ながら直す</span><h3>タイムラインで手直し</h3><p>字幕の文字や出るタイミング、効果音・寄り・画像・章を、動画を見ながらドラッグで直せます。</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">聞いて選ぶ</span><h3>カット候補を聞き比べ</h3><p>「元」と「カット後」をその場で再生して、残すか切るかを選べます。</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">答えるだけ</span><h3>確認は画面に届く</h3><p>AI の確認はボタンで答えるだけ。コマンドもチャットも要りません。</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">自分好みに</span><h3>指示を育てる</h3><p>「テンポよく」など、毎回伝えたい指示を名前を付けて保存し、ワンクリックで足せます。</p></div></div>
+  </div>
+</section>
+
+<section>
+  <h2 id="know">はじめに知っておいてほしいこと</h2>
+  <div class="callout warn"><b>作業フォルダは、クラウド同期の外に</b><p>Dropbox・Google ドライブ・OneDrive・iCloud の中で編集すると、書き出し中に同期とぶつかって止まることがあります。作業はパソコンの中のフォルダ（例：ムービーの中の totonou）で行い、完成した動画だけをコピーします。</p></div>
+  <div class="callout info"><b>音声ファイルは外に送りません</b><p>文字起こしはパソコンの中で動きます。文字起こしの文章や確認用の画像は、Claude Code のふだんの会話と同じように Claude が読みます。書き出しのときは字幕の字体（Google Fonts）をインターネットから取得するので、接続は必要です。</p></div>
+</section>

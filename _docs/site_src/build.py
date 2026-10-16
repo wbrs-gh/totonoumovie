@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+マニュアルサイトを組み立てる
+
+pages/*.html（先頭に <!--meta {...} --> を書いた本文だけのファイル）に、共通のヘッダー・左の目次・
+検索・Mac/Windows の切り替え・前後ページのリンクを付けて、../site/ に書き出す。
+assets/ と images/ と videos/ もそのままコピーする。
+
+使い方: python3 build.py
+"""
+import html
+import json
+import os
+import re
+import shutil
+
+SRC = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(os.path.dirname(SRC), "site")
+VERSION = "v1.0.0"
+UPDATED = "2026年10月16日"
+
+# 左の目次（順番どおりに前後ページもつながる）
+NAV = [
+    ("はじめに", [("index", "トップ"), ("start", "準備と全体の流れ")]),
+    ("導入", [("install", "入れかた（Mac／Windows）")]),
+    ("使い方", [("first", "はじめての1本"), ("editor", "編集画面の使い方"), ("reels", "リール・ショート"),
+              ("youtube", "YouTube（横動画）"), ("voiceover", "アフレコ動画"), ("materials", "合図と持ち込み素材")]),
+    ("もっと活かす", [("scenes", "使える場面と頼み方メーカー"), ("features", "機能の一覧"), ("customize", "自分好みに育てる")]),
+    ("困ったとき", [("trouble", "困ったとき・質問")]),
+    ("動画", [("videos", "動画で見る")]),
+]
+ORDER = [slug for _, items in NAV for slug, _ in items]
+TITLES = {slug: t for _, items in NAV for slug, t in items}
+
+
+def read_page(slug):
+    raw = open(os.path.join(SRC, "pages", slug + ".html"), encoding="utf-8").read()
+    m = re.match(r"\s*<!--meta\s*(\{.*?\})\s*-->", raw, re.S)
+    meta = json.loads(m.group(1)) if m else {}
+    body = raw[m.end():] if m else raw
+    return meta, body
+
+
+def nav_html(cur):
+    out = []
+    for group, items in NAV:
+        out.append(f'<div class="nav-group"><div class="nav-h">{group}</div>')
+        for slug, title in items:
+            on = ' class="on" aria-current="page"' if slug == cur else ""
+            out.append(f'<a href="{slug}.html"{on}>{title}</a>')
+        out.append("</div>")
+    return "\n".join(out)
+
+
+def text_only(s):
+    s = re.sub(r"<(script|style|svg)[\s\S]*?</\1>", " ", s)
+    s = re.sub(r"<[^>]+>", " ", s)
+    return re.sub(r"\s+", " ", html.unescape(s)).strip()
+
+
+def build():
+    os.makedirs(OUT, exist_ok=True)
+    for d in ("assets", "images", "videos"):
+        src = os.path.join(SRC, d)
+        if os.path.isdir(src):
+            dst = os.path.join(OUT, d)
+            if os.path.isdir(dst):
+                shutil.rmtree(dst)
+            shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".*", "*.wav"))
+    layout = open(os.path.join(SRC, "layout.html"), encoding="utf-8").read()
+    index = []
+    for i, slug in enumerate(ORDER):
+        meta, body = read_page(slug)
+        prev_s = ORDER[i - 1] if i > 0 else None
+        next_s = ORDER[i + 1] if i + 1 < len(ORDER) else None
+        pager = '<nav class="pager">'
+        pager += f'<a class="prev" href="{prev_s}.html"><small>前のページ</small>{TITLES[prev_s]}</a>' if prev_s else "<span></span>"
+        pager += f'<a class="next" href="{next_s}.html"><small>次のページ</small>{TITLES[next_s]}</a>' if next_s else "<span></span>"
+        pager += "</nav>"
+        title = meta.get("title", TITLES[slug])
+        page = (layout.replace("{{TITLE}}", html.escape(title))
+                .replace("{{DESC}}", html.escape(meta.get("desc", "")))
+                .replace("{{NAV}}", nav_html(slug))
+                .replace("{{BODY}}", body)
+                .replace("{{PAGER}}", pager if slug != "index" else "")
+                .replace("{{SLUG}}", slug)
+                .replace("{{VERSION}}", VERSION)
+                .replace("{{UPDATED}}", UPDATED)
+                .replace("{{BODYCLASS}}", meta.get("bodyClass", "")))
+        with open(os.path.join(OUT, slug + ".html"), "w", encoding="utf-8") as f:
+            f.write(page)
+        # 検索用：見出しごとに区切って本文を入れる
+        parts = re.split(r'(<h[23][^>]*id="([^"]+)"[^>]*>(.*?)</h[23]>)', body, flags=re.S)
+        index.append({"p": slug, "t": title, "h": "", "a": "", "x": text_only(parts[0])[:1200]})
+        for j in range(1, len(parts), 4):
+            hid, htxt, rest = parts[j + 1], text_only(parts[j + 2]), parts[j + 3] if j + 3 < len(parts) else ""
+            index.append({"p": slug, "t": title, "h": htxt, "a": hid, "x": text_only(rest)[:1200]})
+    with open(os.path.join(OUT, "assets", "search.js"), "w", encoding="utf-8") as f:
+        f.write("window.TM_SEARCH=" + json.dumps(index, ensure_ascii=False) + ";")
+    # 印刷・PDF 用：全ページを1枚にまとめたページ（動画と道具は除く）
+    bodies = []
+    for slug in ORDER:
+        if slug == "videos":
+            continue
+        meta, body = read_page(slug)
+        body = re.sub(r"<script[\s\S]*?</script>", "", body)
+        body = re.sub(r'<div class="video">[\s\S]*?</div>\s*(<div class="video-meta"[\s\S]*?</div>)?', "", body)
+        bodies.append(f'<article class="print-page" id="p-{slug}">{body}</article>')
+    allpage = (layout.replace("{{TITLE}}", "全ページ（印刷用）").replace("{{DESC}}", "")
+               .replace("{{NAV}}", nav_html("")).replace("{{BODY}}", "\n".join(bodies)).replace("{{PAGER}}", "")
+               .replace("{{SLUG}}", "all").replace("{{VERSION}}", VERSION).replace("{{UPDATED}}", UPDATED)
+               .replace("{{BODYCLASS}}", "print-all"))
+    with open(os.path.join(OUT, "all.html"), "w", encoding="utf-8") as f:
+        f.write(allpage)
+    # 旧 URL（introduction.html）は新しいトップへ案内する
+    with open(os.path.join(OUT, "introduction.html"), "w", encoding="utf-8") as f:
+        f.write('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=index.html">'
+                '<title>totonoumovie 使い方マニュアル</title><a href="index.html">totonoumovie 使い方マニュアルへ</a>')
+    print(f"{len(ORDER)} ページを書き出しました → {OUT}")
+
+
+if __name__ == "__main__":
+    build()

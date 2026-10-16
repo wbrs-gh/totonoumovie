@@ -1,0 +1,165 @@
+<!--meta {"title": "はじめての1本", "desc": "動画を渡してから完成するまで。4回の確認の答え方、完成した動画の場所、直したいときの伝え方。"} -->
+<header class="page-head">
+  <div class="eyebrow">使い方</div>
+  <h1>はじめての1本</h1>
+  <p class="lead">動画を1本渡してから完成するまでの流れです。途中で止まって確認を求めるのは<b>4回だけ</b>。それ以外は AI が進めます。</p>
+</header>
+
+<section>
+  <div class="video"><video id="v04" src="videos/v04-first.mp4" poster="videos/v04-first.jpg" controls preload="none" playsinline></video></div>
+  <div class="video-meta"><span>🎬 この動画1本で、最初から完成まで見られます</span></div>
+</section>
+
+<section>
+  <h2 id="give"><span class="num">1</span>動画を渡す</h2>
+  <ol>
+    <li>作業フォルダで <code>totonoumovie</code> を起動します（<a href="install.html#daily">起動のしかた</a>）</li>
+    <li>上の <b>🎬 AIで作る</b> を押します</li>
+    <li>「話している動画」を選び、<b>選ぶ</b> ボタンで動画ファイルを選びます（<span class="term" data-tip="パソコンの中でのファイルの場所を表す文字。選ぶボタンを使えば自動で入ります。">パス</span>を直接貼ってもかまいません）</li>
+    <li>画像・BGM・人名の表記があれば「今回だけの追加の指示」に書き、<b>AI で作り始める</b> を押します</li>
+  </ol>
+  <figure><img src="images/app-create.jpg" alt="AIで作る の画面"><figcaption>「AIで作る」の画面。オリジナルの指示（例：テンポよく）もチェックで足せます。</figcaption></figure>
+  <div class="cmd tm"><span class="lab">「今回だけの追加の指示」の書き方の例</span><pre>画像は /Users/あなたの名前/Pictures/talk-images に入っています。BGM は /Users/あなたの名前/Music/calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <h3>どんな動画になるかは、自動で決まります</h3>
+  <div class="fig-svg">
+  <svg viewBox="0 0 900 260" role="img" aria-label="渡した動画によって作り方が決まる：縦の動画はショート、3分を超える横の動画はロング、3分以下の横や正方形は1回聞かれる、声の録音と素材のフォルダはアフレコ動画">
+    <defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" fill="#9aa1ab"/></marker></defs>
+    <g font-family="sans-serif">
+      <rect x="10" y="95" width="150" height="70" rx="14" fill="#2d6b5f"/><text x="85" y="126" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">渡したもの</text><text x="85" y="148" text-anchor="middle" fill="#cfe9e1" font-size="12">向きと長さを見る</text>
+      <g stroke="#9aa1ab" stroke-width="2.5" fill="none" marker-end="url(#a3)"><path d="M162 130 C210 130 210 30 255 30"/><path d="M162 130 C210 130 210 95 255 95"/><path d="M162 130 C210 130 210 162 255 162"/><path d="M162 130 C210 130 210 228 255 228"/></g>
+      <g font-size="15">
+        <rect x="260" y="8" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="274" y="17" width="15" height="26" rx="3" fill="#26303a"/><text x="300" y="36" fill="#1d2126">縦の動画</text>
+        <rect x="260" y="73" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="272" y="85" width="26" height="15" rx="3" fill="#26303a"/><text x="308" y="101" fill="#1d2126">横・3分を超える</text>
+        <rect x="260" y="140" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="272" y="152" width="26" height="15" rx="3" fill="#9aa1ab"/><text x="308" y="168" fill="#1d2126">横・3分以下／正方形</text>
+        <rect x="260" y="206" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><text x="274" y="234" fill="#1d2126">🎙 声 ＋ 📁 素材フォルダ</text>
+      </g>
+      <g stroke="#9aa1ab" stroke-width="2.5" marker-end="url(#a3)"><line x1="502" y1="30" x2="560" y2="30"/><line x1="502" y1="95" x2="560" y2="95"/><line x1="502" y1="162" x2="560" y2="162"/><line x1="502" y1="228" x2="560" y2="228"/></g>
+      <g font-size="15" font-weight="800">
+        <rect x="566" y="8" width="320" height="44" rx="10" fill="#fff1e6"/><text x="582" y="36" fill="#c4551a">ショート（リール・Shorts・TikTok）</text>
+        <rect x="566" y="73" width="320" height="44" rx="10" fill="#eaf1fd"/><text x="582" y="101" fill="#2f5fb8">ロング（YouTube）</text>
+        <rect x="566" y="140" width="320" height="44" rx="10" fill="#f3f0e9"/><text x="582" y="168" fill="#4a515b">どう作るかを1回だけ聞かれる</text>
+        <rect x="566" y="206" width="320" height="44" rx="10" fill="#e5f0ec"/><text x="582" y="234" fill="#1f4f46">アフレコ動画（縦）</text>
+      </g>
+    </g>
+  </svg>
+  </div>
+  <p>判定の理由は、AI の作業の画面に1行で出ます（例「縦 1080x1920・14.3秒 → ショートとして進めます」）。追加の指示に「YouTube 用」「リールにして」などと書けば、聞かれません。</p>
+</section>
+
+<section>
+  <h2 id="four"><span class="num">2</span>4回の確認に答える</h2>
+  <div class="fig-svg">
+  <svg viewBox="0 0 960 250" role="img" aria-label="4回の確認：①最初の確認、自動で文字起こしとカット候補、②カットの承認、自動で字幕と演出、③仕上がりの確認、自動で書き出しと検査、④完成の視聴">
+    <g font-family="sans-serif" text-anchor="middle">
+      <line x1="60" y1="96" x2="900" y2="96" stroke="#e1dbcf" stroke-width="6" stroke-linecap="round"/>
+      <g>
+        <circle cx="90" cy="96" r="40" fill="#ff7a30"/><text x="90" y="92" font-size="24" fill="#fff">✋</text><text x="90" y="114" font-size="13" font-weight="800" fill="#fff">①</text>
+        <text x="90" y="166" font-size="15" font-weight="800" fill="#1d2126">最初の確認</text><text x="90" y="186" font-size="12.5" fill="#4a515b">雰囲気・テンポ</text><text x="90" y="204" font-size="12.5" fill="#4a515b">持ち込み素材</text>
+      </g>
+      <g><rect x="165" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="220" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
+        <text x="220" y="146" font-size="12" fill="#7a818c">文字起こし</text><text x="220" y="163" font-size="12" fill="#7a818c">誤字の修正</text><text x="220" y="180" font-size="12" fill="#7a818c">カット候補</text></g>
+      <g>
+        <circle cx="350" cy="96" r="40" fill="#ff7a30"/><text x="350" y="92" font-size="24" fill="#fff">✂️</text><text x="350" y="114" font-size="13" font-weight="800" fill="#fff">②</text>
+        <text x="350" y="166" font-size="15" font-weight="800" fill="#1d2126">カットの承認</text><text x="350" y="186" font-size="12.5" fill="#4a515b">聞いて選ぶ</text>
+      </g>
+      <g><rect x="425" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="480" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
+        <text x="480" y="146" font-size="12" fill="#7a818c">字幕</text><text x="480" y="163" font-size="12" fill="#7a818c">演出・効果音</text></g>
+      <g>
+        <circle cx="610" cy="96" r="40" fill="#ff7a30"/><text x="610" y="92" font-size="24" fill="#fff">👀</text><text x="610" y="114" font-size="13" font-weight="800" fill="#fff">③</text>
+        <text x="610" y="166" font-size="15" font-weight="800" fill="#1d2126">仕上がりの確認</text><text x="610" y="186" font-size="12.5" fill="#4a515b">静止画・試作</text>
+      </g>
+      <g><rect x="685" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="740" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
+        <text x="740" y="146" font-size="12" fill="#7a818c">書き出し</text><text x="740" y="163" font-size="12" fill="#7a818c">音声の仕上げ・検査</text></g>
+      <g>
+        <circle cx="870" cy="96" r="40" fill="#ff7a30"/><text x="870" y="92" font-size="24" fill="#fff">▶</text><text x="870" y="114" font-size="13" font-weight="800" fill="#fff">④</text>
+        <text x="870" y="166" font-size="15" font-weight="800" fill="#1d2126">完成の視聴</text><text x="870" y="186" font-size="12.5" fill="#4a515b">最後まで見て OK</text>
+      </g>
+      <text x="480" y="236" font-size="13.5" fill="#2d6b5f" font-weight="700">✏️ この間ずっと、編集画面で字幕や効果音を直せます（AI が作業中でなければ）</text>
+    </g>
+  </svg>
+  </div>
+  <p>確認の順番が来ると、上の <b>🤖 AI</b> に赤い数字が付きます。開くと、AI の作業の様子と、答える欄が出ます。<b>おすすめの選択肢がいちばん上</b>にあります。選んで「答えを送って続ける」を押すだけです。</p>
+  <figure><img src="images/app-question.jpg" alt="AI からの確認の画面"><figcaption>AI からの確認。選ぶだけで答えられ、補足を書くこともできます。</figcaption></figure>
+
+  <h3 id="q1">① 最初の確認</h3>
+  <div class="scroll"><table class="tbl"><thead><tr><th>動画の種類</th><th>聞かれること</th></tr></thead><tbody>
+    <tr><td>ショート</td><td>字幕の雰囲気、テンポ（話の間を詰めるか）、持ち込み素材（画像・BGM・人名や用語の表記）</td></tr>
+    <tr><td>ロング</td><td>対談かどうか（話している人が2人以上か）、持ち込み素材</td></tr>
+    <tr><td>アフレコ</td><td>テンポ、素材の順番（内容に合わせて／ファイル名の順）、効果音を入れるか</td></tr>
+  </tbody></table></div>
+  <p>冒頭・末尾に0.8秒以上、または途中に2秒以上の無音があるときは、切るかどうか（切る／残す／秒数を指定）も聞かれます。話の「間」として残したいこともあるので毎回聞きます（何も選ばなければ切りません）。マイスタイルを保存していれば、最初に「前回と同じで」と1問だけ増えます。</p>
+
+  <h3 id="q2">② カットの承認</h3>
+  <p>AI の確認の中の <b>✂ カット承認を開く</b> を押すと、編集画面の「カット承認」が開きます。候補ごとに <b>▶ 元</b> と <b>▶ カット後</b> で聞き比べ、切ってよいものにチェックを付けて <b>✔ 承認して反映</b>。終わると AI が自動で続きを進めます。</p>
+  <figure><img src="images/app-cuts.jpg" alt="カット承認の画面"><figcaption>カット承認。赤い取り消し線が切る言葉、斜線の区間が切られる場所です。</figcaption></figure>
+  <div class="scroll"><table class="tbl"><thead><tr><th>選び方</th><th>向いているとき</th></tr></thead><tbody>
+    <tr><td>「無音だけ＋」「フィラーだけ＋」</td><td>はじめての1本。いちばん安全です</td></tr>
+    <tr><td>「全部」</td><td>聞き比べて、全部切ってよいと分かったとき</td></tr>
+    <tr><td>1つずつチェック</td><td>言い直しなど、意味のある所を自分で選びたいとき</td></tr>
+  </tbody></table></div>
+  <p><span class="term" data-tip="「えー」「あのー」のような、意味のないつなぎの言葉。">フィラー</span>は意味のないつなぎの言葉、<span class="term" data-tip="AI が「切ってよい」と判断した自信の強さ。0〜1 で、1に近いほど確か。">確信度</span>は切ってよいと判断した自信の強さです。撮影中の合図（「編集さん、ここに章」など）の声は、どの選び方でも切られます。切りすぎたと思ったら、チェックを外して承認し直せば戻ります（ショートで冒頭のつかみを入れたあとは戻せません）。</p>
+
+  <h3 id="q3">③ 仕上がりの確認</h3>
+  <p>字幕の入った静止画の一覧（ロングは30〜45秒の音付きの試作も）が、確認の中に表示されます。字幕の見た目と本文、強調、画像の位置などを確かめます。ショートでは、<b>冒頭のつかみ（フック）</b>と<b>最後の案内文（CTA）</b>もここで決めます。CTA は毎回、入れるかどうかと文言を聞かれます。</p>
+  <div class="callout tip"><b>気になる所は、答える前に自分で直してもOK</b><p>編集画面で字幕の文字や効果音を直してから「直しました。続けてください」と返事をすれば、そのまま続きます。</p></div>
+
+  <h3 id="q4">④ 完成の視聴</h3>
+  <p>完成動画が確認の中で再生できます。最後まで見て、問題がなければ OK と答えます（確認した記録が残ります）。直したい所があれば、そのまま文章で返事をします（下の「直したいとき」）。完成のあとに1つだけ、「この見た目を<a href="customize.html#mystyle">マイスタイル</a>として保存しますか」と聞かれます。</p>
+</section>
+
+<section>
+  <h2 id="where"><span class="num">3</span>完成した動画の場所</h2>
+  <p>作業フォルダの中に、動画ごとのフォルダができます。左の「素材・出力」タブの <b>Finder で開く</b>（Windows はエクスプローラー）で、すぐ開けます。</p>
+  <div class="fig-svg">
+  <svg viewBox="0 0 900 330" role="img" aria-label="動画ごとのフォルダの中身：out に完成動画と字幕ファイルと試作、output に YouTube のチャプター、work に途中のファイル、そのほかは触らない">
+    <g font-family="sans-serif" font-size="15">
+      <rect x="10" y="10" width="300" height="46" rx="10" fill="#2d6b5f"/><text x="30" y="40" fill="#fff" font-weight="800">📁 作業フォルダ/朝の時間の使い方</text>
+      <g stroke="#cfc8ba" stroke-width="2"><line x1="40" y1="56" x2="40" y2="292"/><line x1="40" y1="90" x2="70" y2="90"/><line x1="40" y1="176" x2="70" y2="176"/><line x1="40" y1="226" x2="70" y2="226"/><line x1="40" y1="292" x2="70" y2="292"/></g>
+      <rect x="70" y="68" width="250" height="44" rx="10" fill="#fff1e6" stroke="#ffb98f"/><text x="88" y="96" font-weight="800" fill="#c4551a">📁 out　← 完成はここ</text>
+      <g font-size="14" fill="#1d2126">
+        <text x="345" y="80">〇〇_loopable.mp4　…ショートの完成（これを投稿）</text>
+        <text x="345" y="104">〇〇.mp4　…ロングの完成（ショートはループ前の版）</text>
+        <text x="345" y="128">〇〇.srt　…YouTube の字幕ファイル（ロング）</text>
+        <text x="345" y="152">〇〇_voice.mp4　…BGM を重ねる前の声だけの版</text>
+      </g>
+      <rect x="70" y="154" width="250" height="44" rx="10" fill="#eaf1fd" stroke="#b9cff5"/><text x="88" y="182" font-weight="800" fill="#2f5fb8">📁 output</text>
+      <text x="345" y="182" font-size="14" fill="#1d2126">youtube_chapters.txt　…概要欄に貼るチャプター（ロング・5分超）</text>
+      <rect x="70" y="204" width="250" height="44" rx="10" fill="#f3f0e9" stroke="#ddd5c6"/><text x="88" y="232" font-weight="800" fill="#4a515b">📁 work</text>
+      <text x="345" y="232" font-size="14" fill="#1d2126">途中のファイル（確認用の画像・カット候補の表など）</text>
+      <rect x="70" y="270" width="250" height="44" rx="10" fill="#f6f6f6" stroke="#e3e3e3"/><text x="88" y="298" fill="#9aa1ab">📁 data・public・src など</text>
+      <text x="345" y="298" font-size="14" fill="#9aa1ab">書き出しの部品。触りません（totonoumovie の画面で直します）</text>
+    </g>
+  </svg>
+  </div>
+  <p>セットアップで「完成動画のコピー先」を決めた場合は、そこにも完成動画がコピーされます。</p>
+</section>
+
+<section>
+  <h2 id="fix"><span class="num">4</span>直したいとき</h2>
+  <p>字幕の文字やタイミング、効果音の位置などは、<a href="editor.html">編集画面</a>で自分で直すのがいちばん早くて確実です。AI に頼むときは、次の4点で伝えると一度で正確に直ります。</p>
+  <div class="cards">
+    <div class="card"><div class="bd"><span class="tag">1</span><h3>どの場面か</h3><p>静止画の番号、または完成動画の「1分23秒あたり」</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">2</span><h3>その時の発言</h3><p>字幕の文言か、話している内容</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">3</span><h3>直したいこと</h3><p>どうしたいか</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">4</span><h3>残したいこと</h3><p>直すときに巻き込んではいけないもの</p></div></div>
+  </div>
+  <div class="cmd tm"><span class="lab">AI タブ →「直してもらう」に書く例</span><pre>1分23秒あたり、「売上が伸びた」の字幕の「伸びた」を「伸びました」に。前後の間はそのままで。</pre></div>
+  <p>書き直したら、<b>⬇ 書き出し</b> で完成動画を作り直します。</p>
+</section>
+
+<section>
+  <h2 id="time">どれくらい時間がかかるか</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>動画</th><th>機械の処理の合計（目安）</th></tr></thead><tbody>
+    <tr><td>ショート（35秒・縦）</td><td>約5分</td></tr>
+    <tr><td>ロング（10分・横・画像3枚・BGM・章カード）</td><td>約24分（ほかの重い処理と重なると約50分）</td></tr>
+  </tbody></table></div>
+  <p>Apple M5 Pro（メモリ48GB）での実測です。これに、確認に答える時間とカット候補を聞く時間が加わります。</p>
+</section>
+
+<section>
+  <h2 id="chat">チャット（Claude Code）でも使えます</h2>
+  <p>totonoumovie を使わずに、Claude Code にそのまま頼むこともできます。作ったプロジェクトは同じ場所に残るので、あとから totonoumovie で開いて直せます。</p>
+  <div class="cmd cc os-mac"><span class="lab">Claude Code に送る（縦動画をショートに）</span><pre>この動画をショートにして /Users/あなたの名前/Downloads/IMG_0001.MOV</pre></div>
+  <div class="cmd cc os-win"><span class="lab">Claude Code に送る（縦動画をショートに）</span><pre>この動画をショートにして C:\Users\あなたの名前\Downloads\IMG_0001.MOV</pre></div>
+  <p>途中で「このコマンドを実行してよいか」を聞かれたら、TotonouMovie の処理（<code>uv run</code> で始まるもの）なら「Yes」で進めます。</p>
+</section>

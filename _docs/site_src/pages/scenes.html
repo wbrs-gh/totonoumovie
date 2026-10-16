@@ -1,0 +1,164 @@
+<!--meta {"title": "使える場面と頼み方メーカー", "desc": "TotonouMovie が役に立つ場面と、選ぶだけで頼み方の文章ができる頼み方メーカー。"} -->
+<header class="page-head">
+  <div class="eyebrow">もっと活かす</div>
+  <h1>使える場面と頼み方メーカー</h1>
+  <p class="lead">場面ごとのおすすめと、選ぶだけで「AI への頼み方」の文章ができる道具です。できた文章は、totonoumovie の「今回だけの追加の指示」に貼るか、Claude Code にそのまま送ります。</p>
+</header>
+
+<section>
+  <h2 id="maker">頼み方メーカー</h2>
+  <div class="tool" id="maker-tool">
+    <h3>🪄 選ぶだけで、頼み方ができる</h3>
+    <div class="q">1. どんな動画？</div>
+    <div class="chips" data-k="kind">
+      <label><input type="radio" name="kind" value="short" checked><span>📱 縦のショート</span></label>
+      <label><input type="radio" name="kind" value="long"><span>🖥 YouTube（横）</span></label>
+      <label><input type="radio" name="kind" value="vo"><span>🎙 アフレコ</span></label>
+    </div>
+    <div class="q">2. 内容は？（おすすめの雰囲気が自動で選ばれます）</div>
+    <div class="chips" data-k="topic"></div>
+    <div class="q only-short">3. 字幕の雰囲気</div>
+    <div class="chips only-short" data-k="style">
+      <label><input type="radio" name="style" value="おまかせ" checked><span>おまかせ</span></label>
+      <label><input type="radio" name="style" value="落ち着き＋流行りの字幕"><span>落ち着き＋流行り</span></label>
+      <label><input type="radio" name="style" value="表情をつけた語り"><span>表情をつけた語り</span></label>
+      <label><input type="radio" name="style" value="派手め"><span>派手め</span></label>
+      <label><input type="radio" name="style" value="縦書き白テロップ"><span>縦書き白テロップ</span></label>
+    </div>
+    <div class="q not-long">4. テンポ</div>
+    <div class="chips not-long" data-k="tempo">
+      <label><input type="radio" name="tempo" value="おまかせ" checked><span>おまかせ</span></label>
+      <label><input type="radio" name="tempo" value="詰める"><span>詰める（間を0.1秒に）</span></label>
+      <label><input type="radio" name="tempo" value="標準"><span>標準（間を残す）</span></label>
+    </div>
+    <div class="q only-long">3. 話している人は？</div>
+    <div class="chips only-long" data-k="talk">
+      <label><input type="radio" name="talk" value="1人" checked><span>1人</span></label>
+      <label><input type="radio" name="talk" value="2人"><span>2人の対談</span></label>
+      <label><input type="radio" name="talk" value="3人以上"><span>3人以上</span></label>
+    </div>
+    <div class="q">5. 入れたいもの（あれば）</div>
+    <div class="chips" data-k="extras">
+      <label class="only-short"><input type="checkbox" value="hook"><span>冒頭のつかみ（フック）</span></label>
+      <label class="only-short"><input type="checkbox" value="cta"><span>最後の案内文（CTA）</span></label>
+      <label class="not-vo"><input type="checkbox" value="img"><span>画像</span></label>
+      <label><input type="checkbox" value="bgm"><span>BGM</span></label>
+      <label><input type="checkbox" value="names"><span>人名・用語の表記</span></label>
+      <label><input type="checkbox" value="soft"><span>美肌は弱め</span></label>
+      <label><input type="checkbox" value="mystyle"><span>前回と同じ見た目</span></label>
+    </div>
+    <div class="extra-in" data-for="cta" hidden><div class="q">案内文</div><input type="text" id="mk-cta" value="続きはプロフィールから"></div>
+    <div class="extra-in" data-for="img" hidden><div class="q">画像のフォルダ（あとで書き換えてもOK）</div><input type="text" id="mk-img" value=""></div>
+    <div class="extra-in" data-for="bgm" hidden><div class="q">BGM の曲のファイル</div><input type="text" id="mk-bgm" value=""><label style="font-size:14px;display:block;margin-top:6px"><input type="checkbox" id="mk-bgm-ok"> この曲を使ってよい権利を確認済み</label></div>
+    <div class="extra-in" data-for="names" hidden><div class="q">正しい表記（読点で区切る）</div><input type="text" id="mk-names" value="山田太郎、ととのう"></div>
+    <div class="extra-in" data-for="mystyle" hidden><div class="q">マイスタイルの名前（空なら「前回と同じ」）</div><input type="text" id="mk-style" value=""></div>
+
+    <h3 style="margin-top:22px">できあがり</h3>
+    <div class="cmd tm"><span class="lab">totonoumovie の「今回だけの追加の指示」に貼る</span><pre id="mk-out-tm"></pre></div>
+    <div class="cmd cc"><span class="lab">Claude Code にそのまま送る（動画のパスを差し替え）</span><pre id="mk-out-cc"></pre></div>
+  </div>
+</section>
+
+<section>
+  <h2 id="short">縦動画（リール・ショート）の場面</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>場面</th><th>おすすめ</th></tr></thead><tbody>
+    <tr><td>📚 毎日の発信（1人語りのノウハウ・解説）</td><td>落ち着き＋流行りの字幕、テンポは詰める、最後に案内文（CTA）</td></tr>
+    <tr><td>💗 想いを届ける（体験談・ストーリー）</td><td>表情をつけた語り。強調の一言だけ書体や配置が変わり、声の表情が字幕に乗ります</td></tr>
+    <tr><td>🕊 言葉を届ける（名言・語り）</td><td>縦書き白テロップ。静かな語りに合います</td></tr>
+    <tr><td>🎉 楽しく見せる（料理・エンタメ・ネタ）</td><td>派手め。色と動きの多い字幕で、仕上げで1.1倍速になります</td></tr>
+    <tr><td>📣 集客（セミナー・講座の告知）</td><td>冒頭のつかみ（フック）＋最後の案内文「お申し込みはプロフィールから」。告知画像のスクショを画像として入れます</td></tr>
+    <tr><td>🙈 顔を出さない（お店・旅・日常の紹介）</td><td>アフレコ動画。声の録音と、風景や手元の動画・写真から作ります</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="long">横動画（YouTube）の場面</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>場面</th><th>おすすめ</th></tr></thead><tbody>
+    <tr><td>🎓 講座・セミナー</td><td>撮影中に「編集さん、ここに章」と言って区切ると、章カードとチャプターが自動で入ります。スライドのスクショは「収める」で差し込めます</td></tr>
+    <tr><td>🗣 対談・インタビュー</td><td>①で「対談」と答えると、話者ごとに字幕を分けます</td></tr>
+    <tr><td>🛍 商品・サービスの紹介</td><td>商品の写真は「全画面」、サイトのスクショは「収める」、縦長の SNS 投稿は人物の横に「分割」で出せます</td></tr>
+    <tr><td>🧭 やり方・手順の解説</td><td>「編集さん、ここに一覧」のあとに項目を話すと、話した順に1行ずつ増える一覧の字幕になります</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="material">素材を整える</h2>
+  <div class="cards">
+    <div class="card"><div class="bd"><span class="tag">↕ 縦にする</span><h3>横で撮った動画を縦に</h3><p>顔を追いかけて縦（9:16）に切り出してからショートにできます。追うのはいちばん大きい顔だけです。</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">✨ 美肌</span><h3>肌と色味を整える</h3><p>顔の美肌補正（強さは変えられます）と、色味の調整ができます。編集の最初に行います。</p></div></div>
+    <div class="card"><div class="bd"><span class="tag">🔁 両方</span><h3>横の動画からショートも</h3><p>同じ元の動画から、縦のショートを別に作れます。横の完成動画をそのまま縦にした版は、字幕の端が見切れることがあります。</p></div></div>
+  </div>
+</section>
+
+<section>
+  <h2 id="notfit">こんなときは向いていません</h2>
+  <ul>
+    <li>何も話していない動画（BGM だけの映像など）：字幕とカットは話した言葉をもとに作るため</li>
+    <li>画像を新しく作りたいとき：画像の生成はしません（生成用の依頼文は書きます）</li>
+    <li>曲を選んでほしいとき：BGM は持ち込みの曲だけです</li>
+    <li>サムネイルの作成や、SNS への自動投稿</li>
+  </ul>
+  <p>くわしくは <a href="features.html#cannot">できないこと</a>。</p>
+</section>
+
+<script>
+(function () {
+  var TOPICS = {
+    short: [["ノウハウ・解説", "落ち着き＋流行りの字幕", "詰める"], ["体験談・想い", "表情をつけた語り", "標準"], ["名言・語り", "縦書き白テロップ", "標準"], ["料理・エンタメ", "派手め", "詰める"], ["セミナーの告知", "落ち着き＋流行りの字幕", "詰める"], ["自己紹介", "落ち着き＋流行りの字幕", "標準"]],
+    long: [["講座・セミナー"], ["対談・インタビュー"], ["商品・サービスの紹介"], ["やり方・手順の解説"]],
+    vo: [["お店の紹介"], ["旅・日常"], ["手元の作業（料理・作品）"]]
+  };
+  var tool = document.getElementById("maker-tool");
+  function val(name) { var e = tool.querySelector('input[name="' + name + '"]:checked'); return e ? e.value : ""; }
+  function extras() { return Array.prototype.map.call(tool.querySelectorAll('[data-k="extras"] input:checked'), function (e) { return e.value; }); }
+  function drawTopics() {
+    var k = val("kind");
+    tool.querySelector('[data-k="topic"]').innerHTML = TOPICS[k].map(function (t, i) {
+      return '<label><input type="radio" name="topic" value="' + i + '"' + (i === 0 ? " checked" : "") + "><span>" + t[0] + "</span></label>";
+    }).join("");
+  }
+  function show() {
+    var k = val("kind");
+    tool.querySelectorAll(".only-short").forEach(function (e) { e.hidden = k !== "short"; });
+    tool.querySelectorAll(".only-long").forEach(function (e) { e.hidden = k !== "long"; });
+    tool.querySelectorAll(".not-long").forEach(function (e) { e.hidden = k === "long"; });
+    tool.querySelectorAll(".not-vo").forEach(function (e) { e.hidden = k === "vo"; });
+    var ex = extras();
+    tool.querySelectorAll(".extra-in").forEach(function (e) { e.hidden = ex.indexOf(e.dataset.for) < 0 || (tool.querySelector('[value="' + e.dataset.for + '"]').closest("label").hidden); });
+  }
+  function build() {
+    show();
+    var k = val("kind"), t = TOPICS[k][+val("topic") || 0], ex = extras(), lines = [];
+    var win = document.body.classList.contains("os-win");
+    var home = win ? "C:\\Users\\あなたの名前\\" : "/Users/あなたの名前/";
+    if (k === "short") {
+      var st = val("style") === "おまかせ" ? t[1] : val("style");
+      var tp = val("tempo") === "おまかせ" ? t[2] : val("tempo");
+      lines.push("「" + t[0] + "」のショートです。字幕の雰囲気は「" + st + "」、テンポは「" + tp + "」でお願いします。");
+      if (ex.indexOf("hook") >= 0) lines.push("冒頭のつかみ（フック）を入れたいので、候補を出してください。");
+      if (ex.indexOf("cta") >= 0) lines.push("最後に案内文「" + (document.getElementById("mk-cta").value || "続きはプロフィールから") + "」を入れてください。");
+    } else if (k === "long") {
+      var tk = val("talk");
+      lines.push("「" + t[0] + "」の YouTube 用の動画です。話しているのは" + tk + "です。" + (tk !== "1人" ? "話者ごとに字幕を分けてください。" : ""));
+    } else {
+      var tp2 = val("tempo") === "おまかせ" ? "詰める" : val("tempo");
+      lines.push("「" + t[0] + "」のアフレコ動画です。テンポは「" + tp2 + "」、素材の順番は内容に合わせておまかせします。");
+    }
+    if (ex.indexOf("img") >= 0 && k !== "vo") lines.push("画像は " + (document.getElementById("mk-img").value || home + (win ? "Pictures\\talk-images" : "Pictures/talk-images")) + " に入っています。");
+    if (ex.indexOf("bgm") >= 0) lines.push("BGM は " + (document.getElementById("mk-bgm").value || home + (win ? "Music\\calm.mp3" : "Music/calm.mp3")) + (document.getElementById("mk-bgm-ok").checked ? "（使ってよい権利は確認済み）" : "（権利はこれから確認します）") + "。音量は控えめで。");
+    if (ex.indexOf("names") >= 0) lines.push("表記は" + document.getElementById("mk-names").value.split(/[、,，]/).filter(Boolean).map(function (n) { return "「" + n.trim() + "」"; }).join("") + "でお願いします。");
+    if (ex.indexOf("soft") >= 0) lines.push("美肌は弱めにしてください。");
+    if (ex.indexOf("mystyle") >= 0) lines.push(document.getElementById("mk-style").value ? "マイスタイル「" + document.getElementById("mk-style").value + "」でお願いします。" : "前回と同じ見た目（マイスタイル）でお願いします。");
+    var tm = lines.join("\n");
+    document.getElementById("mk-out-tm").textContent = tm;
+    var path = k === "vo" ? "声：" + home + (win ? "Music\\voice.m4a" : "Music/voice.m4a") + " 素材：" + home + (win ? "Videos\\walk" : "Movies/walk")
+      : home + (k === "long" ? (win ? "Videos\\talk.mp4" : "Movies/talk.mp4") : (win ? "Downloads\\IMG_0001.MOV" : "Downloads/IMG_0001.MOV"));
+    var verb = k === "short" ? "この動画をリールにして " : k === "long" ? "この動画を YouTube 用に編集して " : "アフレコ動画にして ";
+    document.getElementById("mk-out-cc").textContent = verb + path + "\n" + tm;
+  }
+  tool.addEventListener("change", function (e) { if (e.target.name === "kind") drawTopics(); build(); });
+  tool.addEventListener("input", build);
+  document.querySelectorAll(".os-switch button").forEach(function (b) { b.addEventListener("click", build); });
+  drawTopics(); build();
+})();
+</script>

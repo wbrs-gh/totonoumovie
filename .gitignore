@@ -11,3 +11,9 @@ tools/
 
 # データファイルの書き換え前の控え
 *.bak
+
+# マニュアルサイトの書き出し結果・大きな生成物（ソースは _docs/site_src にある）
+_docs/site/
+_docs/site_src/videos/*.mp4
+_docs/site_src/video/.cache/
+_docs/site_src/video/img/*.png

@@ -1,0 +1,117 @@
+<!--meta {"title": "困ったとき・質問", "desc": "うまく動かないときの対処、よくある質問、新しい版への入れ替え、質問するときに伝えること。"} -->
+<header class="page-head">
+  <div class="eyebrow">困ったとき</div>
+  <h1>困ったとき・よくある質問</h1>
+  <p class="lead">まずは下の欄に、画面に出た文字や困っていることを入れてみてください。当てはまる対処だけが残ります。それでも分からないときは、Claude Code に「TotonouMovie が動かない」と伝えると診断してくれます。</p>
+</header>
+
+<section>
+  <div class="tool">
+    <h3>🔎 症状から探す</h3>
+    <input type="search" id="finder" placeholder="例：command not found、Timed out、字幕が遅い、赤い帯、動画が再生されない" aria-label="症状">
+    <div id="finder-count" class="muted" style="font-size:13px;margin-top:6px"></div>
+  </div>
+</section>
+
+<section class="finder-scope">
+  <h2 id="install">導入のとき</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
+    <tr><td><code>brew: command not found</code></td><td>Homebrew の導入の最後に出る「Next steps」の2行を実行し、ターミナルを開き直します</td></tr>
+    <tr><td>winget が見つからない</td><td>Microsoft Store で「アプリ インストーラー」を更新します</td></tr>
+    <tr><td><code>claude</code> が見つからない（command not found・認識されません）</td><td>Claude Code のターミナル版が入っていないか、入れたあとに開き直していません。開き直して <code>claude --version</code> で確かめます</td></tr>
+    <tr><td><code>uv</code>・<code>ffmpeg</code>・<code>gh</code>・<code>python</code> が見つからない</td><td>ターミナル（PowerShell）を開き直します。Windows で直らなければパソコンを再起動します</td></tr>
+    <tr><td><code>/plugin isn't available in this environment</code></td><td>デスクトップアプリの Code タブでは /plugin が使えません。ターミナル（PowerShell）で <code>claude plugin marketplace add</code> から始まる行を送ります（<a href="install.html#totonou">入れかた</a>）</td></tr>
+    <tr><td><code>marketplace add</code> でエラー</td><td>TotonouMovie フォルダがホーム（ユーザー）フォルダの直下にあるか確かめます。中に README.md と plugins フォルダが見えるフォルダが正解です</td></tr>
+    <tr><td>急に「failed to load」と出る</td><td>TotonouMovie フォルダを消したり動かしたりしていないか確かめます。元の場所に戻せば直ります</td></tr>
+    <tr><td><code>gh repo clone</code> で「Could not resolve to a Repository」</td><td>招待を受けていない、または別のアカウントでログインしています。招待メールの承認と、<code>gh auth status</code> のアカウント名を確かめます</td></tr>
+    <tr><td><code>totonoumovie: command not found</code>・認識されません</td><td>入れかたの「どこからでも起動できるようにする」のあと、ターミナル（PowerShell）を開き直します。それでもだめなら、<span class="os-mac" style="display:inline"><code>~/totonoumovie/totonoumovie</code></span><span class="os-win" style="display:inline"><code>$HOME\totonoumovie\totonoumovie.cmd</code></span> で直接起動できます</td></tr>
+  </tbody></table></div>
+
+  <h2 id="app">totonoumovie の画面で</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
+    <tr><td>赤い帯「TotonouMovie プラグインが見つかりません」</td><td>TotonouMovie の導入（プラグインを入れる）が済んでいません。<a href="install.html#totonou">入れかた A</a> を済ませて、totonoumovie を起動し直します</td></tr>
+    <tr><td>黄色い帯「初期設定がまだのようです」</td><td>Claude Code で「TotonouMovie のセットアップをして」と話しかけ、PASS まで進めます</td></tr>
+    <tr><td>赤い帯「同期フォルダの中です」</td><td>Dropbox・iCloud・Google ドライブ・OneDrive の外のフォルダ（例：<span class="os-mac" style="display:inline">~/Movies/totonou</span><span class="os-win" style="display:inline">Videos\totonou</span>）に移動してから起動します</td></tr>
+    <tr><td>「claude コマンドが見つかりません」</td><td>Claude Code のターミナル版を入れて、ターミナルを開き直します（<code>claude --version</code> で確認）</td></tr>
+    <tr><td>プロジェクトが一覧に出ない</td><td>totonoumovie は起動したフォルダの中を一覧します。プロジェクトのある作業フォルダで起動し直します</td></tr>
+    <tr><td>動画が再生されない・カクカクする</td><td>右下に「軽い再生用の動画を準備中」と出ている間は少し待ちます。Google Chrome を使ってください</td></tr>
+    <tr><td>画面の字幕と完成の見た目が違う</td><td>画面の重ね表示は近似です。正確な見た目は「📷 静止画」で確かめます</td></tr>
+    <tr><td>カットの承認で「候補または素材が変更されています」</td><td>候補を作ったあとに素材や字幕の元が変わりました。「候補を作り直す」を押してから選び直します</td></tr>
+    <tr><td>カットを変えられない（フック適用済み）</td><td>ショートで冒頭のつかみを入れたあとは、カットを変えられません。フックを入れる前の状態から作り直すかを AI に相談します</td></tr>
+    <tr><td>AI の作業が「⚠ エラー」になった</td><td>「🤖 AI」から開いて内容を確かめます。返事を送れる状態なら「続けてください」と返すと再開できます</td></tr>
+    <tr><td>AI の作業が止まった・ターミナルを閉じてしまった</td><td>作業は動画ごとのフォルダに残っています。totonoumovie を起動し直し、AI タブの「自由に頼む」で「続きをして」と頼みます</td></tr>
+    <tr><td>保存に失敗と出る</td><td>ほかのアプリでデータを開いていないか、空き容量があるかを確かめ、⌘S（Ctrl+S）で保存し直します</td></tr>
+  </tbody></table></div>
+
+  <h2 id="timeout">書き出しが「Timed out」で止まる（回線が遅いとき）</h2>
+  <p>はじめて書き出すときは、書き出し用のブラウザ（約180MB）と字幕の字体を取得します。回線が遅いと、時間切れで止まることがあります。</p>
+  <ol>
+    <li><b>もう一度実行する</b>：取得できた分は残るので、続きから進むことがあります</li>
+    <li><b>同時処理数を1にする</b>：totonoumovie の書き出しで「同時処理数：1」を選びます</li>
+    <li><b>AI に頼む</b>：</li>
+  </ol>
+  <div class="cmd cc"><span class="lab">Claude Code（または AI タブ）に送る</span><pre>書き出しが Timed out で止まる。並列数を1にして、待ち時間を900秒にしてやり直して</pre></div>
+  <p>毎回そうなるときは「書き出しの並列数をいつも1にしたい」と伝えると、設定のしかたを案内します。</p>
+
+  <h2 id="claude">Claude Code そのもののこと</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
+    <tr><td>Claude Code が開かない・サインインできない</td><td>TotonouMovie ではなく Claude Code 側のことです。有料プランのアカウントでサインインしているかを確かめます</td></tr>
+    <tr><td>「You've hit your … limit · resets …」と出て止まる</td><td>Claude の利用の上限に達した表示です。表示された時刻を過ぎると、また使えます。時刻を過ぎたら「続きをして」と頼みます</td></tr>
+    <tr><td>動画のファイルが見つからないと言われる</td><td>パスが違っています。totonoumovie なら「選ぶ」ボタンで選び直します。Claude Code なら動画を入力欄にドラッグします</td></tr>
+  </tbody></table></div>
+
+  <h2 id="edit">編集・書き出しのとき</h2>
+  <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
+    <tr><td>書き出しが途中で止まる・遅い</td><td>作業フォルダがクラウド同期の中にないか確かめます。ほかの重い作業と重なると、数倍遅くなることもあります</td></tr>
+    <tr><td>字幕の字体がいつもと違う</td><td>書き出しのときに字体をインターネットから取得します。接続を確かめます。オフラインだと標準の字体に置き換わります</td></tr>
+    <tr><td>はじめての文字起こしが遅い</td><td>最初の1回は、約3GBの文字起こしモデルを取得します。2回目からは速くなります</td></tr>
+    <tr><td>字幕が声より早い・遅い</td><td>編集画面で字幕をドラッグして合わせるか、「1分10秒あたりの字幕が声より早い」と AI に伝えます</td></tr>
+    <tr><td>合図が効かなかった</td><td>前後に間を空けて、単独で言ったかを確かめます。文の途中だと合図と判定されにくくなります。言い方を変えた場合は、設定の言い方で言います</td></tr>
+    <tr><td>容量が足りない</td><td>空き容量は20GB以上を目安に。仕上がった古い動画のフォルダを外付けのドライブなどに移すと空きが増えます（あとで直すときは元の場所に戻します）</td></tr>
+    <tr><td>検査で WARN（注意・🟡）が出た</td><td>WARN は不合格ではありません。理由が出るので、気になる所だけ確かめます。FAIL（⚠）のときは直して書き出し直します</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="faq">よくある質問</h2>
+  <details class="faq"><summary>音声や動画を外部に送りますか？</summary><div>音声や動画のファイルは送りません。文字起こしはパソコンの中で動きます。ただし、文字起こしの文章や、確認のために作る画像（動画のコマ）は Claude が読むので、Claude Code のふだんの会話と同じように Anthropic に送られます。ほかに、書き出しのときに字幕の字体をインターネットから取得します。</div></details>
+  <details class="faq"><summary>インターネットは必要ですか？</summary><div>必要です。Claude Code は、使っている間ずっとインターネットにつながっている必要があります。導入のときのダウンロードと、書き出しのとき（字体の取得）にも使います。</div></details>
+  <details class="faq"><summary>会社で使えますか？</summary><div>会員ご本人が、仕事の動画づくりに使えます（ほかの社員との共有はできません）。ただし、書き出しに使っている Remotion は、社員4人以上の会社では有料の会社ライセンスが必要です。個人と3人以下の組織は無料です。</div></details>
+  <details class="faq"><summary>1本作るのにどれくらいかかりますか？</summary><div>機械の処理だけで、35秒のショートなら約5分、10分のロングなら約24分が目安です（Apple M5 Pro での実測）。これに確認に答える時間が加わります。</div></details>
+  <details class="faq"><summary>途中でやめても大丈夫ですか？</summary><div>大丈夫です。作業は動画ごとのフォルダに残ります。totonoumovie で開き直して、AI タブの「自由に頼む」で「続きをして」と頼めます。Claude Code の同じ会話の中なら「続きをして」で続きます。</div></details>
+  <details class="faq"><summary>totonoumovie と Claude Code（チャット）、どちらで作ってもいいですか？</summary><div>どちらでも同じ TotonouMovie が動き、同じフォルダにプロジェクトができます。チャットで作った動画を totonoumovie で開いて直すことも、その逆もできます。</div></details>
+  <details class="faq"><summary>同じ動画からショートとロングの両方を作れますか？</summary><div>作れます。横の動画を YouTube 用に仕上げたあと、同じ元の動画から「この横の動画を縦にしてからリールにして」と頼むと、ショートを別に作ります。横の完成動画をそのまま縦にした版も書き出せますが、字幕が横の幅のまま入るので、縦では端が見切れることがあります。</div></details>
+  <details class="faq"><summary>完成した動画は誰が最終確認しますか？</summary><div>あなたです。機械の検査は抜けやずれを見つけますが、言葉の正しさまでは保証しません。④の視聴で最後まで見て確かめます。</div></details>
+</section>
+
+<section>
+  <h2 id="ask">質問するときに伝えること</h2>
+  <p>自分で解決できないときは、TotonouMovie（totonoumovie）を受け取った窓口に質問します。次の5つを添えると、早く答えが見つかります。</p>
+  <ol>
+    <li>パソコン（Mac か Windows か）と、使っている画面（totonoumovie／デスクトップアプリ／ターミナル版）</li>
+    <li>何をしようとしたか（例「リールを作ろうとした」）</li>
+    <li>出たメッセージ（画面の文字をそのまま。totonoumovie なら右下の「ログ」の中身）</li>
+    <li>どこまで進んだか（例「②のカットの承認のあと」）</li>
+    <li>Claude Code に「TotonouMovie が動かない」と伝えたときの診断の結果</li>
+  </ol>
+</section>
+
+<script>
+(function () {
+  var inp = document.getElementById("finder"), cnt = document.getElementById("finder-count");
+  var rows = Array.prototype.slice.call(document.querySelectorAll(".finder-scope tbody tr"));
+  function norm(s) { return (s || "").toLowerCase().replace(/\s+/g, ""); }
+  inp.addEventListener("input", function () {
+    var q = inp.value.trim().toLowerCase().split(/\s+/).filter(Boolean), n = 0;
+    rows.forEach(function (r) {
+      var t = norm(r.textContent), ok = q.every(function (w) { return t.indexOf(norm(w)) >= 0; });
+      r.style.display = ok ? "" : "none"; if (ok) n++;
+    });
+    document.querySelectorAll(".finder-scope table").forEach(function (tb) {
+      var any = Array.prototype.some.call(tb.querySelectorAll("tbody tr"), function (r) { return r.style.display !== "none"; });
+      tb.style.display = any ? "" : "none";
+    });
+    cnt.textContent = q.length ? (n ? n + " 件見つかりました" : "見つかりませんでした。別の言葉で試すか、画面右上の「🔍 さがす」も使ってください") : "";
+  });
+})();
+</script>

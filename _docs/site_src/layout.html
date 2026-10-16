@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}｜totonoumovie 使い方マニュアル</title>
+<meta name="description" content="{{DESC}}">
+<meta property="og:title" content="{{TITLE}}｜totonoumovie 使い方マニュアル">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:image" content="https://totonoumovie.aisys.earth/images/ogp.jpg">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="{{BODYCLASS}}" data-page="{{SLUG}}">
+<a class="skip" href="#main">本文へ移動</a>
+<header class="top">
+  <button class="menu-btn" aria-label="目次を開く" aria-expanded="false">☰</button>
+  <a class="logo" href="index.html"><img src="assets/icon.svg" alt="" width="30" height="30"><span>totonoumovie<small>使い方マニュアル</small></span></a>
+  <button class="search-btn" type="button" aria-label="マニュアル内を検索"><span>🔍 さがす</span><kbd>⌘K</kbd></button>
+  <div class="os-switch" role="group" aria-label="パソコンの種類">
+    <button data-os="mac" type="button"> Mac</button><button data-os="win" type="button">Windows</button>
+  </div>
+</header>
+<div class="shell">
+  <nav class="side" aria-label="マニュアルの目次">{{NAV}}
+    <div class="side-foot">{{VERSION}} ・ 更新 {{UPDATED}}</div>
+  </nav>
+  <main id="main" class="main">
+{{BODY}}
+{{PAGER}}
+    <footer class="foot">
+      <p>totonoumovie 使い方マニュアル {{VERSION}} ・ 更新 {{UPDATED}}</p>
+      <p class="muted">TotonouMovie は配布元の製品です。画面のサンプルの人物・映像は、説明のために AI で作ったものです。動画のナレーション：VOICEVOX:冥鳴ひまり</p>
+    </footer>
+  </main>
+  <aside class="toc" aria-label="このページの見出し"></aside>
+</div>
+
+<div class="search-pop" hidden>
+  <div class="search-box" role="dialog" aria-label="検索">
+    <input type="search" placeholder="知りたいことを入れる（例：カット　戻す、Timed out、BGM）" aria-label="検索語">
+    <div class="search-hits"></div>
+    <div class="search-tip">↑↓で選んで Enter ・ Esc で閉じる</div>
+  </div>
+</div>
+<div class="toast" hidden></div>
+<script src="assets/search.js" defer></script>
+<script src="assets/site.js" defer></script>
+</body>
+</html>

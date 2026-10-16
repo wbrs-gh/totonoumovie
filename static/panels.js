@@ -466,7 +466,7 @@ function renderQuestion(r, proj) {
   const q = r.question;
   if (!q || r.status === "running") { box.innerHTML = ""; return; }
   const imgs = (q.images || []).map((p) => `<img src="${mediaURL(p)}" title="${esc(p)}">`).join("");
-  const vids = (q.videos || []).map((p) => `<video src="${mediaURL(p)}" controls></video><div class="small muted">${esc(p)}</div>`).join("");
+  const vids = (q.videos || []).map((p) => `<video src="${mediaURL(p)}#t=0.8" preload="metadata" controls></video><div class="small muted">${esc(p)}</div>`).join("");
   const qs = (q.questions || []).map((qq, qi) => `
     <div class="q">${esc(qq.question)}</div>
     ${(qq.options || []).map((o, oi) => `<label class="opt"><input type="${qq.multiSelect ? "checkbox" : "radio"}" name="q${qi}" value="${esc(o.label)}" ${!qq.multiSelect && oi === 0 ? "" : ""}> ${esc(o.label)}${o.description ? `<span class="d">${esc(o.description)}</span>` : ""}</label>`).join("")}

@@ -1,0 +1,244 @@
+{
+ "speaker": 14,
+ "label": "Windows への入れかた",
+ "scenes": [
+  {
+   "type": "title",
+   "title": "Windows に入れる",
+   "sub": "コピーして、貼って、Enter。これだけです",
+   "image": "../img/hero.jpg",
+   "kicker": "totonoumovie 使い方動画 ・ 約4分",
+   "say": "このビデオでは、ウィンドウズに TotonouMovie と totonoumovie を入れる手順を、最初から最後まで説明します。コマンドは、マニュアルのページから、コピーボタンで写せます。"
+  },
+  {
+   "type": "card",
+   "title": "全体の流れ",
+   "points": [
+    "道具を入れる（1回だけ）",
+    "Claude Code のターミナル版を入れる",
+    "TotonouMovie を入れて、セットアップ",
+    "totonoumovie を入れて、起動する"
+   ],
+   "say": "流れは4つです。道具を入れて、クロードコードを入れて、ととのうムービーのプラグインを入れて、最後に画面のアプリを入れます。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 1 PowerShell を開く",
+   "lines": [
+    [
+     "out",
+     "スタートメニューで「PowerShell」と入力して開く"
+    ],
+    [
+     "cmd",
+     "winget install --id=Git.Git -e"
+    ],
+    [
+     "out",
+     "✔ Successfully installed"
+    ]
+   ],
+   "say": "スタートメニューで、パワーシェルと入力して開きます。この窓に、マニュアルのコマンドを貼り付けて、エンターを押します。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 2 道具を1行ずつ入れる",
+   "lines": [
+    [
+     "cmd",
+     "winget install --id=astral-sh.uv -e"
+    ],
+    [
+     "cmd",
+     "winget install --id=Gyan.FFmpeg -e"
+    ],
+    [
+     "cmd",
+     "winget install --id=OpenJS.NodeJS.LTS -e"
+    ],
+    [
+     "cmd",
+     "winget install --id=GitHub.cli -e"
+    ],
+    [
+     "cmd",
+     "winget install --id=Python.Python.3.12 -e"
+    ],
+    [
+     "out",
+     "✔ Successfully installed"
+    ]
+   ],
+   "say": "道具を、1行ずつ入れていきます。許可を求める画面が出たら、はい、を押します。全部終わったら、パワーシェルを一度閉じて、開き直します。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 3 入ったか確かめる",
+   "lines": [
+    [
+     "cmd",
+     "uv --version; node -v; ffmpeg -version; gh --version; python --version"
+    ],
+    [
+     "out",
+     "uv 0.9.x / v22.x / ffmpeg 7.1 / gh 2.6x / Python 3.12"
+    ]
+   ],
+   "say": "開き直したら、この1行で確かめます。どれもバージョンが出れば成功です。認識されません、と出たら、パソコンを再起動してから試します。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 4 Claude Code を入れる",
+   "lines": [
+    [
+     "cmd",
+     "claude --version"
+    ],
+    [
+     "out",
+     "'claude' は、コマンドレット…として認識されません。"
+    ],
+    [
+     "cmd",
+     "irm https://claude.ai/install.ps1 | iex"
+    ],
+    [
+     "out",
+     "✔ Claude Code successfully installed!"
+    ]
+   ],
+   "say": "クロードコードのターミナル版が入っているかを確かめて、入っていなければ、この1行で入れます。終わったら、パワーシェルを開き直します。"
+  },
+  {
+   "type": "card",
+   "title": "STEP 4 TotonouMovie のフォルダを置く",
+   "points": [
+    "zip を右クリック →「すべて展開」",
+    "エクスプローラーのアドレス欄に %USERPROFILE% → ユーザーフォルダへ移す",
+    "中に README.md と plugins が見えれば正解",
+    "このフォルダは、消したり動かしたりしない"
+   ],
+   "say": "ジップファイルを右クリックして、すべて展開を選び、できたフォルダを、ユーザーフォルダに移します。このフォルダは、消したり動かしたりしないでください。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 5 プラグインを入れる",
+   "lines": [
+    [
+     "cmd",
+     "claude plugin marketplace add \"~/TotonouMovie\""
+    ],
+    [
+     "out",
+     "✔ Successfully added marketplace: totonou"
+    ],
+    [
+     "cmd",
+     "claude plugin install totonou-movie@totonou"
+    ],
+    [
+     "out",
+     "✔ Successfully installed plugin: totonou-movie@totonou"
+    ]
+   ],
+   "say": "パワーシェルに、この2行を、1行ずつ送ります。サクセスフリーと出れば成功です。"
+  },
+  {
+   "type": "card",
+   "title": "STEP 6 セットアップ（Claude Code に話しかける）",
+   "points": [
+    "Claude Code を開いて「TotonouMovie のセットアップをして」",
+    "作業フォルダはそのまま、名前を答える",
+    "コマンドの許可は「Yes」",
+    "最後に PASS が出れば完了"
+   ],
+   "say": "クロードコードを開いて、ととのうムービーのセットアップをして、と話しかけます。聞かれたことに答えていけば、最後にパスと出て完了です。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 7 totonoumovie を入れる",
+   "lines": [
+    [
+     "cmd",
+     "gh auth login"
+    ],
+    [
+     "out",
+     "✓ Logged in as your-account"
+    ],
+    [
+     "cmd",
+     "gh repo clone wbrs-gh/totonoumovie \"$HOME\\totonoumovie\""
+    ],
+    [
+     "cmd",
+     "$p = [Environment]::GetEnvironmentVariable(\"Path\",\"User\"); [Environment]::SetEnvironmentVariable(\"Path\",\"$p;$HOME\\totonoumovie\",\"User\")"
+    ]
+   ],
+   "say": "次は、画面のアプリです。ギットハブにログインして、ととのうムービーを入れ、どこからでも起動できるように設定します。終わったら、パワーシェルを開き直します。"
+  },
+  {
+   "type": "terminal",
+   "os": "win",
+   "step": "STEP 8 起動する",
+   "lines": [
+    [
+     "cmd",
+     "mkdir \"$HOME\\Videos\\totonou\" -Force; cd \"$HOME\\Videos\\totonou\""
+    ],
+    [
+     "cmd",
+     "totonoumovie"
+    ],
+    [
+     "out",
+     "totonoumovie を起動しました → http://127.0.0.1:8780/"
+    ]
+   ],
+   "say": "作業フォルダに移動して、ととのうムービー、と打てば起動します。起動したフォルダが、作業フォルダになります。"
+  },
+  {
+   "type": "shot",
+   "image": "../img/app-home.png",
+   "cam": [
+    [
+     0,
+     0,
+     1,
+     1
+    ],
+    [
+     0.12,
+     0,
+     0.76,
+     0.4
+    ]
+   ],
+   "hl": [
+    [
+     0.177,
+     0.06,
+     0.645,
+     0.045
+    ]
+   ],
+   "hlLabel": [
+    "この緑の帯が出れば成功"
+   ],
+   "step": "完了",
+   "say": "ブラウザが開いて、ととのうムービー 2.2.0 を使います、と緑の帯が出れば、準備は完了です。"
+  },
+  {
+   "type": "end",
+   "title": "おつかれさまでした",
+   "sub": "次は「はじめての1本」を作ってみましょう",
+   "credit": "ナレーション VOICEVOX:冥鳴ひまり"
+  }
+ ]
+}

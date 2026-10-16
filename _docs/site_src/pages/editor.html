@@ -1,0 +1,150 @@
+<!--meta {"title": "編集画面の使い方", "desc": "totonoumovie の編集画面：画面の見方、タイムラインの操作、字幕・カット・効果音・寄り・モーション・画像・章・BGM の直し方、静止画・試作・書き出し。"} -->
+<header class="page-head">
+  <div class="eyebrow">使い方</div>
+  <h1>編集画面の使い方</h1>
+  <p class="lead">AI が作った字幕や効果音を、動画を見ながら自分の手で直す画面です。直した内容は自動で保存され、そのまま書き出しに使われます。</p>
+</header>
+
+<section>
+  <h2 id="map">画面の見方</h2>
+  <div class="annot">
+    <figure style="margin:0"><img src="images/app-editor.jpg" alt="編集画面の全体"></figure>
+    <span class="pin" style="left:6%;top:6.5%">1</span>
+    <span class="pin" style="left:83%;top:2%">2</span>
+    <span class="pin" style="left:9%;top:35%">3</span>
+    <span class="pin" style="left:50.5%;top:30%">4</span>
+    <span class="pin" style="left:30%;top:67.5%">5</span>
+    <span class="pin" style="left:92%;top:30%">6</span>
+    <span class="pin" style="left:2.5%;top:85%">7</span>
+  </div>
+  <ul class="legend">
+    <li><span class="n">1</span><span><b>左のタブ</b>：字幕の一覧／カット承認／AI／素材・出力</span></li>
+    <li><span class="n">2</span><span><b>上のボタン</b>：AI で作る・AI の作業・プロンプト・検査・静止画・試作・書き出し</span></li>
+    <li><span class="n">3</span><span><b>字幕の一覧</b>：本文をその場で書き換えられる。クリックでその場面へ</span></li>
+    <li><span class="n">4</span><span><b>プレビュー</b>：元の動画に字幕・画像・モーションを重ねて表示（見た目は近似）</span></li>
+    <li><span class="n">5</span><span><b>再生</b>：「元」と「完成」の秒を両方表示。「カットを飛ばす」で完成と同じ流れに</span></li>
+    <li><span class="n">6</span><span><b>プロパティ</b>：選んだ項目の細かい設定。何も選ばないとプロジェクトの情報</span></li>
+    <li><span class="n">7</span><span><b>タイムライン</b>：段ごとに、字幕・効果音・寄り・モーション・画像・章・BGM</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2 id="timeline">タイムラインの操作</h2>
+  <div class="fig-svg">
+  <svg viewBox="0 0 900 300" role="img" aria-label="タイムラインの操作：上の時間の段をクリックで移動、項目のまん中をドラッグで移動、端をドラッグで長さ、空いている所をダブルクリックで追加、斜線はカットされる区間">
+    <g font-family="sans-serif">
+      <rect x="0" y="0" width="900" height="300" rx="14" fill="#1d2027"/>
+      <g font-size="12" fill="#8b92a3"><text x="16" y="34">時間</text><text x="16" y="84">字幕</text><text x="16" y="134">効果音</text><text x="16" y="184">寄り</text><text x="16" y="234">画像</text></g>
+      <rect x="80" y="18" width="800" height="26" fill="#252932"/>
+      <g fill="#8b92a3" font-size="11"><text x="86" y="36">0:00</text><text x="286" y="36">0:05</text><text x="486" y="36">0:10</text><text x="686" y="36">0:15</text></g>
+      <rect x="400" y="50" width="70" height="230" fill="#ff5a5a" opacity=".16"/>
+      <g><rect x="110" y="66" width="140" height="28" rx="6" fill="#7a4fc4"/><text x="120" y="85" font-size="12.5" fill="#fff">おはようございます</text>
+         <rect x="260" y="66" width="130" height="28" rx="6" fill="#7a4fc4" stroke="#ffb020" stroke-width="3"/><text x="270" y="85" font-size="12.5" fill="#fff">ポイントは3つ</text>
+         <rect x="480" y="66" width="170" height="28" rx="6" fill="#7a4fc4"/><text x="490" y="85" font-size="12.5" fill="#fff">1つ目は水を飲むこと</text></g>
+      <rect x="260" y="116" width="34" height="28" rx="6" fill="#c27a1f"/><rect x="480" y="116" width="34" height="28" rx="6" fill="#c27a1f"/>
+      <rect x="260" y="166" width="100" height="28" rx="6" fill="#2b8a6e"/>
+      <rect x="560" y="216" width="150" height="28" rx="6" fill="#2f6fb3"/><text x="570" y="235" font-size="12.5" fill="#fff">water.jpg</text>
+      <line x1="330" y1="18" x2="330" y2="280" stroke="#ffb020" stroke-width="2.5"/>
+      <!-- 吹き出し -->
+      <g font-size="13" font-weight="700">
+        <rect x="530" y="0" width="240" height="0"/>
+        <path d="M330 18 L330 8" stroke="#ff7a30" stroke-width="2"/>
+        <rect x="118" y="252" width="0" height="0"/>
+      </g>
+    </g>
+    <g font-family="sans-serif" font-size="13.5" font-weight="800">
+      <g><circle cx="356" cy="30" r="13" fill="#ff7a30"/><text x="356" y="35" text-anchor="middle" fill="#fff">1</text></g>
+      <g><circle cx="325" cy="58" r="13" fill="#ff7a30"/><text x="325" y="63" text-anchor="middle" fill="#fff">2</text></g>
+      <g><circle cx="397" cy="80" r="13" fill="#ff7a30"/><text x="397" y="85" text-anchor="middle" fill="#fff">3</text></g>
+      <g><circle cx="780" cy="130" r="13" fill="#ff7a30"/><text x="780" y="135" text-anchor="middle" fill="#fff">4</text></g>
+      <g><circle cx="435" cy="268" r="13" fill="#ff7a30"/><text x="435" y="273" text-anchor="middle" fill="#fff">5</text></g>
+    </g>
+  </svg>
+  </div>
+  <ul class="legend">
+    <li><span class="n">1</span><span><b>時間の段をクリック</b>でその位置へ移動（ドラッグで連続して動かせる）。オレンジの縦線がいまの位置</span></li>
+    <li><span class="n">2</span><span><b>項目のまん中をドラッグ</b>で時刻をずらす（選ぶと黄色い枠）</span></li>
+    <li><span class="n">3</span><span><b>項目の左右の端をドラッグ</b>で長さを変える</span></li>
+    <li><span class="n">4</span><span><b>空いている所をダブルクリック</b>で、その時刻に新しく追加</span></li>
+    <li><span class="n">5</span><span><b>赤い斜線</b>はカットされる区間。「カットを飛ばす」をオンにすると、再生でも飛ばします</span></li>
+  </ul>
+  <div class="scroll"><table class="tbl"><thead><tr><th>キー</th><th>はたらき</th></tr></thead><tbody>
+    <tr><td><kbd>Space</kbd></td><td>再生・停止</td></tr>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>1コマずつ移動（<kbd>Shift</kbd> と一緒で1秒）</td></tr>
+    <tr><td><kbd>Delete</kbd></td><td>選んだ項目を消す</td></tr>
+    <tr><td><kbd>⌘</kbd>＋<kbd>D</kbd>（Windows は <kbd>Ctrl</kbd>＋<kbd>D</kbd>）</td><td>選んだ項目を、すぐ後ろに複製</td></tr>
+    <tr><td><kbd>⌘</kbd>＋<kbd>Z</kbd>／<kbd>⌘</kbd>＋<kbd>Shift</kbd>＋<kbd>Z</kbd></td><td>元に戻す／やり直し（Windows は <kbd>Ctrl</kbd>）</td></tr>
+    <tr><td><kbd>⌘</kbd>＋<kbd>S</kbd></td><td>すぐ保存（ふだんは自動で保存されます）</td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2 id="telop">字幕を直す</h2>
+  <div class="video"><video src="videos/v05-telop.mp4" poster="videos/v05-telop.jpg" controls preload="none" playsinline></video></div>
+  <figure><img src="images/app-telop.jpg" alt="字幕の編集"><figcaption>左の一覧で本文を、右のプロパティで時刻・見た目・位置・色を直します。</figcaption></figure>
+  <div class="scroll"><table class="tbl"><thead><tr><th>直したいこと</th><th>やり方</th></tr></thead><tbody>
+    <tr><td>文字・誤字</td><td>左の「字幕」タブの一覧で、そのまま書き換える（改行もそのまま反映）</td></tr>
+    <tr><td>出るタイミング</td><td>タイムラインの字幕をドラッグ／端で長さ。または右の「開始」「終了」に秒を入れる</td></tr>
+    <tr><td>見た目</td><td>右の「見た目」（TotonouMovie の字幕のデザイン）・「出かた」・「書体」・「縦書き」</td></tr>
+    <tr><td>位置</td><td>「位置 X／Y」に 0〜1 の数（左上が 0）。顔にかかる字幕を下に逃がすときなど</td></tr>
+    <tr><td>色</td><td>「文字色」「縁の色」「帯・箱の色」</td></tr>
+    <tr><td>一部の文字だけ色を変える</td><td>「部分装飾」に <code>[{"range":[0,2],"color":"#e02020"}]</code>（0文字目から2文字ぶんを赤）</td></tr>
+    <tr><td>字幕を足す</td><td>字幕の段の空いている所をダブルクリック。または「文字起こし」の段の発話を選んで「この発話から字幕を作る」</td></tr>
+  </tbody></table></div>
+  <div class="callout warn"><b>画面の字幕は近似です</b><p>正確な見た目（書体・縁取り・動き）は <b>📷 静止画</b> で確かめます。完成と同じ仕組みで1コマを作ります。白い文字が背景に埋もれるときは、プロパティの「字幕の読みやすさを自動補正」。</p></div>
+</section>
+
+<section>
+  <h2 id="cut">カットを承認する・戻す</h2>
+  <div class="video"><video src="videos/v06-cut.mp4" poster="videos/v06-cut.jpg" controls preload="none" playsinline></video></div>
+  <p>カットは、TotonouMovie の「承認の記録」の仕組みを守るため、タイムラインで直接は書き換えません。左の <b>カット承認</b> タブで行います。</p>
+  <ol>
+    <li>候補ごとに <b>▶ 元</b>（前後2秒そのまま）と <b>▶ カット後</b>（切った流れ）で聞き比べる。タイムラインの「カット」の段の点線の枠も候補です</li>
+    <li>切るものにチェック（「全部」「なし」「無音だけ＋」などでまとめて選べる）</li>
+    <li>「承認する人」に名前を入れて <b>✔ 承認して反映</b></li>
+  </ol>
+  <ul>
+    <li><b>戻したい</b>：チェックを外して、もう一度「承認して反映」。消えた字幕も一緒に戻ります</li>
+    <li><b>候補が無い・古い</b>：「候補を作り直す」。候補づくり（文字起こし・無音の検出・AI の提案）がまだなら、AI に「カット候補を作って」と頼みます</li>
+    <li><b>確認クリップ</b>：候補ごとの前後の短い動画を作ります（AI が作る確認用と同じもの）</li>
+    <li>ショートで冒頭のつかみ（フック）を入れたあとは、カットを変えられません</li>
+    <li>カットを変えたあとは、寄りの交互切替と効果音を作り直すと自然です（プロパティの「寄りの交互切替を作り直す」、効果音は AI に依頼）</li>
+  </ul>
+</section>
+
+<section>
+  <h2 id="effects">効果音・寄り・モーション・画像・章・BGM</h2>
+  <div class="video"><video src="videos/v07-effects.mp4" poster="videos/v07-effects.jpg" controls preload="none" playsinline></video></div>
+  <div class="scroll"><table class="tbl"><thead><tr><th>段</th><th>できること</th><th>コツ</th></tr></thead><tbody>
+    <tr><td>効果音</td><td>音の種類（🔊で試聴）・音量・長さ</td><td>同梱の13種類から選べます。書き出し用のフォルダへ自動でコピーされます</td></tr>
+    <tr><td>寄り</td><td>倍率・動き（ゆっくり寄る／寄って止める／寄って戻る／交互）・中心</td><td>倍率は 1.08〜1.15 がおすすめ。「交互」は固定カメラのつなぎ目を隠す用</td></tr>
+    <tr><td>モーション</td><td>強調の文字・バッジ・一覧・枠・蛍光ペン・手書きの丸や矢印</td><td>位置は画面の％。種類を変えると、設定欄も切り替わります</td></tr>
+    <tr><td>画像</td><td>画像（＋で追加）・配置（全画面／収める／分割／ワイプ）・動き</td><td>縦動画は「収める」か「全画面」。1枚4〜6秒が見やすい</td></tr>
+    <tr><td>章タイトル</td><td>左上に出る今の話題の見出し（章名・節タイトル）</td><td>かぎ括弧「」は使わない（字形が崩れることがある）</td></tr>
+    <tr><td>章カード</td><td>章の切り替わりに差し込むカード（見出し・秒数・効果音）</td><td>カードの分だけ動画は長くなります</td></tr>
+    <tr><td>BGM</td><td>曲・音量（控えめ／標準）・曲の開始位置・権利の確認</td><td>BGM の段をダブルクリックで設定。権利を確認した曲だけ、書き出しのときに重ねます</td></tr>
+  </tbody></table></div>
+  <figure><img src="images/app-effect.jpg" alt="モーションを選んで直しているところ"><figcaption>モーション（バッジ）を選んだところ。右で文字・位置・色・回転を直せます。</figcaption></figure>
+</section>
+
+<section>
+  <h2 id="check">確かめる・書き出す</h2>
+  <div class="video"><video src="videos/v08-export.mp4" poster="videos/v08-export.jpg" controls preload="none" playsinline></video></div>
+  <div class="scroll"><table class="tbl"><thead><tr><th>ボタン</th><th>何をするか</th><th>目安</th></tr></thead><tbody>
+    <tr><td>🔍 検査</td><td>字幕の点検と書き出し前の検査。結果がそのまま表示されます</td><td>数秒〜数十秒</td></tr>
+    <tr><td>📷 静止画</td><td>今の位置を、完成と同じ仕組みで1コマにする</td><td>初回は数分、2回目から数秒</td></tr>
+    <tr><td>🎞 試作</td><td>指定した区間（30〜45秒がおすすめ）を音付き・縮小で書き出す</td><td>1分前後</td></tr>
+    <tr><td>⬇ 書き出し</td><td>完成動画を書き出し → 音声の仕上げ → BGM → 自動検査</td><td>ショート数分、ロング数十分</td></tr>
+  </tbody></table></div>
+  <ul>
+    <li>進み具合は右下のカードに出ます。「ログ」で詳しい様子、「中止」で止められます</li>
+    <li>検査の結果が🟡（注意）でも、書き出しはできています。気になる所だけ確かめます。⚠（FAIL）のときは直して書き出し直します</li>
+    <li>ショートのループ化・字幕ファイル（SRT）・YouTube のチャプター・完成の確認の記録は、AI に「仕上げて」と頼むと、TotonouMovie の手順どおりに行います</li>
+  </ul>
+  <figure><img src="images/app-export.jpg" alt="書き出しの画面"><figcaption>書き出しの画面。</figcaption></figure>
+</section>
+
+<section>
+  <h2 id="files">素材・出力タブ</h2>
+  <p>完成動画・試作・静止画・差し込み画像の一覧です。クリックでその場で再生・表示でき、「Finder で開く」（Windows はエクスプローラー）で保存場所を開けます。完成の確認の記録があると、緑の表示が出ます。</p>
+</section>
