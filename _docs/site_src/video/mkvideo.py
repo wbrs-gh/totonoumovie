@@ -89,6 +89,17 @@ def tts(text, speaker, path, speed=1.08):
                                  headers={"Content-Type": "application/json"}, method="POST")
     with open(path, "wb") as f:
         f.write(urllib.request.urlopen(req).read())
+    vis, t = [], qd.get("prePhonemeLength", 0.05)
+    for ph in qd["accent_phrases"]:
+        for m in ph["moras"]:
+            d = ((m.get("consonant_length") or 0) + (m.get("vowel_length") or 0)) / speed
+            vis.append([round(t, 3), round(t + d, 3), m["vowel"]])
+            t += d
+        if ph.get("pause_mora"):
+            d = (ph["pause_mora"].get("vowel_length") or 0) / speed
+            vis.append([round(t, 3), round(t + d, 3), "pau"])
+            t += d
+    json.dump(vis, open(path + ".vis.json", "w"))
     with wave.open(path) as w:
         return w.getnframes() / w.getframerate()
 
@@ -129,7 +140,7 @@ def split_sentences(text):
     return parts or [text]
 
 
-def draw_caption(img, sentences, t, dur):
+def draw_caption(img, sentences, t, dur, shift=False):
     """読み上げに合わせて、いま読んでいる文を字幕にする"""
     total = sum(len(s) for s in sentences)
     acc = 0
@@ -140,7 +151,7 @@ def draw_caption(img, sentences, t, dur):
             break
         acc += len(s)
     fnt = font(FONT_B, 44)
-    lines = wrap(cur.strip(), fnt, 1500)[:2]
+    lines = wrap(cur.strip(), fnt, 1360 if shift else 1500)[:2]
     if not lines:
         return
     lh = 64
@@ -148,11 +159,12 @@ def draw_caption(img, sentences, t, dur):
     ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(ov)
     bw = max(fnt.getlength(l) for l in lines) + 80
-    x0 = (W - bw) / 2
+    cx = (W - 250) / 2 if shift == "right" else (250 + W) / 2 if shift else W / 2
+    x0 = cx - bw / 2
     y0 = H - bh - 44
     rounded(d, (x0, y0, x0 + bw, y0 + bh), 18, fill=CAP_BG)
     for i, l in enumerate(lines):
-        d.text((W / 2, y0 + 17 + i * lh + lh / 2), l, font=fnt, fill=(255, 255, 255), anchor="mm")
+        d.text((cx, y0 + 17 + i * lh + lh / 2), l, font=fnt, fill=(255, 255, 255), anchor="mm")
     img.alpha_composite(ov)
 
 
@@ -474,6 +486,93 @@ def render_end(sc, t, dur, base_dir):
     return img
 
 
+# ======================================================================
+# トトノちゃん（アプリと同じ絵。口は母音ごとに描いて重ねる）
+# ======================================================================
+TT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "static", "totono")
+_tt = {}
+
+
+def _bez(p0, p1, p2, n=14):
+    return [((1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0],
+             (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1]) for t in [i / n for i in range(n + 1)]]
+
+
+def mouth_img(v, skin, w):
+    """母音 v の口を、幅 w の画像にする（40×30 の座標で描いて縮める）"""
+    key = (v, skin, w)
+    if key in _tt:
+        return _tt[key]
+    S = 8
+    im = Image.new("RGBA", (40 * S, 30 * S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    P = lambda pts: [(x * S, y * S) for x, y in pts]
+    line, red, pink = (42, 47, 79, 255), (184, 52, 76, 255), (240, 138, 154, 255)
+    d.ellipse([8 * S, 6 * S, 32 * S, 24 * S], fill=skin)
+    if v in ("n", "pau", "N", "cl"):
+        d.line(P(_bez((11, 13), (20, 19.5), (29, 13))), fill=line, width=int(2.6 * S), joint="curve")
+    else:
+        shapes = {"a": ((10, 10), (20, 7.5), (30, 10), (28.5, 27), (20, 27), (11.5, 27)), "e": ((9, 11), (20, 8.5), (31, 11), (27.5, 22.5), (20, 22.5), (12.5, 22.5)),
+                  "i": ((8, 12), (20, 9.5), (32, 12), (26, 20), (20, 20), (14, 20))}
+        if v in shapes:
+            a, b, c, e, f, g = shapes[v]
+            pts = _bez(a, b, c) + _bez(c, e, f)[1:] + _bez(f, g, a)[1:]
+            d.polygon(P(pts), fill=red, outline=line, width=int(2.2 * S))
+            if v == "i":
+                d.polygon(P(_bez((10, 12.4), (20, 10.6), (30, 12.4)) + [(29, 14.6), (20, 13.4), (11, 14.6)]), fill=(255, 255, 255, 255))
+            else:
+                cy = {"a": 22.5, "e": 19}[v]
+                d.ellipse([14 * S, (cy - 3) * S, 26 * S, (cy + 3) * S], fill=pink)
+        else:
+            rx, ry, cy = {"u": (5, 5.2, 15.5), "o": (7, 8.4, 16)}.get(v, (5, 5, 15))
+            d.ellipse([(20 - rx) * S, (cy - ry) * S, (20 + rx) * S, (cy + ry) * S], fill=red, outline=line, width=int(2.2 * S))
+            d.ellipse([(20 - rx * 0.55) * S, (cy + ry * 0.35) * S, (20 + rx * 0.55) * S, (cy + ry * 0.75) * S], fill=pink)
+    out = im.resize((max(1, w), max(1, int(w * 0.75))), Image.LANCZOS)
+    _tt[key] = out
+    return out
+
+
+def tt_meta():
+    if "meta" not in _tt:
+        _tt["meta"] = json.load(open(os.path.join(TT_DIR, "meta.json"), encoding="utf-8"))
+    return _tt["meta"]
+
+
+def draw_totono(img, pose, vowel, x, y, h, t, flip=False):
+    """img の (x, y)（左下）に、高さ h でトトノちゃんを置く"""
+    meta = tt_meta()
+    p = meta["poses"].get(pose) or meta["poses"]["explain"]
+    k = ("img", pose, h)
+    if k not in _tt:
+        src = Image.open(os.path.join(TT_DIR, p["file"])).convert("RGBA")
+        _tt[k] = src.resize((int(src.width * h / src.height), h), Image.LANCZOS)
+    body = _tt[k].copy()
+    m = p.get("mouth")
+    if m:
+        bw, bh = body.size
+        mw = int(m["w"] * bw)
+        mi = mouth_img(vowel, tuple(int(p["skin"][i:i + 2], 16) for i in (1, 3, 5)) + (255,), mw)
+        body.alpha_composite(mi, (int(m["x"] * bw - mw / 2), int(m["y"] * bh - mi.height / 2)))
+    if flip:
+        body = body.transpose(Image.FLIP_LEFT_RIGHT)
+    bob = int(4 * math.sin(t * 2.4))
+    sh = Image.new("RGBA", body.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).ellipse([body.width * 0.25, body.height - 18, body.width * 0.75, body.height - 2], fill=(0, 0, 0, 50))
+    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(5)), (int(x), int(y - body.height)))
+    img.alpha_composite(body, (int(x), int(y - body.height + bob)))
+
+
+def vowel_at(sc, t):
+    vis = sc.get("_vis")
+    if not vis:
+        return "n"
+    ta = t - 0.25
+    for a, b, v in vis:
+        if a <= ta < b:
+            return v
+    return "n"
+
+
 RENDER = {"shot": render_shot, "title": render_title, "card": render_card, "terminal": render_terminal, "end": render_end}
 
 
@@ -494,6 +593,8 @@ def build(spec_path, out, preview=False):
             key = re.sub(r"[^\w]", "", f"{speaker}_{say}")[:60] + f"_{abs(hash(say)) % 10**8}"
             sc["_wav"] = os.path.join(work, key + ".wav")
             sc["_alen"] = tts(say, speaker, sc["_wav"], spec.get("speed", 1.08))
+            vp = sc["_wav"] + ".vis.json"
+            sc["_vis"] = json.load(open(vp)) if os.path.exists(vp) else None
         else:
             sc["_alen"] = 0
         sc["_dur"] = max(float(sc.get("min", 2.4)), sc["_alen"] + float(sc.get("pad", 0.7)))
@@ -548,9 +649,25 @@ def build(spec_path, out, preview=False):
             if sc.get("type") not in ("title", "end"):
                 draw_step(img, sc.get("step"))
                 draw_brand(img, spec.get("label"))
+            typ = sc.get("type", "shot")
+            if spec.get("totono", True):
+                pose = sc.get("pose") or {"title": "wave", "end": "cheer", "card": "explain", "terminal": "point"}.get(typ) or ("point" if sc.get("hl") or sc.get("cursor") else "explain")
+                # 説明している場所が左側にあるときは、右下に立って邪魔をしない
+                side = sc.get("ttSide")
+                if not side:
+                    hl0 = (sc.get("hl") or [None])[0]
+                    side = "right" if isinstance(hl0, list) and hl0[0] + hl0[2] / 2 < 0.4 else "left"
+                sc["_side"] = side
+                if typ in ("title", "end"):
+                    draw_totono(img, pose, vowel_at(sc, t), 1360, 1020, 620, t)
+                elif side == "right":
+                    draw_totono(img, pose, vowel_at(sc, t), W - 300, 1072, 330, t, flip=True)
+                else:
+                    draw_totono(img, pose, vowel_at(sc, t), 10, 1072, 330, t)
             if sc.get("say") and not sc.get("noCaption"):
                 ta = max(0.0, t - 0.25)
-                draw_caption(img, sents, ta, max(0.01, sc["_alen"]))
+                shift = spec.get("totono", True) and typ not in ("title", "end")
+                draw_caption(img, sents, ta, max(0.01, sc["_alen"]), shift=("right" if sc.get("_side") == "right" else "left") if shift else False)
             draw_progress(img, (elapsed + t) / total)
             if t < 0.2:
                 black = Image.new("RGBA", (W, H), (0, 0, 0, int(255 * (1 - t / 0.2) * 0.6)))

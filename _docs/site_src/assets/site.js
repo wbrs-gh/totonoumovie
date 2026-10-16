@@ -170,5 +170,16 @@
       items.forEach(function (a, i) { a.classList.toggle("sel", i === sel); }); if (items[sel]) items[sel].scrollIntoView({ block: "nearest" });
     } else if (e.key === "Enter" && items[sel]) { location.href = items[sel].href; }
   });
+  // ---- トトノちゃんのひとこと（押すと声で説明） ----
+  $$(".tt-tip").forEach(function (tip) {
+    var text = tip.textContent.trim(), pose = tip.dataset.pose || "explain", id = tip.dataset.id;
+    tip.textContent = "";
+    if (!window.Totono) { tip.textContent = text; return; }
+    var c = new Totono.Chara(tip, { size: 120, pose: pose });
+    var play = function () { c.say(text, { id: id, pose: pose, live: false, actions: [{ label: "▶ もう一度聞く", fn: play }] }); };
+    c.show(text, { pose: pose, actions: [{ label: "▶ トトノちゃんの説明を聞く", primary: true, fn: play }] });
+    c.onClick = play;
+  });
+
   window.TM = { toast: toast, store: store };
 })();

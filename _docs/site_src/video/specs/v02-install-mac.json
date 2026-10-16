@@ -1,5 +1,5 @@
 {
- "speaker": 14,
+ "speaker": 8,
  "label": "Mac への入れかた",
  "scenes": [
   {
@@ -228,7 +228,7 @@
    "type": "end",
    "title": "おつかれさまでした",
    "sub": "次は「はじめての1本」を作ってみましょう",
-   "credit": "ナレーション VOICEVOX:冥鳴ひまり"
+   "credit": "案内：トトノちゃん（VOICEVOX:春日部つむぎ）・見本の人物は AI で作成"
   }
  ]
 }

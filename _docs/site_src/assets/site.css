@@ -265,3 +265,24 @@ details.faq > div { padding: 12px 18px 14px 52px; }
   .tool { display: none; }
   a { color: inherit; text-decoration: none; }
 }
+
+/* ===== トトノちゃん（アプリと同じ部品） ===== */
+.tt { position: relative; display: flex; align-items: flex-end; gap: 10px; }
+.tt-body { position: relative; flex-shrink: 0; filter: drop-shadow(0 6px 10px rgba(20,60,110,.18)); transform-origin: 50% 100%; animation: tt-bob 2.6s ease-in-out infinite; }
+@keyframes tt-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.tt-img { display: block; width: 100%; height: auto; cursor: pointer; user-select: none; }
+.tt-mouth { position: absolute; overflow: visible; pointer-events: none; }
+.tt-bubble { position: relative; background: #fff; border: 2px solid #bfe0f5; border-radius: 16px; padding: 10px 16px 12px; max-width: 560px;
+  box-shadow: 0 8px 24px rgba(20,60,110,.12); margin-bottom: 46px; font-size: 15.5px; line-height: 1.8; }
+.tt-bubble::before { content: ""; position: absolute; left: -11px; bottom: 22px; border: 10px solid transparent; border-right-color: #bfe0f5; border-left: 0; }
+.tt-bubble::after { content: ""; position: absolute; left: -7px; bottom: 23px; border: 9px solid transparent; border-right-color: #fff; border-left: 0; }
+.tt-name { font-size: 12px; font-weight: 800; color: #1f6aa5; display: flex; align-items: center; justify-content: space-between; }
+.tt-mute { border: 0; background: none; padding: 0 2px; font-size: 13px; cursor: pointer; }
+.tt-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.tt-actions:empty { display: none; }
+.tt-actions button { font: inherit; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1px solid #bfe0f5; background: #fff; color: #1f6aa5; cursor: pointer; }
+.tt-actions button.primary { background: #2f8fd0; border-color: #2f8fd0; color: #fff; }
+.tt-tip { max-width: 860px; margin: 6px 0 18px; }
+.hidden { display: none !important; }
+@media (max-width: 860px) { .tt-tip .tt-body { width: 90px !important; } .tt-bubble { font-size: 14.5px; } }
+@media print { .tt-actions, .tt-mute { display: none !important; } .tt-body { animation: none; } }

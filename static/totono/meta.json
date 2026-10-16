@@ -1,0 +1,77 @@
+{
+ "size": [
+  640,
+  720
+ ],
+ "poses": {
+  "stand": {
+   "file": "g_stand.png",
+   "mouth": {
+    "x": 0.5109,
+    "y": 0.3722,
+    "w": 0.0594
+   },
+   "skin": "#fdefe3"
+  },
+  "wave": {
+   "file": "g_wave.png",
+   "mouth": {
+    "x": 0.5109,
+    "y": 0.3722,
+    "w": 0.0594
+   },
+   "skin": "#fdf1e4"
+  },
+  "point": {
+   "file": "g_point.png",
+   "mouth": {
+    "x": 0.4672,
+    "y": 0.3583,
+    "w": 0.0594
+   },
+   "skin": "#fdefe4"
+  },
+  "explain": {
+   "file": "g_explain.png",
+   "mouth": {
+    "x": 0.5109,
+    "y": 0.3722,
+    "w": 0.0594
+   },
+   "skin": "#faeedf"
+  },
+  "think": {
+   "file": "g_think.png",
+   "mouth": {
+    "x": 0.5125,
+    "y": 0.3653,
+    "w": 0.0594
+   },
+   "skin": "#fdf1e7"
+  },
+  "cheer": {
+   "file": "g_cheer.png",
+   "mouth": {
+    "x": 0.5109,
+    "y": 0.3431,
+    "w": 0.0594
+   },
+   "skin": "#fdf5ed"
+  },
+  "good": {
+   "file": "g_good.png",
+   "mouth": {
+    "x": 0.5109,
+    "y": 0.3708,
+    "w": 0.0594
+   },
+   "skin": "#fdf1e5"
+  },
+  "walk1": {
+   "file": "walk1.png"
+  },
+  "walk2": {
+   "file": "walk2.png"
+  }
+ }
+}

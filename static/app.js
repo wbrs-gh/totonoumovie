@@ -39,6 +39,8 @@ function openModal(html, opts = {}) {
 }
 function closeModal() {
   $$("#modalBody video").forEach((v) => v.pause());
+  // AI の作業画面のトトノちゃんが話していたら止める
+  if (typeof runView !== "undefined" && runView && runView.chara) runView.chara.stop();
   $("#modal").classList.add("hidden");
   $("#modalBody").innerHTML = "";
 }
@@ -130,6 +132,7 @@ function showHome() {
   $("#video").pause();
   history.replaceState(null, "", "/");
   window.renderHome && window.renderHome();
+  window.maybeAutoTour && window.maybeAutoTour("home");
 }
 
 async function openProject(name, opts = {}) {
@@ -157,6 +160,7 @@ async function openProject(name, opts = {}) {
   renderInspector();
   window.renderSide && window.renderSide();
   if (changed || !S.wave) loadWave();
+  if (changed) window.maybeAutoTour && window.maybeAutoTour("editor");
 }
 
 function fillProjSelect() {

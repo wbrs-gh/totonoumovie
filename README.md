@@ -20,7 +20,10 @@ TotonouMovie（ととのうムービー）で作る動画を、ブラウザの�
 | `tm_app/agent.py` | `claude -p` を動かし、スキルの「★確認」を ```` ```tm-ask ```` ブロックで受けて画面に出す |
 | `tm_app/jobs.py` | 静止画・試作・書き出し・検査・カット承認などの裏の作業 |
 | `prompts/default.json` | AI に渡すプロンプトの既定値（上書きは `~/.totonoumovie/prompts.json`） |
-| `static/` | 画面（app.js＝プレビュー・タイムライン・プロパティ、panels.js＝一覧・カット承認・AI・プロンプト） |
+| `static/` | 画面（app.js＝プレビュー・タイムライン・プロパティ、panels.js＝一覧・カット承認・AI の作業画面・プロンプト、totono.js＝案内役トトノちゃんとツアー） |
+| `static/totono/` | トトノちゃんの絵（ポーズ・歩き）と口の位置（meta.json）、あらかじめ作った声（voice/） |
+| `static/icons/` | AI の作業画面などのアイコン |
+| `assets_src/totono/` | トトノちゃんの絵の整形（process.py）と、せりふの声づくり（make_voice.py・lines.json） |
 
 ## 決まりごと
 
@@ -28,3 +31,9 @@ TotonouMovie（ととのうムービー）で作る動画を、ブラウザの�
 - 完成の確認記録（`verify_render.py --record-human-check`）は AI に任せ、ユーザーの OK の後だけ
 - アプリの記録・キャッシュは `~/.totonoumovie/`（runs＝AI の作業、cache＝再生用の軽い動画・波形）
 - 開発時は環境変数 `TOTONOUMOVIE_PLUGIN_ROOT` でプラグインの場所を直接指定できる
+
+## トトノちゃん
+
+- 絵は codex-image で生成した元絵を `assets_src/totono/process.py` で背景を抜いて大きさをそろえたもの。口は母音（あいうえお・閉じ）ごとに画面側で描いて重ねる
+- 声は VOICEVOX:春日部つむぎ。ツアーや AI の作業画面の決まったせりふは `make_voice.py` で前もって作って同梱（VOICEVOX が無いパソコンでも声が出る）。それ以外は VOICEVOX があればその場で読み上げ、無ければ吹き出しだけ
+- せりふを足したら `python3 assets_src/totono/make_voice.py assets_src/totono/lines.json static/totono/voice`

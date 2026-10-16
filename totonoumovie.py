@@ -315,6 +315,62 @@ def waveform(src, per_sec=50):
 
 
 # ======================================================================
+# トトノちゃんの声（VOICEVOX があれば読み上げ、母音の並びで口を動かす）
+# ======================================================================
+VOICEVOX_URL = "http://127.0.0.1:50021"
+TOTONO_SPEAKER = 8   # VOICEVOX:春日部つむぎ
+
+
+def visemes_from_query(q):
+    """VOICEVOX の audio_query から、口の形の並び [[開始秒, 終了秒, 母音], ...] を作る"""
+    t = q.get("prePhonemeLength", 0.1)
+    speed = q.get("speedScale", 1.0) or 1.0
+    out = []
+    for ph in q.get("accent_phrases", []):
+        for m in ph.get("moras", []):
+            c = (m.get("consonant_length") or 0) / speed
+            v = (m.get("vowel_length") or 0) / speed
+            out.append([round(t, 3), round(t + c + v, 3), m.get("vowel", "a")])
+            t += c + v
+        pm = ph.get("pause_mora")
+        if pm:
+            d = (pm.get("vowel_length") or 0) / speed
+            out.append([round(t, 3), round(t + d, 3), "pau"])
+            t += d
+    return out
+
+
+def totono_tts(text):
+    """読み上げの音声と口の動きを作って、キャッシュのパスを返す。VOICEVOX が無ければ None"""
+    import urllib.request
+    h = hashlib.md5(f"{TOTONO_SPEAKER}:{text}".encode()).hexdigest()[:16]
+    d = os.path.join(CACHE_DIR, "tts")
+    wav, meta = os.path.join(d, h + ".wav"), os.path.join(d, h + ".json")
+    if os.path.exists(wav) and os.path.exists(meta):
+        return h
+    try:
+        say = text
+        for a, b in (("totonoumovie", "ととのうムービー"), ("TotonouMovie", "ととのうムービー"), ("AI", "エーアイ"),
+                     ("OK", "オーケー"), ("BGM", "ビージーエム"), ("Claude Code", "クロードコード"), ("YouTube", "ユーチューブ")):
+            say = say.replace(a, b)
+        q = json.loads(urllib.request.urlopen(urllib.request.Request(
+            f"{VOICEVOX_URL}/audio_query?speaker={TOTONO_SPEAKER}&text={urllib.parse.quote(say)}", method="POST"),
+            timeout=8).read())
+        q["speedScale"] = 1.08
+        body = urllib.request.urlopen(urllib.request.Request(
+            f"{VOICEVOX_URL}/synthesis?speaker={TOTONO_SPEAKER}", data=json.dumps(q).encode(),
+            headers={"Content-Type": "application/json"}, method="POST"), timeout=30).read()
+    except Exception:
+        return None
+    os.makedirs(d, exist_ok=True)
+    with open(wav, "wb") as f:
+        f.write(body)
+    with open(meta, "w", encoding="utf-8") as f:
+        json.dump({"visemes": visemes_from_query(q)}, f)
+    return h
+
+
+# ======================================================================
 # 裏の作業（エンジンの呼び出し）
 # ======================================================================
 def engine_job(P, kind, title, steps, on_done=None):
@@ -643,6 +699,15 @@ class Handler(BaseHTTPRequestHandler):
                     if os.path.exists(os.path.join(d, name)):
                         return self.send_file(os.path.join(d, name), cache=True)
                 return self.send_json({"error": "not found"}, 404)
+            if u.path == "/api/tts":
+                h = totono_tts(q.get("text", "")[:400])
+                if not h:
+                    return self.send_json({"audio": None})
+                meta = read_json(os.path.join(CACHE_DIR, "tts", h + ".json"), {}) or {}
+                return self.send_json({"audio": "/api/tts_audio?h=" + h, "visemes": meta.get("visemes", [])})
+            if u.path == "/api/tts_audio":
+                h = re.sub(r"[^0-9a-f]", "", q.get("h", ""))
+                return self.send_file(os.path.join(CACHE_DIR, "tts", h + ".wav"), "audio/wav", cache=True)
             if u.path == "/api/jobs":
                 P = resolve_project(q["p"]) if q.get("p") else None
                 return self.send_json({"jobs": JOBS.list(P)})

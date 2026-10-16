@@ -422,35 +422,125 @@ async function pollRuns() {
 setTimeout(pollRuns, 1500);
 
 let runView = null;
+
+// AI の作業の段階（アイコン・表示名・トトノちゃんのせりふ）
+const STAGES = [
+  { id: "recv", label: "受け取る", icon: "film", say: "動画を受け取ったよ。準備をしているね。" },
+  { id: "trans", label: "文字起こし", icon: "transcribe", say: "いま、話している言葉を文字にしているよ。少し待っててね。" },
+  { id: "q1", label: "確認①", icon: "question", say: "確認だよ。雰囲気とテンポを選んでね。迷ったら一番上のおすすめで大丈夫。" },
+  { id: "cut", label: "カット承認", icon: "scissors", say: "カットの候補を作っているよ。" },
+  { id: "telop", label: "字幕", icon: "subtitle", say: "字幕を作って、読みやすく整えているよ。" },
+  { id: "fx", label: "演出", icon: "sparkle", say: "効果音や動きを入れているよ。" },
+  { id: "q3", label: "仕上がり確認", icon: "question", say: "仕上がりを確認してね。気になる所は、編集画面で直してからでも大丈夫。" },
+  { id: "render", label: "書き出し", icon: "export", say: "書き出し中だよ。長い動画だと少し時間がかかるよ。" },
+  { id: "check", label: "検査", icon: "inspect", say: "できた動画を検査しているよ。" },
+  { id: "done", label: "完成", icon: "trophy", say: "おつかれさま！完成した動画は、素材と出力のタブにあるよ。" },
+];
+const STAGE_RULES = [
+  [/init_project|probe_video|tm_style|tm_settings/, "recv"], [/transcribe|fix_transcript|skin_retouch/, "trans"],
+  [/detect_|gen_cut_plan|cut_review|cue_cuts/, "cut"], [/gen_telopdata|lint_telop|caption_contrast|apply_expression|gen_image_plan/, "telop"],
+  [/gen_se_plan|motion_graphics|ensure_se|jumpcut_zoom|shorts_hook|gen_highlight|section_titles/, "fx"],
+  [/render_project.py render|postprocess_audio|mix_bgm|shorts_loop|gen_srt/, "render"], [/verify_render|recheck_speech|qa_static/, "check"],
+];
+const SAY_ID = { recv: "run_recv", trans: "run_trans", q1: "run_q1", cut: "run_cut", telop: "run_telop", fx: "run_fx", q3: "run_q3", render: "run_render", check: "run_check", done: "run_done" };
+function stageOf(r, evts) {
+  const order = STAGES.map((x) => x.id);
+  let idx = 0;
+  for (const e of evts) for (const [re, st] of STAGE_RULES) if (re.test(e.text)) idx = Math.max(idx, order.indexOf(st));
+  const q = r.question;
+  if (q && r.status !== "running") {
+    const t = (q.title || "") + q.kind;
+    if (q.kind === "done") idx = order.indexOf("done");
+    else if (q.kind === "review" || /④/.test(t)) idx = order.indexOf("done");
+    // 確認の番のときは、その確認の段階を「いま」にする（先に進んだ作業の記録があっても）
+    else if (q.kind === "cut_approval" || /②/.test(t)) idx = order.indexOf("cut");
+    else if (/③/.test(t)) idx = order.indexOf("q3");
+    else if (/①/.test(t)) idx = order.indexOf("q1");
+  }
+  return idx;
+}
+function lineFor(r, stage) {
+  const q = r.question;
+  if (r.status === "error") return ["うまくいかなかったみたい。くわしい記録を見て、続けてくださいと送ってみてね。", "run_error", "think"];
+  if (r.status === "stopped") return ["作業を止めたよ。続けたいときは、AI タブで続きを頼んでね。", "run_stopped", "think"];
+  if (r.status === "waiting" && q) {
+    if (q.kind === "cut_approval") return ["カットの承認だよ。下のボタンを押して、聞き比べながら選んでね。", "run_q2", "point"];
+    if (q.kind === "review") return ["完成したよ！最後まで見て、よければオーケーを選んでね。", "run_q4", "cheer"];
+    if (q.kind === "done") return [STAGES[9].say, "run_done", "good"];
+    if (stage.id === "q1" || stage.id === "q3") return [stage.say, SAY_ID[stage.id], "point"];
+    return ["確認したいことがあるみたい。答えを選んで送ってね。", "run_ask", "point"];
+  }
+  return [stage.say, SAY_ID[stage.id], stage.id === "done" ? "good" : "explain"];
+}
+
 async function openRun(id) {
+  if (runView && runView.chara) runView.chara.remove();
   runView = { id, since: 0, events: [] };
-  openModal(`<h2 id="rvTitle">🤖 AI の作業</h2>
-    <div class="small muted" id="rvStatus"></div>
-    <div id="rvEvents" style="max-height:38vh;overflow-y:auto;margin:8px 0;border:1px solid var(--line);border-radius:6px;padding:6px"></div>
-    <div id="rvQuestion"></div>
-    <div class="btnrow"><button id="rvStop" class="danger">止める</button><button id="rvOpenP" class="hidden">プロジェクトを開く</button><button onclick="closeModal()">閉じる（裏で続きます）</button></div>`, { width: "min(1000px,96vw)" });
+  openModal(`<div class="run2">
+    <div class="run-head"><h2 id="rvTitle">AI の作業</h2><span class="pill" id="rvPill"></span><span class="small muted" id="rvCost"></span></div>
+    <div class="stepper" id="rvSteps"></div>
+    <div class="run-main">
+      <div class="run-chara" id="rvChara"></div>
+      <div>
+        <div id="rvNow"></div>
+        <div id="rvQuestion"></div>
+      </div>
+    </div>
+    <details class="run-log"><summary>くわしい記録（AI がしたこと）</summary><div id="rvEvents"></div></details>
+    <div class="run-foot"><button id="rvStop" class="danger">止める</button><button id="rvOpenP" class="hidden">編集画面を開く</button><button onclick="closeModal()">閉じる（裏で続きます）</button></div>
+  </div>`, { width: "min(1080px,96vw)" });
+  runView.chara = new Totono.Chara($("#rvChara"), { size: 170, pose: "explain" });
   $("#rvStop").onclick = () => api("/api/run_stop", { id });
   refreshRun();
 }
+
 async function refreshRun() {
-  if (!runView || $("#modal").classList.contains("hidden") || !$("#rvEvents")) { runView = null; return; }
+  if (!runView || $("#modal").classList.contains("hidden") || !$("#rvEvents")) {
+    if (runView && runView.chara) runView.chara.remove();
+    runView = null; return;
+  }
   const v = runView;
   let r;
   try { r = await api(`/api/run?id=${v.id}&since=${v.since}`); } catch (e) { setTimeout(refreshRun, 2000); return; }
   if (runView !== v) return;
   v.since = r.eventCount;
-  $("#rvTitle").textContent = "🤖 " + r.title;
-  $("#rvStatus").innerHTML = `${RUN_ST[r.status] || r.status}${r.project ? "・" + esc(r.project) : ""}${r.cost ? `・約 $${r.cost.toFixed(2)}` : ""}${r.error ? `<div class="err">${esc(r.error)}</div>` : ""}`;
+  v.events.push(...r.events);
+  $("#rvTitle").textContent = r.title;
+  const pill = $("#rvPill");
+  pill.className = "pill " + (r.status === "waiting" && r.question?.kind !== "done" ? "waiting" : r.status);
+  pill.textContent = { running: "⏳ AI が作業中", waiting: "✋ あなたの番です", done: "✅ 完了", error: "⚠ エラー", stopped: "⏹ 止めました" }[r.status] || r.status;
+  if (r.question?.kind === "done") pill.textContent = "✅ 完了";
+  $("#rvCost").textContent = r.cost ? `約 $${r.cost.toFixed(2)}` : "";
   const ev = $("#rvEvents");
   const atBottom = ev.scrollTop + ev.clientHeight >= ev.scrollHeight - 30;
   ev.insertAdjacentHTML("beforeend", r.events.map((e) => `<div class="ev ${e.role}">${esc(e.text)}</div>`).join(""));
   if (atBottom) ev.scrollTop = ev.scrollHeight;
   $("#rvStop").classList.toggle("hidden", r.status !== "running");
+  // 段階の表示（AI で作るときだけ）
+  const isCreate = r.kind === "create" || r.kind === "voiceover";
+  const si = stageOf(r, v.events);
+  const stage = STAGES[si];
+  $("#rvSteps").classList.toggle("hidden", !isCreate);
+  if (isCreate) {
+    $("#rvSteps").innerHTML = STAGES.map((x, i) => `<div class="stp ${i < si ? "done" : i === si ? "cur" + (r.status === "running" ? " working" : "") : ""}">
+      <div class="ic"><img src="/static/icons/${x.icon}.png" alt=""></div><div>${x.label}</div></div>`).join("");
+  }
+  // いまの様子（作業中のとき）
+  const last = [...v.events].reverse().find((e) => e.role === "assistant" || e.role === "tool");
+  $("#rvNow").innerHTML = r.status === "running" ? `<div class="run-card"><div class="run-now"><img src="/static/icons/${isCreate ? stage.icon : "gear"}.png" alt="">
+      <div><div class="big">${isCreate ? esc(stage.label) + "をしています" : "AI が作業しています"}</div><div class="last">${esc(last ? last.text.split("\n")[0].slice(0, 90) : "準備中…")}</div></div></div>
+      <p class="small muted" style="margin:10px 0 0">この画面を閉じても、AI は裏で作業を続けます。確認の順番が来たら、上の 🤖 AI に赤い数字が付きます。</p></div>` : "";
   const pname = r.project ? r.project.split("/").pop() : null;
   if (pname && S.projects.every((p) => p.path !== r.project)) { try { S.projects = (await api("/api/projects")).projects; fillProjSelect(); } catch (e) { /* 空 */ } }
   const proj = S.projects.find((p) => p.path === r.project);
   $("#rvOpenP").classList.toggle("hidden", !proj);
   $("#rvOpenP").onclick = () => { closeModal(); openProject(proj.name); };
+  const key = r.status + ":" + si + ":" + (r.question?.kind || "");
+  if (key !== v.lastKey) {
+    v.lastKey = key;
+    const [text, id, pose] = lineFor(r, stage);
+    v.chara.say(text, { id, pose });
+  }
   if (r.status !== v.lastStatus) {
     v.lastStatus = r.status;
     renderQuestion(r, proj);
@@ -469,18 +559,18 @@ function renderQuestion(r, proj) {
   const vids = (q.videos || []).map((p) => `<video src="${mediaURL(p)}#t=0.8" preload="metadata" controls></video><div class="small muted">${esc(p)}</div>`).join("");
   const qs = (q.questions || []).map((qq, qi) => `
     <div class="q">${esc(qq.question)}</div>
-    ${(qq.options || []).map((o, oi) => `<label class="opt"><input type="${qq.multiSelect ? "checkbox" : "radio"}" name="q${qi}" value="${esc(o.label)}" ${!qq.multiSelect && oi === 0 ? "" : ""}> ${esc(o.label)}${o.description ? `<span class="d">${esc(o.description)}</span>` : ""}</label>`).join("")}
+    ${(qq.options || []).map((o, oi) => `<label class="opt"><input type="${qq.multiSelect ? "checkbox" : "radio"}" name="q${qi}" value="${esc(o.label)}" ${!qq.multiSelect && oi === 0 ? "checked" : ""}> ${esc(o.label)}${o.description ? `<span class="d">${esc(o.description)}</span>` : ""}</label>`).join("")}
     <input type="text" class="qOther" data-qi="${qi}" placeholder="その他・補足（自由に書けます）">`).join("");
   const isCut = q.kind === "cut_approval";
   const isDone = q.kind === "done";
-  box.innerHTML = `<div class="qbox">
-    <b>${isDone ? "✅ " : "✋ "}${esc(q.title || "確認")}</b>
+  box.innerHTML = `<div class="qbox run-card ask">
+    <h3><img src="/static/icons/${isDone ? "trophy" : isCut ? "scissors" : "question"}.png" alt="">${esc(q.title || "確認")}</h3>
     ${q.text ? `<div class="qbody small" style="margin-top:6px">${esc(q.text)}</div>` : ""}
     ${q.body ? `<div class="qbody" style="margin-top:6px">${esc(q.body)}</div>` : ""}
     <div class="thumbs" style="margin-top:6px">${imgs}</div>${vids}
     ${isCut ? `<div class="notice small" style="margin-top:8px">カットの承認は編集画面の「カット承認」で、候補を聞いて選んで行います。</div>
       <div class="btnrow"><button class="primary" id="qCut" ${proj ? "" : "disabled"}>✂ カット承認を開く</button></div>` : qs}
-    ${isCut ? "" : `<h4 style="margin:10px 0 4px">${(q.questions || []).length ? "まとめての補足（任意）" : "AI への返事"}</h4><textarea id="qFree" rows="2" placeholder="${isDone ? "追加で頼みたいことがあれば" : "答え・指示を書いてください"}"></textarea>
+    ${isCut ? "" : `<h4 style="margin:12px 0 4px;font-size:12px;color:var(--muted)">${(q.questions || []).length ? "まとめての補足（なければ空のままで OK）" : "AI への返事"}</h4><textarea id="qFree" rows="2" placeholder="${isDone ? "追加で頼みたいことがあれば" : "答え・指示を書いてください"}"></textarea>
       <div class="btnrow"><button class="primary" id="qSend">${isDone ? "追加で頼む" : "答えを送って続ける"}</button></div>`}
   </div>`;
   box.querySelectorAll(".thumbs img").forEach((im) => im.onclick = () => window.open(im.src));
@@ -507,7 +597,7 @@ function renderQuestion(r, proj) {
     try {
       await api("/api/run_answer", { id: r.id, text: lines.join("\n") });
       runView.lastStatus = "running";
-      box.innerHTML = `<div class="muted">送りました。AI が続きを進めています…</div>`;
+      box.innerHTML = `<div class="run-card"><div class="muted">送りました。AI が続きを進めています…</div></div>`;
     } catch (e) { toast(e.message, 5000); }
   };
 }
@@ -548,3 +638,12 @@ async function openPrompts() {
 function presetRow(p) {
   return `<div class="preset"><input type="text" value="${esc(p.name)}" placeholder="名前（例：テンポよく）"><textarea rows="2" placeholder="AI への指示">${esc(p.text)}</textarea><button class="small danger" data-del>✕</button></div>`;
 }
+
+// ======================================================================
+// ツアー（トトノちゃん）
+// ======================================================================
+$("#btnTour").addEventListener("click", () => Totono.startTour(S.P ? "editor" : "home"));
+// はじめて開いた画面では、自動でツアーを始める
+window.maybeAutoTour = function (name) {
+  if (!Totono.tourSeen(name)) setTimeout(() => Totono.startTour(name), 900);
+};

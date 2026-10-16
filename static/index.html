@@ -8,7 +8,7 @@
 </head>
 <body>
 <header id="topbar">
-  <div class="brand">🎬 totonoumovie <span id="projName" class="muted"></span></div>
+  <div class="brand"><img src="/static/totono/logo.svg" alt="" class="brand-logo"> totonoumovie <span id="projName" class="muted"></span></div>
   <div class="proj">
     <button id="btnHome" title="プロジェクトの一覧へ">📁 一覧</button>
     <select id="projSelect" title="プロジェクトを切り替え"></select>
@@ -20,6 +20,7 @@
     <button id="btnCreate" title="動画を渡して、TotonouMovie の手順で AI に作ってもらう">🎬 AIで作る</button>
     <button id="btnAI" title="AI の作業の様子と確認待ち">🤖 AI <span id="aiBadge" class="badge hidden"></span></button>
     <button id="btnPrompts" title="AI に渡すプロンプトを見る・書き換える・オリジナルの指示を作る">✍ プロンプト</button>
+    <button id="btnTour" title="トトノちゃんが画面を案内します">🎓 ツアー</button>
     <span class="sep"></span>
     <button id="btnQA" class="needp" title="字幕の点検と書き出し前の検査">🔍 検査</button>
     <button id="btnStill" class="needp" title="今の位置を Remotion で静止画にする（完成と同じ見た目）">📷 静止画</button>
@@ -93,6 +94,7 @@
 <div id="toast" class="hidden"></div>
 <div id="modal" class="hidden"><div class="modal-box" id="modalBox"><div id="modalBody"></div></div></div>
 
+<script src="/static/totono.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/panels.js"></script>
 </body>

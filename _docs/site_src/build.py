@@ -68,6 +68,14 @@ def build():
             if os.path.isdir(dst):
                 shutil.rmtree(dst)
             shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".*", "*.wav"))
+    # トトノちゃん（アプリと同じ絵と仕組みを使う）
+    app_static = os.path.join(os.path.dirname(os.path.dirname(SRC)), "static")
+    tt_out = os.path.join(OUT, "assets", "totono")
+    os.makedirs(tt_out, exist_ok=True)
+    for fn in os.listdir(os.path.join(app_static, "totono")):
+        if fn.endswith((".png", ".json", ".svg")):
+            shutil.copy2(os.path.join(app_static, "totono", fn), os.path.join(tt_out, fn))
+    shutil.copy2(os.path.join(app_static, "totono.js"), os.path.join(OUT, "assets", "totono.js"))
     layout = open(os.path.join(SRC, "layout.html"), encoding="utf-8").read()
     index = []
     for i, slug in enumerate(ORDER):
