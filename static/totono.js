@@ -3,6 +3,7 @@
 
 (function () {
   const BASE = window.TOTONO_BASE || "/static/totono/";
+  const Q = window.TOTONO_Q || "";  // マニュアルサイトでは古い絵・声が残らないよう付ける
   let META = null;      // 画像ごとの口の位置など（meta.json）
   let LINES = {};       // あらかじめ作った声（voice/lines.json）
 
@@ -34,12 +35,17 @@
   }
 
   function muted() { try { return localStorage.getItem("totono-mute") === "1"; } catch (e) { return false; } }
-  function setMuted(v) { try { localStorage.setItem("totono-mute", v ? "1" : "0"); } catch (e) { /* 無視 */ } }
+  const ALL = new Set();   // 画面にいるトトノちゃん全員（声のオン・オフをそろえる）
+  function setMuted(v) {
+    try { localStorage.setItem("totono-mute", v ? "1" : "0"); } catch (e) { /* 無視 */ }
+    ALL.forEach((c) => { c.updateMute(); if (v && c.audio) c.audio.pause(); });
+    document.dispatchEvent(new CustomEvent("totono-mute", { detail: v }));
+  }
 
   async function loadMeta() {
     if (META) return META;
-    try { META = await (await fetch(BASE + "meta.json")).json(); } catch (e) { META = { poses: {} }; }
-    try { LINES = await (await fetch(BASE + "voice/lines.json")).json(); } catch (e) { LINES = {}; }
+    try { META = await (await fetch(BASE + "meta.json" + Q)).json(); } catch (e) { META = { poses: {} }; }
+    try { LINES = await (await fetch(BASE + "voice/lines.json" + Q)).json(); } catch (e) { LINES = {}; }
     return META;
   }
 
@@ -65,7 +71,8 @@
       this.pose = null;
       this.flip = false;
       this.updateMute();
-      this.muteBtn.addEventListener("click", (e) => { e.stopPropagation(); setMuted(!muted()); this.updateMute(); if (muted() && this.audio) this.audio.pause(); });
+      ALL.add(this);
+      this.muteBtn.addEventListener("click", (e) => { e.stopPropagation(); setMuted(!muted()); });
       this.img.addEventListener("click", () => this.onClick && this.onClick());
       loadMeta().then(() => this.setPose(opts.pose || "wave"));
     }
@@ -77,7 +84,7 @@
       if (!p) return;
       this.pose = name;
       if (flip !== undefined) this.flip = flip;
-      this.img.src = BASE + p.file;
+      this.img.src = BASE + p.file + Q;
       this.el.querySelector(".tt-body").style.transform = this.flip ? "scaleX(-1)" : "";
       // 口の位置（画像に対する割合）
       const m = p.mouth;
@@ -112,13 +119,14 @@
         const b = document.createElement("button");
         b.textContent = a.label;
         if (a.primary) b.className = "primary";
+        if (a.link) b.className = "link";
         b.addEventListener("click", (e) => { e.stopPropagation(); a.fn(); });
         this.actEl.appendChild(b);
       });
       // 声：あらかじめ作った声 → その場で作る声 → 声なし（文字だけ）の順
       let vis = null, src = null;
       const line = opts.id && LINES[opts.id];
-      if (line) { src = BASE + "voice/" + line.file; vis = line.visemes; }
+      if (line) { src = BASE + "voice/" + line.file + Q; vis = line.visemes; }
       else if (!muted() && opts.live !== false) {
         try {
           const j = await (await fetch("/api/tts?text=" + encodeURIComponent(text))).json();
@@ -129,7 +137,7 @@
       if (!vis) vis = textVisemes(text);
       const dur = vis.length ? vis[vis.length - 1][1] + 0.2 : 1;
       let start = performance.now();
-      const useAudio = src && !muted();
+      const useAudio = src && !muted() && !opts.silent;   // silent：声を出さずに口と文字だけ動かす
       if (useAudio) {
         this.audio = new Audio(src);
         try { await this.audio.play(); start = performance.now(); } catch (e) { this.audio = null; }
@@ -160,13 +168,13 @@
       this.actEl.innerHTML = "";
       (opts.actions || []).forEach((a) => {
         const b = document.createElement("button");
-        b.textContent = a.label; if (a.primary) b.className = "primary";
+        b.textContent = a.label; if (a.primary) b.className = "primary"; if (a.link) b.className = "link";
         b.addEventListener("click", (e) => { e.stopPropagation(); a.fn(); });
         this.actEl.appendChild(b);
       });
     }
     hideBubble() { this.bubble.classList.add("hidden"); }
-    remove() { this.stop(); this.el.remove(); }
+    remove() { this.stop(); this.el.remove(); ALL.delete(this); }
 
     // 画面の中を歩いて移動（floating のときだけ）
     walkTo(x, y) {
@@ -197,11 +205,12 @@
   const TOURS = {
     home: [
       { id: "tour_home_1", text: "こんにちは、トトノちゃんだよ！totonoumovie の使い方を案内するね。", pose: "wave" },
-      { id: "tour_home_2", el: "#btnCreate2, #btnCreate", text: "動画を作るときは、ここを押してね。動画を選ぶだけで、AI が編集を進めてくれるよ。", pose: "point" },
-      { id: "tour_home_3", el: "#projGrid", text: "作った動画は、ここに並ぶよ。クリックすると、編集画面が開くの。", pose: "point" },
+      { id: "tour_home_2", el: "#btnCreate3, #btnCreate2, #btnCreate", text: "動画を作るときは、ここを押してね。動画を選ぶだけで、AI が編集を進めてくれるよ。", pose: "point" },
+      { id: "tour_home_3", el: "#projGrid", when: () => !!document.querySelector("#projGrid .pcard"), text: "作った動画は、ここに並ぶよ。クリックすると、編集画面が開くの。", pose: "point" },
       { id: "tour_home_4", el: "#btnAI", text: "AI の作業の様子と、確認待ちは、ここで見られるよ。赤い数字が付いたら、答えてあげてね。", pose: "point" },
       { id: "tour_home_5", el: "#btnPrompts", text: "毎回伝えたいことは、プロンプトに保存しておくと便利だよ。", pose: "explain" },
-      { id: "tour_home_6", text: "まずは、動画を1本渡してみよう！わからなくなったら、右上のツアーで、いつでも呼んでね。", pose: "cheer" },
+      { id: "tour_home_videos", el: "#btnVideos", text: "動画で見たいときは、ここを押してね。使い方動画が見られるよ。", pose: "point" },
+      { id: "tour_home_7", el: "#btnCreate3, #btnCreate2, #btnCreate", text: "まずは、ここから動画を1本渡してみよう！わからなくなったら、右上のツアーで、いつでも呼んでね。", pose: "cheer" },
     ],
     editor: [
       { id: "tour_ed_1", text: "ここが編集画面だよ。AI が作った字幕や効果音を、見ながら直せるの。", pose: "wave" },
@@ -227,48 +236,75 @@
     tourIdx = i;
     const st = tourSteps[i];
     if (!st) return endTour();
-    const target = st.el ? [...document.querySelectorAll(st.el)].find((e) => e.offsetParent !== null) : null;
+    // el は「,」区切りで先に書いたものを優先（見えているものだけ）
+    const target = st.el ? st.el.split(",").map((q) => document.querySelector(q.trim())).find((e) => e && e.offsetParent !== null) : null;
     const s = ensureSpot();
-    const W = innerWidth, H = innerHeight, cw = tourChara.size, ch = cw * 1.33;
-    let x = W / 2 - cw / 2, y = H / 2 - ch / 2, flip = false;
-    if (target) {
-      const r = target.getBoundingClientRect();
+    const W = innerWidth, H = innerHeight, cw = tourChara.size, ch = cw * 1.33, BW = 370;   // BW：吹き出しの幅＋すき間
+    // 立つ位置 x,y（トトノちゃんの左上）と、吹き出しを左に出すか（bl）
+    let x = W / 2 - (cw + BW) / 2, y = H / 2 - ch / 2, bl = false, stack = false;
+    const r = target && target.getBoundingClientRect();
+    if (r) {
       s.classList.remove("hidden");
       Object.assign(s.style, { left: r.left - 6 + "px", top: r.top - 6 + "px", width: r.width + 12 + "px", height: r.height + 12 + "px" });
-      // 目標の左か右の、空いている側に立つ（指さす方向を合わせる）
-      if (r.left > cw + 320) { x = r.left - cw - 10; flip = false; }
-      else { x = Math.min(W - cw - 330, r.right + 10); flip = true; }
-      y = Math.max(60, Math.min(H - ch - 20, r.top + r.height / 2 - ch / 2));
-      if (r.width > W * 0.6) { x = W - cw - 340; y = Math.max(60, r.top - ch - 10); if (y < 60) y = Math.min(H - ch - 10, r.bottom + 10); flip = false; }
-    } else s.classList.add("hidden");
-    tourChara.el.classList.toggle("tt-bl", x > W / 2);
+      y = r.top + r.height / 2 - ch / 2;
+      const fitL = r.left - cw - 12 - BW >= 8, fitR = r.right + 12 + cw + BW <= W - 8;   // 体＋吹き出しが横に入るか
+      const bodyL = r.left - cw - 12 >= 8, bodyR = r.right + 12 + cw <= W - 8;            // 体だけなら入るか
+      if (r.width <= W * 0.6 && fitL) { x = r.left - cw - 12; bl = true; }        // 相手の左に立ち、吹き出しはさらに左
+      else if (r.width <= W * 0.6 && fitR) { x = r.right + 12; }                  // 相手の右に立ち、吹き出しはさらに右
+      else if (r.width <= W * 0.6 && (bodyL || bodyR)) {
+        // 横に吹き出しまでは入らない（編集画面の見本など）：体は相手の横、吹き出しは体の上に出す
+        stack = true; bl = bodyL; x = bodyL ? r.left - cw - 12 : r.right + 12;
+        y = r.top + r.height / 2 - ch / 2 + 70;
+      } else {
+        // 横に長い相手（タイムラインなど）：上か下の右寄りに立ち、吹き出しは左
+        x = W - cw - 30; bl = true;
+        y = r.top - ch - 12 >= 56 ? r.top - ch - 12 : r.bottom + 12;
+      }
+    } else {
+      s.classList.add("hidden");
+      // 指す相手が無いときは、ホームのトトノちゃんと同じ場所に立つ（大きなボタンを隠さない）
+      const home = document.querySelector("#welcomeChara .tt-body");
+      if (home && home.offsetParent !== null) { const hr = home.getBoundingClientRect(); x = hr.left; y = hr.bottom - ch; }
+    }
+    // 画面の外に出ない
+    if (stack) { x = Math.max(8, Math.min(W - cw - 8, x)); y = Math.max(200, Math.min(H - ch - 10, y)); }
+    else { x = Math.max(bl ? BW : 8, Math.min(W - cw - (bl ? 8 : BW), x)); y = Math.max(56, Math.min(H - ch - 10, y)); }
+    tourChara.el.classList.toggle("tt-stack", stack);
+    // 吹き出しを上に出すときは、画面からはみ出さない幅にする
+    tourChara.bubble.style.width = stack ? Math.min(BW - 30, bl ? x + cw - 8 : W - 8 - x) + "px" : "";
+    tourChara.el.classList.toggle("tt-bl", bl);
     await tourChara.walkTo(x, y);
-    const pose = st.pose === "point" ? "point" : st.pose;
-    // 指さしの絵は右を指すので、目標が左にあるときは左右を反転
-    const pointFlip = pose === "point" ? !flip && !!target && target.getBoundingClientRect().left < x : false;
+    if (!tourChara || tourIdx !== i) return;   // 歩いている間にツアーが閉じられた・次へ進んだ
+    // 指さしの絵は右を指すので、相手がトトノちゃんより左にあるときは左右を反転
+    const flip = st.pose === "point" && !!r && r.left + r.width / 2 < x + cw / 2;
     tourChara.say(st.text, {
-      id: st.id, pose, flip: pose === "point" ? (target ? target.getBoundingClientRect().left + target.getBoundingClientRect().width / 2 < x + cw / 2 : false) : false,
+      id: st.id, pose: st.pose, flip,
       actions: [
         ...(i > 0 ? [{ label: "← 戻る", fn: () => showStep(i - 1) }] : []),
         { label: i === tourSteps.length - 1 ? "おわる" : "次へ →", primary: true, fn: () => showStep(i + 1) },
         { label: "閉じる", fn: endTour },
       ],
     });
-    void pointFlip;
   }
   function startTour(name) {
     endTour();
-    tourSteps = TOURS[name] || TOURS.home;
+    // 指す相手が今の画面に見えていない手順は飛ばす（0件のときの「AI」「プロンプト」など）
+    const visible = (sel) => sel.split(",").some((q) => { const e = document.querySelector(q.trim()); return e && e.offsetParent !== null; });
+    tourSteps = (TOURS[name] || TOURS.home).filter((st) => (!st.when || st.when()) && (!st.el || visible(st.el)));
+    document.body.classList.add("touring");
     tourChara = new Chara(document.body, { floating: true, size: 170, pose: "wave" });
     tourChara.place(innerWidth / 2 - 85, innerHeight + 10);
     try { localStorage.setItem("totono-tour-" + name, "1"); } catch (e) { /* 無視 */ }
     showStep(0);
   }
   function endTour() {
+    const was = !!tourChara;
     if (tourChara) { tourChara.remove(); tourChara = null; }
     if (spot) spot.classList.add("hidden");
+    document.body.classList.remove("touring");
+    if (was && window.onTotonoTourEnd) window.onTotonoTourEnd();
   }
   function tourSeen(name) { try { return localStorage.getItem("totono-tour-" + name) === "1"; } catch (e) { return true; } }
 
-  window.Totono = { Chara, startTour, endTour, tourSeen, loadMeta, isMuted: muted };
+  window.Totono = { Chara, startTour, endTour, tourSeen, loadMeta, isMuted: muted, setMuted };
 })();

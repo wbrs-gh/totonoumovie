@@ -1,6 +1,9 @@
 /* totonoumovie の周りの画面（ホーム・左の一覧・カット承認・AI・プロンプト・裏の作業） */
 "use strict";
 
+// ファイルを見るアプリの名前（Mac は Finder、Windows はエクスプローラー）
+const FILER = /Win/i.test(navigator.platform || navigator.userAgent) ? "エクスプローラー" : "Finder";
+
 // ======================================================================
 // ホーム（プロジェクト一覧）
 // ======================================================================
@@ -14,16 +17,23 @@ window.renderHome = async function () {
   const notes = [];
   if (st.pluginError) {
     notes.push(`<div class="notice bad"><b>TotonouMovie プラグインが見つかりません。</b><br>${esc(st.pluginError)}<br>
-      Claude Code で <code>/plugin marketplace add ~/TotonouMovie</code> → <code>/plugin install totonou-movie@totonou</code> を実行し、
-      続けて「TotonouMovie のセットアップをして」と話しかけてください（QUICKSTART-mac.md）。</div>`);
-  } else if (st.plugin) {
-    notes.push(`<div class="notice good">TotonouMovie ${esc(st.plugin.version || "")} を使います <span class="muted small">${esc(st.plugin.root)}</span></div>`);
+      ターミナル（Windows は PowerShell）で <code>claude plugin marketplace add ~/TotonouMovie</code> → <code>claude plugin install totonou-movie@totonou</code> を実行し、
+      続けて Claude Code に「TotonouMovie のセットアップをして」と話しかけてください。くわしくはマニュアルの
+      <a href="https://totonoumovie.aisys.earth/install.html#totonou" target="_blank" rel="noopener">「入れかた A-7」</a>。</div>`);
   }
   if (!st.claude) notes.push(`<div class="notice bad">claude コマンドが見つかりません。「AIで作る」には Claude Code が必要です。</div>`);
   if (st.cloudSync) notes.push(`<div class="notice bad">作業フォルダが Dropbox・iCloud などの同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります。同期フォルダの外（例：~/Movies/totonou）で <code>totonoumovie</code> を起動してください。</div>`);
   if (st.plugin && !st.settingsFileExists) notes.push(`<div class="notice">TotonouMovie の初期設定がまだのようです。Claude Code で「TotonouMovie のセットアップをして」と話しかけてください（または「AIで作る」の最初に AI が案内します）。</div>`);
   $("#statusBox").innerHTML = notes.join("");
-  $("#wsPath").textContent = "作業フォルダ: " + (st.workspace || "");
+  // 作業フォルダはフォルダ名だけ（全体の場所はマウスを乗せると出る）
+  $("#wsPath").textContent = st.workspace ? "保存先: " + st.workspace.split(/[\\/]/).filter(Boolean).pop() : "";
+  $("#wsPath").title = (st.workspace || "") + (st.plugin ? `\nTotonouMovie ${st.plugin.version || ""}（${st.plugin.root}）` : "");
+  // プロジェクトが無いときは、真ん中のトトノちゃんが案内する
+  const empty = !S.projects.length;
+  $("#home").classList.toggle("is-empty", empty);
+  document.body.classList.toggle("home-empty", empty && !S.P);
+  if (empty) { renderWelcome(); return; }
+  removeWelcome();
   $("#projGrid").innerHTML = S.projects.length ? S.projects.map((p) => `
     <div class="pcard" data-p="${esc(p.name)}">
       <h3>${esc(p.title)}</h3>
@@ -35,6 +45,97 @@ window.renderHome = async function () {
   $$("#projGrid .pcard").forEach((c) => c.addEventListener("click", () => openProject(c.dataset.p)));
 };
 $("#btnReloadProjects").addEventListener("click", () => window.renderHome());
+
+// ----------------------------------------------------------------------
+// はじめての画面（プロジェクトが0件）：トトノちゃん＋ツアー／使い方動画／AIで作る
+// ----------------------------------------------------------------------
+let welcomeChara = null;
+function renderWelcome() {
+  $("#projGrid").innerHTML = "";
+  if (welcomeChara && document.body.contains(welcomeChara.el)) return;
+  $("#welcome").classList.remove("hidden");
+  const host = $("#welcomeChara");
+  host.innerHTML = "";
+  welcomeChara = new Totono.Chara(host, { size: 210, pose: "wave" });
+  const ask = (talk) => {
+    const opts = {
+      id: "home_welcome", pose: "wave",
+      actions: [
+        { label: "🎓 ツアーを始める", primary: true, fn: () => { welcomeChara.stop(); Totono.startTour("home"); } },
+        { label: "▶ 使い方動画を見る", fn: () => { welcomeChara.stop(); openVideos(); } },
+        { label: "あとで", link: true, fn: () => { welcomeChara.stop(); welcomeChara.hideBubble(); } },
+      ],
+    };
+    const text = "はじめまして、トトノちゃんだよ！使い方を案内するツアーを始める？";
+    if (talk) welcomeChara.say(text, opts); else welcomeChara.show(text, opts);
+  };
+  welcomeChara.onClick = () => ask(false);
+  welcomeChara.img.title = "押すと、トトノちゃんがまた案内します";   // 「あとで」の後も、トトノちゃんを押せばまた聞ける
+  ask(true);
+}
+function removeWelcome() {
+  if (welcomeChara) { welcomeChara.remove(); welcomeChara = null; }
+  $("#welcome").classList.add("hidden");
+}
+$("#btnCreate3").addEventListener("click", () => openCreate());
+// ツアーを見終わったら、歓迎の質問はもう出さない（トトノちゃんを押せばまた聞ける）
+window.onTotonoTourEnd = () => { if (welcomeChara) { welcomeChara.stop(); welcomeChara.hideBubble(); } };
+
+// ----------------------------------------------------------------------
+// 使い方動画（マニュアルサイトの動画をアプリの中で再生）
+// ----------------------------------------------------------------------
+const VIDEO_BASE = "https://totonoumovie.aisys.earth/videos/";
+const VIDEOS = [
+  { f: "v01-overview", t: "まず見る：totonoumovie の全体像", p: "何ができて、どんな流れで動画ができるのか。" },
+  { f: "v04-first", t: "はじめての1本", p: "動画を渡してから、4回の確認に答えて完成するまで。" },
+  { f: "v05-telop", t: "字幕を直す", p: "一覧で書き換える・タイムラインでずらす・見た目を変える。" },
+  { f: "v06-cut", t: "カットを承認する・戻す", p: "元とカット後を聞き比べて、残すか切るかを選びます。" },
+  { f: "v07-effects", t: "効果音・寄り・文字の動き・画像・BGM", p: "演出をドラッグで入れて、すぐに重ねて確かめます。" },
+  { f: "v08-export", t: "確かめて書き出す", p: "検査・静止画・試作で確かめてから、完成を書き出します。" },
+  { f: "v09-ai", t: "AI に直してもらう・プロンプトを育てる", p: "言葉で直しを頼む方法と、いつもの指示を保存する方法。" },
+  { f: "v02-install-mac", t: "入れかた（Mac）", p: "コマンドを貼る場所と、成功したときの表示。" },
+  { f: "v03-install-win", t: "入れかた（Windows）", p: "PowerShell に貼る場所と、成功したときの表示。" },
+];
+function openVideos(start) {
+  if (window.Totono) Totono.endTour();
+  if (welcomeChara) welcomeChara.stop();
+  const body = openModal(`<div class="vids">
+    <div class="vids-head"><h2>▶ 使い方動画</h2><span class="muted small">どの動画も字幕つき。音を出せない場所でも見られます</span><span class="grow"></span><button onclick="closeModal()">閉じる</button></div>
+    <div class="vids-main">
+      <video id="vidMain" controls playsinline preload="metadata"></video>
+      <div id="vidErr" class="notice bad hidden">動画を読み込めませんでした。インターネットにつながっているか確かめてください。
+        <a href="https://totonoumovie.aisys.earth/videos.html" target="_blank" rel="noopener">マニュアルサイトで見る</a></div>
+    </div>
+    <div class="vids-list">${VIDEOS.map((v, i) => `<button class="vcard2" data-i="${i}">
+      <span class="th" style="background-image:url(${VIDEO_BASE}${v.f}.jpg)"><span class="du hidden"></span></span>
+      <span class="bd"><b>${esc(v.t)}</b><span class="muted small">${esc(v.p)}</span></span></button>`).join("")}</div>
+  </div>`, { width: "min(1100px, 96vw)" });
+  // 長さは動画ファイルから読む（動画を作り直しても表示がずれない）
+  body.querySelectorAll(".vcard2").forEach((b) => {
+    const m = document.createElement("video");
+    m.preload = "metadata";
+    m.onloadedmetadata = () => {
+      const s = Math.round(m.duration), du = b.querySelector(".du");
+      if (isFinite(s)) { du.textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); du.classList.remove("hidden"); }
+      m.removeAttribute("src"); m.load();
+    };
+    m.src = VIDEO_BASE + VIDEOS[+b.dataset.i].f + ".mp4";
+  });
+  const vid = body.querySelector("#vidMain");
+  vid.addEventListener("error", () => body.querySelector("#vidErr").classList.remove("hidden"));
+  const play = (i, auto) => {
+    const v = VIDEOS[i];
+    body.querySelector("#vidErr").classList.add("hidden");
+    vid.poster = VIDEO_BASE + v.f + ".jpg";
+    vid.src = VIDEO_BASE + v.f + ".mp4";
+    body.querySelectorAll(".vcard2").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
+    if (auto) vid.play().catch(() => {});
+  };
+  body.querySelectorAll(".vcard2").forEach((b) => b.addEventListener("click", () => play(+b.dataset.i, true)));
+  play(start || 0, true);
+}
+window.openVideos = openVideos;
+$("#btnVideos").addEventListener("click", () => openVideos());
 $("#btnCreate").addEventListener("click", () => openCreate());
 $("#btnCreate2").addEventListener("click", () => openCreate());
 
@@ -223,7 +324,7 @@ function renderFilesPanel() {
     <div class="thumbs">${p.stills.map((s) => `<img src="${enc("work/stills/" + s)}" data-img="work/stills/${esc(s)}" title="${esc(s)}">`).join("") || `<span class="muted small">まだありません</span>`}</div>
     <h4>差し込み画像（public/images/）</h4>
     <div class="thumbs">${(p.assets.images || []).map((s) => `<img src="${enc("public/images/" + s)}" data-img="public/images/${esc(s)}" title="${esc(s)}">`).join("") || `<span class="muted small">まだありません</span>`}</div>
-    <div class="btnrow"><button id="fAddImg">＋ 画像を追加</button><button id="fReveal">Finder で開く</button></div>
+    <div class="btnrow"><button id="fAddImg">＋ 画像を追加</button><button id="fReveal">${FILER} で開く</button></div>
     ${p.humanCheck ? `<div class="notice good small">完成の確認記録があります（${esc(p.humanCheck.reviewer || "")}）</div>` : ""}`;
   box.querySelectorAll("[data-v]").forEach((el) => el.addEventListener("click", () => showVideo(enc(el.dataset.v), el.dataset.v)));
   box.querySelectorAll("[data-img]").forEach((el) => el.addEventListener("click", () => showImage(enc(el.dataset.img), el.dataset.img)));
@@ -296,7 +397,7 @@ function afterJob(job) {
       ${job.result.note ? `<div class="notice small">${esc(job.result.note)}</div>` : ""}
       ${job.result.warnings ? `<pre class="log">${esc((job.log || []).slice(-30).join("\n"))}</pre>` : ""}
       ${job.status !== "done" ? `<pre class="log">${esc((job.log || []).slice(-40).join("\n"))}</pre>` : ""}
-      <div class="btnrow"><button id="rvReveal">Finder で表示</button><button onclick="closeModal()">閉じる</button></div>`);
+      <div class="btnrow"><button id="rvReveal">${FILER} で表示</button><button onclick="closeModal()">閉じる</button></div>`);
     $("#rvReveal").onclick = () => api("/api/reveal", { p: S.P, path: job.result.video });
   }
   if (job.kind === "qa") showJobLog(job.id);
@@ -317,12 +418,13 @@ $("#btnPreview").addEventListener("click", () => {
 });
 $("#btnExport").addEventListener("click", () => {
   const b = S.proj.bgm || {};
+  const vertical = (S.proj.config || {}).format === "9:16";
   openModal(`<h2>⬇ 書き出し</h2>
-    <p>Remotion で書き出し → 音声の仕上げ（雑音を減らし -14 LUFS）${b.enabled && b.rightsConfirmed ? " → BGM を重ねる" : ""} → 自動検査、の順に行います。</p>
+    <p>書き出し → 音声の仕上げ（雑音を減らし -14 LUFS）${b.enabled && b.rightsConfirmed ? " → BGM を重ねる" : ""} → ${vertical ? "投稿用のループ版（_loopable.mp4）" : "字幕ファイル（SRT）"} → 自動検査、の順に行います。</p>
     <div class="small muted">完成ファイル: out/${esc(S.proj.title)}.mp4（長い動画は数十分かかります）</div>
     <div class="row" style="margin-top:10px"><label>同時処理数</label><select id="exConc"><option value="">おまかせ</option><option value="1">1（遅いが安定）</option><option value="2">2</option><option value="4">4</option></select></div>
     <div class="row"><label>自動検査</label><label class="chk"><input type="checkbox" id="exVerify" checked> verify_render で検査する</label></div>
-    <p class="small muted">完成の視聴確認の記録と、ショートのループ化・SRT・チャプターの書き出しは、AI に「仕上げて」と頼むとスキルの手順どおりに行います。</p>
+    <p class="small muted">チャプターと、完成の確認の記録は、AI タブで頼んでください。</p>
     <div class="btnrow"><button class="primary" id="exGo">書き出す</button><button onclick="closeModal()">やめる</button></div>`);
   $("#exGo").onclick = () => { const c = $("#exConc").value; closeModal(); runAction("render", { concurrency: c ? +c : null, verify: $("#exVerify").checked }); };
 });
@@ -335,15 +437,15 @@ async function openCreate() {
   try { prompts = await api("/api/prompts"); } catch (e) { /* 空 */ }
   const presets = prompts.presets || [];
   openModal(`<h2>🎬 動画を渡して AI で作る</h2>
-    <p class="small muted">TotonouMovie の手順（produce → ショート／ロング／アフレコ）を AI が進めます。途中の確認（雰囲気・カット承認・仕上がり・完成）はこの画面に出ます。</p>
-    <div class="tabs" id="crKind" style="padding:0 0 8px;border:0"><button data-k="create" class="on">話している動画</button><button data-k="voiceover">アフレコ（声＋素材フォルダ）</button></div>
-    <div class="row"><label id="crVideoLab">動画</label><input type="text" id="crVideo" class="grow" placeholder="/Users/…/IMG_0001.MOV"><button id="crChoose">選ぶ</button></div>
+    <p class="small muted">動画を選んで「AI で作り始める」を押すだけです。途中で AI から確認（雰囲気・カット・仕上がり・完成）が届いたら、画面で答えてください。</p>
+    <div class="tabs" id="crKind" style="padding:0 0 8px;border:0"><button data-k="create" class="on" title="カメラに向かって話している動画（ショート・YouTube など）">話している動画</button><button data-k="voiceover" title="顔は映さず、録音した声に画像や動画の素材を重ねて作る動画">アフレコ（声＋素材フォルダ）</button></div>
+    <div class="row"><label id="crVideoLab">動画</label><input type="text" id="crVideo" class="grow" placeholder="右の「選ぶ」から動画ファイルを選んでください"><button id="crChoose">選ぶ</button></div>
     <div class="row hidden" id="crMatRow"><label>素材フォルダ</label><input type="text" id="crMat" class="grow"><button id="crChooseMat">選ぶ</button></div>
-    <h3>オリジナルの指示（選んだものを足します）</h3>
+    <h3>いつもの指示 <span class="muted small">（任意・チェックした指示が AI に伝わります）</span></h3>
     <div>${presets.length ? presets.map((p, i) => `<label class="chk" style="margin-right:12px"><input type="checkbox" class="crPreset" value="${esc(p.name)}"> ${esc(p.name)}</label>`).join("") : `<span class="muted small">まだありません（「✍ プロンプト」で作れます）</span>`}</div>
-    <h3>今回だけの追加の指示</h3>
-    <textarea id="crExtra" placeholder="例：画像は ~/Pictures/talk に入っています。BGM は ~/Music/calm.mp3（権利確認済み）。表記は「山田太郎」。"></textarea>
-    <div class="btnrow"><button class="primary" id="crGo">AI で作り始める</button><button id="crShow">渡すプロンプトを見る</button><button onclick="closeModal()">やめる</button></div>
+    <h3>今回だけ伝えたいこと <span class="muted small">（任意）</span></h3>
+    <textarea id="crExtra" placeholder="例：テンポよく、明るい雰囲気で。名前は「山田太郎」と表記してください。"></textarea>
+    <div class="btnrow"><button class="primary" id="crGo">AI で作り始める</button><button id="crShow">AI に渡す内容を確認</button><button onclick="closeModal()">やめる</button></div>
     <pre class="log hidden" id="crPrompt"></pre>`);
   let kind = "create";
   $$("#crKind button").forEach((b) => b.onclick = () => {
@@ -614,7 +716,7 @@ async function openPrompts() {
     ["always", "毎回足す指示", "すべての依頼の最後に足します"], ["system", "AI への前提（上級者向け）", "確認のしかた（tm-ask）の決まりを含みます。消すと画面で確認できなくなります"]];
   openModal(`<h2>✍ プロンプト</h2>
     <p class="small muted">AI（Claude Code）に渡す文章です。書き換えは ~/.totonoumovie/prompts.json に保存され、元の既定値はいつでも戻せます。</p>
-    <h3>オリジナルの指示（作るとき・頼むときに選んで足せます）</h3>
+    <h3>いつもの指示（作るとき・頼むときに選んで足せます）</h3>
     <div id="pPresets">${(pr.presets || []).map(presetRow).join("")}</div>
     <button class="small" id="pAddPreset">＋ 指示を追加</button>
     ${F.map(([k, label, hint]) => `<h3>${label} ${pr._overridden?.includes(k) ? `<span class="warn small">（変更あり）</span> <button class="small" data-reset="${k}">既定に戻す</button>` : ""}</h3>
@@ -643,7 +745,17 @@ function presetRow(p) {
 // ツアー（トトノちゃん）
 // ======================================================================
 $("#btnTour").addEventListener("click", () => Totono.startTour(S.P ? "editor" : "home"));
-// はじめて開いた画面では、自動でツアーを始める
+// 上のバーの声のオン・オフ（吹き出しの 🔊 と同じ設定）
+function updateMuteBtn() {
+  const m = Totono.isMuted();
+  $("#btnMute").textContent = m ? "🔇" : "🔊";
+  $("#btnMute").title = m ? "トトノちゃんの声：オフ（押すとオン）" : "トトノちゃんの声：オン（押すとオフ）";
+}
+$("#btnMute").addEventListener("click", () => Totono.setMuted(!Totono.isMuted()));
+document.addEventListener("totono-mute", updateMuteBtn);
+updateMuteBtn();
+// はじめて開いた画面では、自動でツアーを始める（ホームは真ん中のトトノちゃんの案内から選ぶので、自動では始めない）
 window.maybeAutoTour = function (name) {
+  if (name === "home") return;
   if (!Totono.tourSeen(name)) setTimeout(() => Totono.startTour(name), 900);
 };

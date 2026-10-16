@@ -2,7 +2,7 @@
 
 TotonouMovie（ととのうムービー）で作る動画を、ブラウザの編集画面で作る・直すアプリ。
 
-- 導入と使い方：`_docs/site/introduction.html`（公開先 https://totonoumovie.aisys.earth/introduction.html ）／PDF 版 `_docs/totonoumovie_導入と使い方ガイド.pdf`
+- 導入と使い方：https://totonoumovie.aisys.earth/ （ソースは `_docs/site_src/`、`python3 build.py` で `_docs/site/` に書き出す）／PDF 版 `_docs/totonoumovie_使い方マニュアル.pdf`
 - 起動：作業フォルダで `totonoumovie`（Windows は `totonoumovie.cmd`）→ ブラウザで http://127.0.0.1:8780/ 。起動したフォルダが作業フォルダ（プロジェクトを作る・一覧する場所）になる
 
 ## 前提

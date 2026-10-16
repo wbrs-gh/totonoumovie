@@ -146,7 +146,7 @@ async function openProject(name, opts = {}) {
   S.cuts = normalizeCuts(S.data.cut || []);
   S.dur = proj.media?.dur || proj.config?.durationSec || 10;
   if (changed) { S.sel = null; S.undo = []; S.redo = []; S.wave = null; }
-  document.body.classList.remove("home-mode");
+  document.body.classList.remove("home-mode", "home-empty");
   $("#home").classList.add("hidden");
   $("#editor").classList.remove("hidden");
   $("#timelineArea").classList.remove("hidden");

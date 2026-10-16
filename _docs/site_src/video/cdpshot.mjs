@@ -8,11 +8,11 @@ import path from "node:path";
 
 const spec = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const port = 9333;
+const port = +process.env.CDP_PORT || 9400 + Math.floor(Math.random() * 500);   // 同時に撮っても取り合わないよう毎回ずらす
 const prof = fs.mkdtempSync("/tmp/cdp-");
 const chrome = spawn(CHROME, [`--remote-debugging-port=${port}`, "--headless=new", `--user-data-dir=${prof}`,
   `--window-size=${spec.width || 1920},${spec.height || 1080}`, "--hide-scrollbars", "--force-device-scale-factor=1",
-  "--autoplay-policy=no-user-gesture-required", "about:blank"], { stdio: "ignore" });
+  "--autoplay-policy=no-user-gesture-required", "--mute-audio", "about:blank"], { stdio: "ignore" });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let wsUrl = null;

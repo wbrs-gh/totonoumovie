@@ -10,7 +10,7 @@
 <header id="topbar">
   <div class="brand"><img src="/static/totono/logo.svg" alt="" class="brand-logo"> totonoumovie <span id="projName" class="muted"></span></div>
   <div class="proj">
-    <button id="btnHome" title="プロジェクトの一覧へ">📁 一覧</button>
+    <button id="btnHome" title="プロジェクトの一覧へ">📁<span class="lbl"> 一覧</span></button>
     <select id="projSelect" title="プロジェクトを切り替え"></select>
     <span id="saveState" class="muted small"></span>
   </div>
@@ -19,12 +19,14 @@
     <button id="btnRedo" title="やり直し (⌘⇧Z)">↷</button>
     <button id="btnCreate" title="動画を渡して、TotonouMovie の手順で AI に作ってもらう">🎬 AIで作る</button>
     <button id="btnAI" title="AI の作業の様子と確認待ち">🤖 AI <span id="aiBadge" class="badge hidden"></span></button>
-    <button id="btnPrompts" title="AI に渡すプロンプトを見る・書き換える・オリジナルの指示を作る">✍ プロンプト</button>
+    <button id="btnPrompts" title="AI に渡すプロンプトを見る・書き換える・いつもの指示を作る">✍<span class="lbl"> プロンプト</span></button>
     <button id="btnTour" title="トトノちゃんが画面を案内します">🎓 ツアー</button>
+    <button id="btnVideos" title="使い方を動画で見る（全体像・字幕・カット・書き出しなど）">▶ 使い方動画</button>
+    <button id="btnMute" title="トトノちゃんの声のオン・オフ">🔊</button>
     <span class="sep"></span>
-    <button id="btnQA" class="needp" title="字幕の点検と書き出し前の検査">🔍 検査</button>
-    <button id="btnStill" class="needp" title="今の位置を Remotion で静止画にする（完成と同じ見た目）">📷 静止画</button>
-    <button id="btnPreview" class="needp" title="今の位置の前後を、音付きで試作する">🎞 試作</button>
+    <button id="btnQA" class="needp" title="字幕の点検と書き出し前の検査">🔍<span class="lbl"> 検査</span></button>
+    <button id="btnStill" class="needp" title="今の位置を Remotion で静止画にする（完成と同じ見た目）">📷<span class="lbl"> 静止画</span></button>
+    <button id="btnPreview" class="needp" title="今の位置の前後を、音付きで試作する">🎞<span class="lbl"> 試作</span></button>
     <button id="btnExport" class="primary needp" title="完成動画を書き出す">⬇ 書き出し</button>
   </div>
 </header>
@@ -41,6 +43,13 @@
       <button id="btnReloadProjects">🔄 更新</button>
     </div>
     <div id="projGrid"></div>
+    <div id="welcome" class="hidden">
+      <div id="welcomeChara"></div>
+      <div class="welcome-or">
+        <span class="muted">準備ができたら、編集したい動画を1本選ぶだけ</span>
+        <button id="btnCreate3" class="primary big">🎬 動画を渡して AI で作る</button>
+      </div>
+    </div>
   </div>
 </section>
 

@@ -21,7 +21,7 @@ URL = "http://127.0.0.1:50021"
 
 # 英字の読みを直す（表示の文字はそのまま、読み上げだけ置き換える）
 YOMI = [("totonoumovie", "ととのうムービー"), ("TotonouMovie", "ととのうムービー"), ("AI", "エーアイ"), ("OK", "オーケー"),
-        ("BGM", "ビージーエム"), ("Claude Code", "クロードコード"), ("YouTube", "ユーチューブ")]
+        ("BGM", "ビージーエム"), ("Claude Code", "クロードコード"), ("YouTube", "ユーチューブ"), ("GitHub", "ぎっとはぶ"), ("ギットハブ", "ぎっとはぶ"), ("かんたん", "簡単")]
 
 
 def yomi(text):
@@ -49,11 +49,16 @@ def visemes(q):
 
 def main(src, outdir):
     lines = json.load(open(src, encoding="utf-8"))
+    # 読みの固定（せりふごとに、読み間違いを直した文）
+    yp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "yomi.json")
+    fixed = json.load(open(yp, encoding="utf-8")) if os.path.exists(yp) else {}
     os.makedirs(outdir, exist_ok=True)
     idx_path = os.path.join(outdir, "lines.json")
     idx = json.load(open(idx_path, encoding="utf-8")) if os.path.exists(idx_path) else {}
     for lid, text in lines.items():
-        say = yomi(text)
+        if isinstance(text, dict):
+            text = text.get("text", "")
+        say = yomi(fixed.get(lid, text))
         h = hashlib.md5(say.encode()).hexdigest()[:8]
         fn = f"{lid}_{h}.m4a"
         if idx.get(lid, {}).get("file") == fn and os.path.exists(os.path.join(outdir, fn)):

@@ -436,12 +436,24 @@ def start_action(P, action, body):
                                       "--level", bgm.get("level") or "quiet", "--rights-confirmed",
                                       "--start-offset", str(bgm.get("startOffset") or 0))),
                       ("BGM を重ねる", ("E", "mix_bgm.py", "--project", P, "--input", voice, "--output", final))]
+        # 縦の動画は投稿用のループ版、横の動画は YouTube の字幕ファイル（SRT）も作る（AI に頼んだときと同じ）
+        vertical = cfg.get("format") == "9:16"
+        loop = os.path.join(P, "out", f"{title}_loopable.mp4")
+        if vertical:
+            fade = (["--fade-in", "0.05", "--fade-out", "0.3"]
+                    if cfg.get("mode") == "voiceover" or (cfg.get("design") or {}).get("tempo") == "tight"
+                    else ["--fade-duration", "0.4"])
+            steps.append(("投稿用のループ版を作る", ("E", "shorts_loop.py", "--input", final, "--output", loop, *fade)))
+        elif "--speech-velocity" not in post:
+            steps.append(("字幕ファイル（SRT）を作る", ("E", "gen_srt.py", "--project", P)))
         if body.get("verify", True):
-            vargs = ["--project", P, "--video", final] + (["--voice", voice] if use_bgm else [])
+            vargs = ["--project", P, "--video", loop if vertical else final] + (["--voice", voice] if use_bgm else [])
             steps.append(("自動検査（verify_render）", ("E", "verify_render.py", *vargs), {1}))
 
         def done(job):
             job.result["video"] = os.path.relpath(final, P) if os.path.exists(final) else None
+            if vertical and os.path.exists(loop):
+                job.result["loopable"] = os.path.relpath(loop, P)
             if job.status == "error" and "verify_render" in (job.result.get("error") or ""):
                 job.result["note"] = "書き出しはできましたが、検査で問題が見つかりました（ログを確認してください）"
             elif job.result.get("warnings"):

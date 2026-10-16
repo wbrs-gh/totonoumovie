@@ -18,7 +18,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif; font-size: 13px; }
-body { display: grid; grid-template-rows: 46px minmax(0, 1fr) auto; overflow: hidden; }
+body { display: grid; grid-template-rows: 46px minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr); overflow: hidden; }
 body.home-mode { grid-template-rows: 46px minmax(0, 1fr); }
 button, select, input, textarea { font: inherit; color: var(--text); background: var(--panel);
   border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; }
@@ -60,6 +60,38 @@ textarea { padding: 6px; resize: vertical; }
 .pcard:hover { border-color: var(--accent); }
 .pcard h3 { margin: 0 0 6px; font-size: 14px; word-break: break-all; }
 .pcard .meta { color: var(--muted); font-size: 11px; line-height: 1.6; }
+/* はじめての画面（プロジェクトが0件） */
+#welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; min-height: calc(100vh - 170px); padding: 0 0 20px; }
+#welcomeChara .tt { flex-direction: row; align-items: flex-end; }
+#welcomeChara .tt-bubble { max-width: 420px; font-size: 15px; }
+.tt-actions button.link { border: 0; background: none; color: var(--muted); font-size: 12px; text-decoration: underline; padding: 4px 2px; margin-left: auto; }
+#welcomeChara .tt-actions button { font-size: 13px; padding: 6px 14px; }
+.welcome-or { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+button.big { font-size: 15px; padding: 10px 22px; border-radius: 12px; }
+#home.is-empty #projGrid, #home.is-empty .home-head h2, #home.is-empty #btnCreate2, #home.is-empty #btnReloadProjects { display: none; }
+#home.is-empty .home-head { margin: 0; }
+/* ホームでは編集用のボタン（取り消し・検査・書き出しなど）を出さない。0件のときは中央の大ボタンだけにする */
+body.home-mode #btnUndo, body.home-mode #btnRedo, body.home-mode .needp, body.home-mode #topbar .sep { display: none; }
+/* 編集画面の上部バー：新しい動画づくりは一覧から。狭い画面では補助のボタンを絵だけにする（説明はマウスを乗せると出る） */
+body:not(.home-mode) #btnCreate { display: none; }
+@media (max-width: 1500px) { body:not(.home-mode) #topbar .lbl { display: none; } }
+body.home-empty #btnCreate, body.home-empty #btnHome, body.home-empty #projSelect, body.home-empty #btnPrompts { display: none; }
+/* 0件の間は「AI」も隠す（AI が確認を待っているときだけ出す） */
+body.home-empty #btnAI:not(:has(#aiBadge:not(.hidden))) { display: none; }
+body.touring #welcome .tt-inline { visibility: hidden; }
+
+/* 使い方動画 */
+.vids-head { display: flex; align-items: center; gap: 10px; margin: -18px -20px 10px; padding: 14px 20px 10px; position: sticky; top: -18px; z-index: 2; background: var(--panel); }
+.vids-head h2 { margin: 0; }
+.vids-main { margin-bottom: 12px; }
+.vids-main video { width: 100%; max-height: 52vh; background: #000; border-radius: 10px; margin: 0; }
+.vids-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.vcard2 { display: flex; gap: 8px; align-items: flex-start; text-align: left; white-space: normal; padding: 6px; border-radius: 10px; background: var(--panel); }
+.vcard2.on { border-color: var(--accent); background: var(--accent-l); }
+.vcard2 .th { flex-shrink: 0; width: 96px; height: 54px; border-radius: 6px; background: #1b2430 center/cover; position: relative; }
+.vcard2 .du { position: absolute; right: 3px; bottom: 3px; background: rgba(0,0,0,.7); color: #fff; font-size: 10px; padding: 0 4px; border-radius: 4px; }
+.vcard2 .bd { display: flex; flex-direction: column; gap: 2px; font-size: 12px; line-height: 1.45; }
+
 .notice { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent2); border-radius: 10px; box-shadow: var(--shadow);
   padding: 10px 14px; margin-bottom: 8px; line-height: 1.6; }
 .notice.bad { border-left-color: var(--danger); }
@@ -195,6 +227,13 @@ pre.log { background: #f7f9fb; border: 1px solid var(--line); border-radius: 6px
 .tt { position: relative; display: flex; align-items: flex-end; gap: 8px; z-index: 60; }
 .tt-float { position: fixed; left: 0; top: 0; z-index: 200; pointer-events: none; }
 .tt-float .tt-body, .tt-float .tt-bubble { pointer-events: auto; }
+/* 浮いているトトノちゃんは、体の位置を基準に吹き出しを横に出す（吹き出しが出ても体が動かない） */
+.tt-float .tt-bubble { position: absolute; left: calc(100% + 10px); bottom: 0; width: 340px; }
+.tt-float.tt-bl .tt-bubble { left: auto; right: calc(100% + 10px); }
+.tt-float.tt-stack .tt-bubble { left: 0; right: auto; bottom: 100%; margin-bottom: 4px; }
+.tt-float.tt-stack.tt-bl .tt-bubble { left: auto; right: 0; }
+.tt-float.tt-stack .tt-bubble::before, .tt-float.tt-stack .tt-bubble::after { display: none; }
+html { overflow-x: hidden; }
 .tt-body { position: relative; flex-shrink: 0; filter: drop-shadow(0 6px 10px rgba(20,60,110,.18)); transform-origin: 50% 100%; }
 .tt-img { display: block; width: 100%; height: auto; cursor: pointer; user-select: none; }
 .tt-mouth { position: absolute; overflow: visible; pointer-events: none; }
@@ -258,3 +297,6 @@ pre.log { background: #f7f9fb; border: 1px solid var(--line); border-radius: 6px
 .qbox label.opt:has(input:checked) { background: var(--accent-l); outline: 2px solid var(--accent); }
 @media (max-width: 860px) { .run-main { grid-template-columns: 1fr; } .run-chara { position: static; } }
 .brand-logo { width: 24px; height: 24px; vertical-align: -6px; margin-right: 4px; }
+/* ホームのトトノちゃんは押すとまた話しかけてくれる（押せると分かるように） */
+@keyframes tt-wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+#welcomeChara .tt-body:hover { animation: tt-wiggle .5s ease-in-out; }
