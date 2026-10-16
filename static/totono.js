@@ -42,6 +42,37 @@
     document.dispatchEvent(new CustomEvent("totono-mute", { detail: v }));
   }
 
+  // ---- 歩く音（てくてく）：WebAudio でその場で作る小さな足音。声をオフにしているときは鳴らさない ----
+  let actx = null;
+  function stepSound(left) {
+    if (muted()) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = actx.currentTime, o = actx.createOscillator(), g = actx.createGain();
+      o.type = "triangle";
+      o.frequency.setValueAtTime(left ? 520 : 440, t);            // 左右で少し高さを変えて「て・く」に聞こえるように
+      o.frequency.exponentialRampToValueAtTime(left ? 260 : 220, t + 0.07);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.12, t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+      o.connect(g).connect(actx.destination);
+      o.start(t); o.stop(t + 0.1);
+    } catch (e) { /* 音が出せない環境では鳴らさない */ }
+  }
+  // ---- 足あと：足もとに小さく残して、1秒で消える ----
+  function footprint(x, y, deg, left) {
+    // 進む向き（deg）に合わせて回し、左右の足を少し横にずらす
+    const r = (deg + 90) * Math.PI / 180, off = left ? -6 : 6;
+    const d = document.createElement("div");
+    d.className = "tt-foot";
+    d.style.left = x + Math.cos(r) * off + "px";
+    d.style.top = y + Math.sin(r) * off + "px";
+    d.style.transform = `translate(-50%, -50%) rotate(${deg + 90}deg)`;
+    d.addEventListener("animationend", () => d.remove());
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 1500);   // 念のため
+  }
+
   async function loadMeta() {
     if (META) return META;
     try { META = await (await fetch(BASE + "meta.json" + Q)).json(); } catch (e) { META = { poses: {} }; }
@@ -174,7 +205,7 @@
       });
     }
     hideBubble() { this.bubble.classList.add("hidden"); }
-    remove() { this.stop(); this.el.remove(); ALL.delete(this); }
+    remove() { this.stop(); (this._walkTimers || []).forEach(clearInterval); this.el.remove(); ALL.delete(this); }
 
     // 画面の中を歩いて移動（floating のときだけ）
     walkTo(x, y) {
@@ -187,13 +218,24 @@
         const before = this.pose;
         const dur = Math.min(2600, Math.max(500, dist * 2.6));
         let f = 0;
-        const flipFrames = setInterval(() => { this.setPose(f++ % 2 ? "walk2" : "walk1", !right); }, 170);
+        const flipFrames = setInterval(() => {
+          const left = f++ % 2 === 0;
+          this.setPose(left ? "walk1" : "walk2", !right);
+          stepSound(left);   // 一歩ごとに、てくてくの音
+        }, 170);
+        // 足あと：半歩ごとに左右交互で足もとに置く
+        let fl = false;
+        const feet = setInterval(() => {
+          const b = this.el.querySelector(".tt-body").getBoundingClientRect();
+          footprint(b.left + b.width / 2, b.bottom - 6, Math.atan2(dy, dx) * 180 / Math.PI, (fl = !fl));
+        }, 85);
+        this._walkTimers = [flipFrames, feet];   // 途中でトトノちゃんが消されたら止める（remove）
         this.setPose("walk1", !right);
         this.hideBubble();
         this.el.style.transition = `left ${dur}ms linear, top ${dur}ms linear`;
         this.el.style.left = x + "px";
         this.el.style.top = y + "px";
-        setTimeout(() => { clearInterval(flipFrames); this.el.style.transition = ""; this.setPose(before && !before.startsWith("walk") ? before : "explain", false); resolve(); }, dur + 30);
+        setTimeout(() => { clearInterval(flipFrames); clearInterval(feet); this.el.style.transition = ""; this.setPose(before && !before.startsWith("walk") ? before : "explain", false); resolve(); }, dur + 30);
       });
     }
     place(x, y) { this.el.style.left = x + "px"; this.el.style.top = y + "px"; }

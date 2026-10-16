@@ -711,6 +711,19 @@ class Handler(BaseHTTPRequestHandler):
                     if os.path.exists(os.path.join(d, name)):
                         return self.send_file(os.path.join(d, name), cache=True)
                 return self.send_json({"error": "not found"}, 404)
+            if u.path == "/api/video_check":
+                # 使い方動画が再生できないとき、理由を調べる（ブラウザからはサイトの応答が読めないため、ここで確かめる）
+                url = q.get("url", "")
+                if not url.startswith("https://totonoumovie.aisys.earth/"):
+                    return self.send_json({"error": "対象外の URL です"}, 400)
+                import urllib.request
+                try:
+                    with urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=8) as r:
+                        return self.send_json({"status": r.status, "length": int(r.headers.get("Content-Length") or 0)})
+                except urllib.error.HTTPError as e:
+                    return self.send_json({"status": e.code})
+                except Exception as e:   # つながらない（回線・サイトの不調）
+                    return self.send_json({"status": -1, "reason": str(e)[:200]})
             if u.path == "/api/tts":
                 h = totono_tts(q.get("text", "")[:400])
                 if not h:

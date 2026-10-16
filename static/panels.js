@@ -2,7 +2,8 @@
 "use strict";
 
 // ファイルを見るアプリの名前（Mac は Finder、Windows はエクスプローラー）
-const FILER = /Win/i.test(navigator.platform || navigator.userAgent) ? "エクスプローラー" : "Finder";
+const IS_WIN = /Win/i.test(navigator.platform || navigator.userAgent);
+const FILER = IS_WIN ? "エクスプローラー" : "Finder";
 
 // ======================================================================
 // ホーム（プロジェクト一覧）
@@ -19,7 +20,7 @@ window.renderHome = async function () {
     notes.push(`<div class="notice bad"><b>TotonouMovie プラグインが見つかりません。</b><br>${esc(st.pluginError)}<br>
       ターミナル（Windows は PowerShell）で <code>claude plugin marketplace add ~/TotonouMovie</code> → <code>claude plugin install totonou-movie@totonou</code> を実行し、
       続けて Claude Code に「TotonouMovie のセットアップをして」と話しかけてください。くわしくはマニュアルの
-      <a href="https://totonoumovie.aisys.earth/install.html#totonou" target="_blank" rel="noopener">「入れかた A-7」</a>。</div>`);
+      <a href="https://totonoumovie.aisys.earth/install.html#totonou" target="_blank" rel="noopener">「入れかた ${IS_WIN ? "A-6" : "A-7"}」</a>。</div>`);
   }
   if (!st.claude) notes.push(`<div class="notice bad">claude コマンドが見つかりません。「AIで作る」には Claude Code が必要です。</div>`);
   if (st.cloudSync) notes.push(`<div class="notice bad">作業フォルダが Dropbox・iCloud などの同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります。同期フォルダの外（例：~/Movies/totonou）で <code>totonoumovie</code> を起動してください。</div>`);
@@ -102,9 +103,9 @@ function openVideos(start) {
   const body = openModal(`<div class="vids">
     <div class="vids-head"><h2>▶ 使い方動画</h2><span class="muted small">どの動画も字幕つき。音を出せない場所でも見られます</span><span class="grow"></span><button onclick="closeModal()">閉じる</button></div>
     <div class="vids-main">
-      <video id="vidMain" controls playsinline preload="metadata"></video>
-      <div id="vidErr" class="notice bad hidden">動画を読み込めませんでした。インターネットにつながっているか確かめてください。
-        <a href="https://totonoumovie.aisys.earth/videos.html" target="_blank" rel="noopener">マニュアルサイトで見る</a></div>
+      <div class="vids-stage"><video id="vidMain" controls playsinline preload="metadata"></video>
+        <div id="vidState" class="vids-state hidden"></div></div>
+      <div class="vids-speed"><span class="muted small">再生の速さ</span>${[1, 1.25, 1.5, 2].map((r) => `<button data-rate="${r}">${r}倍</button>`).join("")}</div>
     </div>
     <div class="vids-list">${VIDEOS.map((v, i) => `<button class="vcard2" data-i="${i}">
       <span class="th" style="background-image:url(${VIDEO_BASE}${v.f}.jpg)"><span class="du hidden"></span></span>
@@ -122,14 +123,75 @@ function openVideos(start) {
     m.src = VIDEO_BASE + VIDEOS[+b.dataset.i].f + ".mp4";
   });
   const vid = body.querySelector("#vidMain");
-  vid.addEventListener("error", () => body.querySelector("#vidErr").classList.remove("hidden"));
+  // 倍速（選んだ速さは次に開いたときも使う）
+  let rate = 1;
+  try { rate = +localStorage.getItem("tm-video-rate") || 1; } catch (e) { /* 無視 */ }
+  const setRate = (r) => {
+    rate = r; vid.playbackRate = r; vid.defaultPlaybackRate = r;
+    body.querySelectorAll(".vids-speed button").forEach((b) => b.classList.toggle("on", +b.dataset.rate === r));
+    try { localStorage.setItem("tm-video-rate", String(r)); } catch (e) { /* 無視 */ }
+  };
+  body.querySelectorAll(".vids-speed button").forEach((b) => b.addEventListener("click", () => setRate(+b.dataset.rate)));
+  vid.addEventListener("loadedmetadata", () => { vid.playbackRate = rate; });
+  setRate(rate);
+  // ---- 再生の状態を、動画の上に分かる言葉で出す（読み込み中・時間がかかっている・再生できない理由） ----
+  const stEl = body.querySelector("#vidState");
+  let cur = 0, slowTimer = null, blocked = false;   // blocked：自動での再生をブラウザに止められた
+  const showState = (kind, html) => {
+    stEl.className = "vids-state " + kind;
+    stEl.innerHTML = html;
+    const r = stEl.querySelector("[data-retry]");
+    if (r) r.onclick = () => play(cur, true);
+  };
+  const hideState = () => { stEl.className = "vids-state hidden"; clearTimeout(slowTimer); };
+  const retryBtns = `<div class="vs-btns"><button class="primary" data-retry>もう一度読み込む</button>
+    <a href="https://totonoumovie.aisys.earth/videos.html" target="_blank" rel="noopener">マニュアルサイトで見る</a></div>`;
+  const loading = () => {
+    showState("loading", `<div class="vs-spin"></div><div>動画を読み込んでいます…</div>`);
+    clearTimeout(slowTimer);
+    slowTimer = setTimeout(() => showState("slow", `<div class="vs-spin"></div><div><b>読み込みに時間がかかっています</b><br>
+      <span class="small">回線が遅いか、サイトが混み合っている可能性があります。このまま待つか、読み込み直してください。</span></div>${retryBtns}`), 10000);
+  };
+  // 再生できなかった理由を調べて出す（ネットが切れている／動画が見つからない・差し替え中／ファイルが壊れている）
+  const failed = async () => {
+    clearTimeout(slowTimer);
+    const src = vid.src;   // 調べている間に別の動画へ切り替わったら、結果を出さない
+    const code = vid.error ? vid.error.code : 0;
+    let why;
+    if (!navigator.onLine) why = "<b>インターネットにつながっていません</b><br><span class='small'>接続を確かめてから、読み込み直してください。</span>";
+    else {
+      let status = 0;
+      // サイトは別のドメインなので、アプリのサーバー経由で応答を確かめる
+      try { status = (await api("/api/video_check?url=" + encodeURIComponent(src))).status; } catch (e) { status = -1; }
+      if (vid.src !== src) return;
+      if (status === -1) why = "<b>マニュアルサイトにつながりません</b><br><span class='small'>回線か、サイトの一時的な不調です。少し待ってから読み込み直してください。</span>";
+      else if (status >= 400) why = `<b title="サイトの応答: ${status}">動画を読み込めませんでした</b><br><span class='small'>動画を差し替えている最中の可能性があります。少し待ってから読み込み直してください。</span>`;
+      else if (code === 3 || code === 4) why = "<b>動画を再生できません</b><br><span class='small'>動画の差し替え中か、ファイルが壊れています。少し待ってから読み込み直してください。</span>";
+      else why = "<b>動画の読み込みが途中で止まりました</b><br><span class='small'>回線が不安定な可能性があります。読み込み直してください。</span>";
+    }
+    vid.controls = false;   // 失敗中は、押しても動かない再生ボタンを出さない
+    showState("error", `<div class="vs-icon">⚠</div><div>${why}</div>${retryBtns}`);
+  };
+  vid.addEventListener("loadstart", loading);
+  vid.addEventListener("waiting", () => { if (!stEl.classList.contains("error")) loading(); });
+  vid.addEventListener("playing", () => { blocked = false; hideState(); });
+  vid.addEventListener("canplay", () => {
+    if (!vid.paused) return;
+    if (blocked) showState("info", `<div>▶ を押すと再生します</div>`); else hideState();
+  });
+  vid.addEventListener("error", () => { if (vid.getAttribute("src")) failed(); });
   const play = (i, auto) => {
     const v = VIDEOS[i];
-    body.querySelector("#vidErr").classList.add("hidden");
+    cur = i;
+    blocked = false;
+    vid.controls = true;
     vid.poster = VIDEO_BASE + v.f + ".jpg";
     vid.src = VIDEO_BASE + v.f + ".mp4";
     body.querySelectorAll(".vcard2").forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
-    if (auto) vid.play().catch(() => {});
+    if (auto) vid.play().catch((e) => {
+      // 自動での再生がブラウザに止められたときは、▶ を押してもらう（読み込みの失敗は error の方で出す）
+      if (e.name === "NotAllowedError") { blocked = true; showState("info", `<div>▶ を押すと再生します</div>`); }
+    });
   };
   body.querySelectorAll(".vcard2").forEach((b) => b.addEventListener("click", () => play(+b.dataset.i, true)));
   play(start || 0, true);
@@ -748,7 +810,7 @@ $("#btnTour").addEventListener("click", () => Totono.startTour(S.P ? "editor" : 
 // 上のバーの声のオン・オフ（吹き出しの 🔊 と同じ設定）
 function updateMuteBtn() {
   const m = Totono.isMuted();
-  $("#btnMute").textContent = m ? "🔇" : "🔊";
+  $("#btnMute").textContent = m ? "🔇 声" : "🔊 声";
   $("#btnMute").title = m ? "トトノちゃんの声：オフ（押すとオン）" : "トトノちゃんの声：オン（押すとオフ）";
 }
 $("#btnMute").addEventListener("click", () => Totono.setMuted(!Totono.isMuted()));
