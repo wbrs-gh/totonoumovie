@@ -218,7 +218,11 @@ function layoutStage() {
   $("#stage").style.width = Math.floor(w * sc) + "px";
   $("#stage").style.height = Math.floor(h * sc) + "px";
 }
-window.addEventListener("resize", () => { layoutStage(); renderTimeline(); });
+let resizeRaf = 0;
+window.addEventListener("resize", () => {
+  cancelAnimationFrame(resizeRaf);
+  resizeRaf = requestAnimationFrame(() => { layoutStage(); renderTimeline(); });
+});
 
 function curTime() { return video.currentTime || 0; }
 function seek(t) {
@@ -248,7 +252,10 @@ function playRange(a, b, skip = true) {
   video.play();
 }
 
-let lastTick = -1;
+let lastTick = -1, lastLabel = "";
+const timeLabelEl = $("#timeLabel"), playheadEl = $("#playhead");
+// 再生位置の線は left ではなく transform で動かす（レイアウトの計算をさせない）
+function setPlayhead(t) { playheadEl.style.transform = `translateX(${t * S.pps}px)`; }
 function tick(force) {
   if (S.P) {
     const t = curTime();
@@ -261,9 +268,11 @@ function tick(force) {
     } else stopAt = stopAt && video.paused ? null : stopAt;
     if (force || t !== lastTick) {
       lastTick = t;
-      $("#timeLabel").textContent = `元 ${fmt(t)} ／ 完成 ${fmt(toEdited(t))} / ${fmt(editedDuration())}`;
-      $("#playhead").style.left = t * S.pps + "px";
-      renderOverlay(t);
+      // 文字が変わった時だけ書き換える（毎フレームの再描画を減らす）
+      const label = `元 ${fmt(t)} ／ 完成 ${fmt(toEdited(t))} / ${fmt(editedDuration())}`;
+      if (label !== lastLabel) { lastLabel = label; timeLabelEl.textContent = label; }
+      setPlayhead(t);
+      renderOverlay(t, force);
       if (!video.paused) followPlayhead(t);
       window.onTimeTick && window.onTimeTick(t);
     }
@@ -332,14 +341,22 @@ function defaultTelopY() {
   return (S.proj?.media?.h || 1) > (S.proj?.media?.w || 1) ? 0.72 : 0.86;
 }
 
-function renderOverlay(t) {
-  const ov = $("#overlay");
-  if (!S.proj || !$("#showOverlay").checked) { ov.innerHTML = ""; video.style.transform = ""; return; }
+// 前回と同じ中身なら DOM を作り直さない（画像の読み直し・文字の再レイアウトを防ぐ）
+let lastOverlayHTML = null, lastVideoTransform = null, lastVideoOrigin = null;
+function setOverlay(html, transform, origin) {
+  if (html !== lastOverlayHTML) { lastOverlayHTML = html; $("#overlay").innerHTML = html; }
+  if (transform !== lastVideoTransform) { lastVideoTransform = transform; video.style.transform = transform; }
+  if (origin != null && origin !== lastVideoOrigin) { lastVideoOrigin = origin; video.style.transformOrigin = origin; }
+}
+function renderOverlay(t, force) {
+  if (force) lastOverlayHTML = lastVideoTransform = lastVideoOrigin = null;
+  if (!S.proj || !$("#showOverlay").checked) return setOverlay("", "");
   const parts = [];
   const D = S.data;
   const at = (key, it) => t >= itemStart(key, it) && t < itemEnd(key, it);
   // 寄り
   const z = (D.zoom || []).find((it) => at("zoom", it));
+  let vTransform = "", vOrigin = null;
   if (z) {
     const s = +z.scale || 1.1, dur = itemEnd("zoom", z) - itemStart("zoom", z);
     const p = clamp((t - z.startSec) / Math.max(0.01, dur), 0, 1);
@@ -348,9 +365,9 @@ function renderOverlay(t) {
     else if (z.mode === "hold") k = 1 + (s - 1) * Math.min(1, (t - z.startSec) / 0.3);
     else if (z.mode === "pulse") k = 1 + (s - 1) * Math.sin(Math.PI * p);
     else k = 1 + (s - 1) * p;
-    video.style.transformOrigin = `${(z.originX ?? 0.5) * 100}% ${(z.originY ?? 0.35) * 100}%`;
-    video.style.transform = `scale(${k})`;
-  } else video.style.transform = "";
+    vOrigin = `${(z.originX ?? 0.5) * 100}% ${(z.originY ?? 0.35) * 100}%`;
+    vTransform = `scale(${k.toFixed(4)})`;
+  }
   // 画像
   for (const it of (D.image || []).filter((x) => at("image", x))) {
     const src = "/api/pfile?p=" + encodeURIComponent(S.P) + "&path=" + encodeURIComponent((it.file || "").includes("/") ? "public/" + it.file : "public/images/" + it.file);
@@ -417,7 +434,7 @@ function renderOverlay(t) {
   if (card) parts.push(`<div class="ov-label">ここに章カード「${esc(card.title)}」（${card.durationSec || 2.4}秒）が入ります</div>`);
   const c = cutAt(t);
   if (c && !$("#skipCuts").checked) parts.push(`<div class="ov-label" style="background:#a22">カットされる区間</div>`);
-  ov.innerHTML = parts.join("");
+  setOverlay(parts.join(""), vTransform, vOrigin);
 }
 
 // ======================================================================
@@ -478,7 +495,7 @@ function renderTimeline() {
     rows.push(`<div class="track" data-lane="${lane.key}">${html}</div>`);
   }
   $("#tlRows").innerHTML = rows.join("") + S.cuts.map((c) => `<div class="cutshade" style="left:${c.s * S.pps}px;width:${(c.e - c.s) * S.pps}px"></div>`).join("");
-  $("#playhead").style.left = curTime() * S.pps + "px";
+  setPlayhead(curTime());
   drawWave();
 }
 
@@ -499,12 +516,17 @@ function drawWave() {
   }
 }
 
+let zoomRaf = 0;
 $("#zoom").addEventListener("input", (e) => {
-  const sc = $("#tlScroll");
-  const center = (sc.scrollLeft + sc.clientWidth / 2) / S.pps;
-  S.pps = +e.target.value;
-  renderTimeline();
-  sc.scrollLeft = center * S.pps - sc.clientWidth / 2;
+  const v = +e.target.value;
+  cancelAnimationFrame(zoomRaf);
+  zoomRaf = requestAnimationFrame(() => {
+    const sc = $("#tlScroll");
+    const center = (sc.scrollLeft + sc.clientWidth / 2) / S.pps;
+    S.pps = v;
+    renderTimeline();
+    sc.scrollLeft = center * S.pps - sc.clientWidth / 2;
+  });
 });
 
 // ---- タイムラインのマウス操作 ----

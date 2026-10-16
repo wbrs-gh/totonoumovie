@@ -206,7 +206,7 @@ body.touring #welcome .tt-inline { visibility: hidden; }
 .k-transcript { background: #e3e9f0; color: #3b4a5a; cursor: pointer; border-color: #d3dce6; }
 .k-bgm { background: #2aa5ba; }
 .cutshade { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(45deg, rgba(226,72,61,.13) 0 6px, rgba(226,72,61,.05) 6px 12px); pointer-events: none; z-index: 1; }
-#playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent2); pointer-events: none; z-index: 5; }
+#playhead { position: absolute; left: 0; top: 0; bottom: 0; width: 2px; will-change: transform; background: var(--accent2); pointer-events: none; z-index: 5; }
 
 /* ---- 作業バー・トースト・モーダル ---- */
 #jobBar { position: fixed; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 50; max-width: 420px; }
@@ -277,7 +277,7 @@ html { overflow-x: hidden; }
   pointer-events: none; animation: tt-foot 1.1s ease-out forwards; }
 @keyframes tt-foot { 0% { opacity: .9; } 70% { opacity: .5; } 100% { opacity: 0; } }
 @keyframes tt-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-.tt-inline .tt-body { animation: tt-bob 2.6s ease-in-out infinite; }
+.tt-inline .tt-body { animation: tt-bob 2.6s ease-in-out infinite; will-change: transform; }
 
 /* ===== AI の作業画面 ===== */
 .run2 { display: flex; flex-direction: column; gap: 14px; }

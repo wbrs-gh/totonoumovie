@@ -256,8 +256,12 @@ def project_payload(P):
 # ======================================================================
 # プレビュー用の軽い動画・波形
 # ======================================================================
+PROXY_VER = 2
+
+
 def proxy_path(src):
-    h = hashlib.md5(f"{src}:{os.path.getmtime(src)}".encode()).hexdigest()[:16]
+    # PROXY_VER を上げると、作り方を変えたときに作り直される
+    h = hashlib.md5(f"{src}:{os.path.getmtime(src)}:{PROXY_VER}".encode()).hexdigest()[:16]
     return os.path.join(CACHE_DIR, "proxy", h + ".mp4")
 
 
@@ -276,8 +280,12 @@ def ensure_proxy(src):
         tmp = dst + ".part.mp4"
         info = probe(src)
         vf = "scale=-2:720" if info.get("h", 0) <= info.get("w", 0) else "scale=540:-2"
+        # 60fps などの動画は 30fps に落とす（再生の負荷が半分になる。時間はずれない）
+        if info.get("fps", 30) > 31:
+            vf += ",fps=30"
+        # fastdecode: ブラウザでの解読を軽くする／-g 15: シークを速く
         cmd = ["ffmpeg", "-y", "-v", "error", "-i", src, "-vf", vf, "-c:v", "libx264", "-preset", "veryfast",
-               "-crf", "26", "-g", "15", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
+               "-tune", "fastdecode", "-crf", "26", "-g", "15", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
                "-movflags", "+faststart", tmp]
         r = subprocess.run(cmd, capture_output=True, text=True)
         if r.returncode == 0:
