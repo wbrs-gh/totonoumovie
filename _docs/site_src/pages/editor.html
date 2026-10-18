@@ -9,7 +9,7 @@
 
 <section>
   <h2 id="tour">トトノちゃんのツアー</h2>
-  <p>はじめて画面を開くと、案内役のトトノちゃんが画面の中を歩きながら、各部分を順番に教えてくれます。あとから見直したいときは、上の <b>🎓 ツアー</b> を押します。声は吹き出しの 🔊 でオン・オフできます。</p>
+  <p>はじめて起動すると、真ん中のトトノちゃんが「ツアーを始める？」と聞きます。「🎓 ツアーを始める」を押すと、トトノちゃんが画面の中を歩きながら、各部分を順番に教えてくれます。編集画面は、はじめて開いたときに自動で案内します。あとから見直したいときは、上の <b>🎓 ツアー</b> を押します。声は、上の 🔊（または吹き出しの 🔊）でオン・オフできます。</p>
   <div class="cards">
     <figure style="margin:0"><img src="images/app-tour-home.jpg" alt="ホームでのツアー"><figcaption>ホーム：動画を作るボタンを指さして案内</figcaption></figure>
     <figure style="margin:0"><img src="images/app-tour-editor.jpg" alt="編集画面でのツアー"><figcaption>編集画面：タイムラインの使い方を案内</figcaption></figure>
@@ -41,34 +41,87 @@
 
 <section>
   <h2 id="timeline">タイムラインの操作</h2>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 300" role="img" aria-label="タイムラインの操作：上の時間の段をクリックで移動、項目のまん中をドラッグで移動、端をドラッグで長さ、空いている所をダブルクリックで追加、斜線はカットされる区間">
-    <g font-family="sans-serif">
-      <rect x="0" y="0" width="900" height="300" rx="14" fill="#1d2027"/>
-      <g font-size="12" fill="#8b92a3"><text x="16" y="34">時間</text><text x="16" y="84">字幕</text><text x="16" y="134">効果音</text><text x="16" y="184">寄り</text><text x="16" y="234">画像</text></g>
-      <rect x="80" y="18" width="800" height="26" fill="#252932"/>
-      <g fill="#8b92a3" font-size="11"><text x="86" y="36">0:00</text><text x="286" y="36">0:05</text><text x="486" y="36">0:10</text><text x="686" y="36">0:15</text></g>
-      <rect x="400" y="50" width="70" height="230" fill="#ff5a5a" opacity=".16"/>
-      <g><rect x="110" y="66" width="140" height="28" rx="6" fill="#7a4fc4"/><text x="120" y="85" font-size="12.5" fill="#fff">おはようございます</text>
-         <rect x="260" y="66" width="130" height="28" rx="6" fill="#7a4fc4" stroke="#ffb020" stroke-width="3"/><text x="270" y="85" font-size="12.5" fill="#fff">ポイントは3つ</text>
-         <rect x="480" y="66" width="170" height="28" rx="6" fill="#7a4fc4"/><text x="490" y="85" font-size="12.5" fill="#fff">1つ目は水を飲むこと</text></g>
-      <rect x="260" y="116" width="34" height="28" rx="6" fill="#c27a1f"/><rect x="480" y="116" width="34" height="28" rx="6" fill="#c27a1f"/>
-      <rect x="260" y="166" width="100" height="28" rx="6" fill="#2b8a6e"/>
-      <rect x="560" y="216" width="150" height="28" rx="6" fill="#2f6fb3"/><text x="570" y="235" font-size="12.5" fill="#fff">water.jpg</text>
-      <line x1="330" y1="18" x2="330" y2="280" stroke="#ffb020" stroke-width="2.5"/>
-      <!-- 吹き出し -->
-      <g font-size="13" font-weight="700">
-        <rect x="530" y="0" width="240" height="0"/>
-        <path d="M330 18 L330 8" stroke="#ff7a30" stroke-width="2"/>
-        <rect x="118" y="252" width="0" height="0"/>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 27, "pose": "point", "id": "fig_editor_1_1", "t": "上の時間の段をクリックすると、その位置へ移動するよ。"}, {"s": 2, "x": 35, "pose": "explain", "id": "fig_editor_1_2", "t": "項目のまん中をドラッグすると、時刻をずらせるよ。"}, {"s": 3, "x": 42, "pose": "point", "id": "fig_editor_1_3", "t": "左右の端をドラッグすると、長さを変えられるよ。"}, {"s": 4, "x": 86, "pose": "explain", "id": "fig_editor_1_4", "t": "空いている所をダブルクリックすると、新しく追加できるよ。"}, {"s": 5, "x": 48, "pose": "good", "id": "fig_editor_1_5", "t": "赤い斜線はカットされる区間だよ。覚えておいてね。"}]'>
+  <svg viewBox="0 0 900 380" role="img" aria-label="タイムラインの操作：上の時間の段をクリックで移動、項目のまん中をドラッグで移動、端をドラッグで長さ、空いている所をダブルクリックで追加、斜線はカットされる区間">
+    <defs>
+      <linearGradient id="editor1-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <filter id="editor1-shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".13"/></filter>
+      <pattern id="editor1-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#ff5a5a" fill-opacity=".08"/><rect width="3" height="10" fill="#ff5a5a" fill-opacity=".5"/></pattern>
+      <marker id="editor1-arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,1.5 Q1,1 1.6,2.4 L3.4,6 L1.6,9.6 Q1,11 2,10.5 L10.6,6.6 Q11.6,6 10.6,5.4 Z" fill="#1b5f96"/></marker>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <rect x="0" y="0" width="900" height="380" rx="24" fill="#f4f9fd"/>
+        <rect x="12" y="34" width="876" height="268" rx="20" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#editor1-shadow)"/>
+        <!-- 段の名前 -->
+        <g font-size="13" font-weight="700" fill="#4b5b6e"><text x="28" y="69">時間</text><text x="28" y="118">字幕</text><text x="28" y="168">効果音</text><text x="28" y="218">寄り</text><text x="28" y="268">画像</text></g>
+        <!-- 時間の段 -->
+        <rect x="90" y="48" width="784" height="30" rx="10" fill="#e6f3fc"/>
+        <g stroke="#a8d8f5" stroke-width="2"><line x1="100" y1="70" x2="100" y2="78"/><line x1="292" y1="70" x2="292" y2="78"/><line x1="484" y1="70" x2="484" y2="78"/><line x1="676" y1="70" x2="676" y2="78"/></g>
+        <g font-size="13" fill="#4b5b6e"><text x="104" y="67">0:00</text><text x="296" y="67">0:05</text><text x="488" y="67">0:10</text><text x="680" y="67">0:15</text></g>
+        <!-- 段の区切り -->
+        <g stroke="#dcebf6" stroke-width="2"><line x1="90" y1="136" x2="874" y2="136"/><line x1="90" y1="186" x2="874" y2="186"/><line x1="90" y1="236" x2="874" y2="236"/></g>
+        <!-- 字幕 -->
+        <g font-size="13" font-weight="700" fill="#fff">
+          <rect x="100" y="96" width="136" height="30" rx="10" fill="url(#editor1-main)"/><text x="110" y="116">おはようございます</text>
+          <rect x="252" y="96" width="132" height="30" rx="10" fill="url(#editor1-main)"/><text x="264" y="116">ポイントは3つ</text>
+          <rect x="482" y="96" width="176" height="30" rx="10" fill="url(#editor1-main)"/><text x="492" y="116">1つ目は水を飲むこと</text>
+        </g>
+        <!-- 効果音 -->
+        <rect x="482" y="146" width="34" height="30" rx="10" fill="#ff8fa8"/><rect x="640" y="146" width="34" height="30" rx="10" fill="#ff8fa8"/>
+        <!-- 寄り -->
+        <rect x="252" y="196" width="100" height="30" rx="10" fill="#23a07a"/>
+        <!-- 画像 -->
+        <rect x="560" y="246" width="150" height="30" rx="10" fill="#1b5f96"/><text x="572" y="266" font-size="13" font-weight="700" fill="#fff">water.jpg</text>
       </g>
-    </g>
-    <g font-family="sans-serif" font-size="13.5" font-weight="800">
-      <g><circle cx="356" cy="30" r="13" fill="#ff7a30"/><text x="356" y="35" text-anchor="middle" fill="#fff">1</text></g>
-      <g><circle cx="325" cy="58" r="13" fill="#ff7a30"/><text x="325" y="63" text-anchor="middle" fill="#fff">2</text></g>
-      <g><circle cx="397" cy="80" r="13" fill="#ff7a30"/><text x="397" y="85" text-anchor="middle" fill="#fff">3</text></g>
-      <g><circle cx="780" cy="130" r="13" fill="#ff7a30"/><text x="780" y="135" text-anchor="middle" fill="#fff">4</text></g>
-      <g><circle cx="435" cy="268" r="13" fill="#ff7a30"/><text x="435" y="273" text-anchor="middle" fill="#fff">5</text></g>
+
+      <!-- 1 時間の段をクリック -->
+      <g class="gs" data-s="1">
+        <circle cx="244" cy="63" r="13" fill="none" stroke="#ff8f3a" stroke-width="2" opacity=".6"/>
+        <line x1="244" y1="54" x2="244" y2="292" stroke="#ff8f3a" stroke-width="3"/>
+        <path d="M236 50 H252 L244 60 Z" fill="#ff8f3a"/>
+        <circle cx="268" cy="63" r="12" fill="#1b5f96" stroke="#fff" stroke-width="2"/>
+        <text x="268" y="68" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">1</text>
+        <g font-size="13" font-weight="700" fill="#1f2d3d"><rect x="40" y="318" width="146" height="34" rx="17" fill="#fff" stroke="#cfe6f7" stroke-width="2"/><circle cx="58" cy="335" r="10" fill="#1b5f96"/><text x="58" y="340" text-anchor="middle" fill="#fff">1</text><text x="74" y="340">クリックで移動</text></g>
+      </g>
+
+      <!-- 2 まん中をドラッグ -->
+      <g class="gs" data-s="2">
+        <rect x="250" y="94" width="136" height="34" rx="11" fill="none" stroke="#ffb020" stroke-width="3"/>
+        <line x1="306" y1="148" x2="262" y2="148" stroke="#1b5f96" stroke-width="3" stroke-linecap="round" marker-end="url(#editor1-arrow)"/>
+        <line x1="330" y1="148" x2="374" y2="148" stroke="#1b5f96" stroke-width="3" stroke-linecap="round" marker-end="url(#editor1-arrow)"/>
+        <circle cx="318" cy="148" r="12" fill="#1b5f96" stroke="#fff" stroke-width="2"/>
+        <text x="318" y="153" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">2</text>
+        <g font-size="13" font-weight="700" fill="#1f2d3d"><rect x="198" y="318" width="146" height="34" rx="17" fill="#fff" stroke="#cfe6f7" stroke-width="2"/><circle cx="216" cy="335" r="10" fill="#1b5f96"/><text x="216" y="340" text-anchor="middle" fill="#fff">2</text><text x="232" y="340">ドラッグで移動</text></g>
+      </g>
+
+      <!-- 3 端をドラッグ -->
+      <g class="gs" data-s="3">
+        <rect x="249" y="100" width="7" height="22" rx="3.5" fill="#fff" stroke="#1b5f96" stroke-width="2"/>
+        <rect x="380" y="100" width="7" height="22" rx="3.5" fill="#fff" stroke="#1b5f96" stroke-width="2"/>
+        <path d="M393 111 H408" stroke="#1b5f96" stroke-width="3" stroke-linecap="round" marker-end="url(#editor1-arrow)"/>
+        <circle cx="384" cy="86" r="12" fill="#1b5f96" stroke="#fff" stroke-width="2"/>
+        <text x="384" y="91" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">3</text>
+        <g font-size="13" font-weight="700" fill="#1f2d3d"><rect x="356" y="318" width="146" height="34" rx="17" fill="#fff" stroke="#cfe6f7" stroke-width="2"/><circle cx="374" cy="335" r="10" fill="#1b5f96"/><text x="374" y="340" text-anchor="middle" fill="#fff">3</text><text x="390" y="340">端で長さを変更</text></g>
+      </g>
+
+      <!-- 4 ダブルクリックで追加 -->
+      <g class="gs" data-s="4">
+        <rect x="760" y="146" width="70" height="30" rx="10" fill="#e6f3fc" stroke="#2f8fd0" stroke-width="2" stroke-dasharray="5 4"/>
+        <path d="M795 153 V169 M787 161 H803" stroke="#2f8fd0" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="842" cy="146" r="12" fill="#1b5f96" stroke="#fff" stroke-width="2"/>
+        <text x="842" y="151" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">4</text>
+        <g font-size="13" font-weight="700" fill="#1f2d3d"><rect x="514" y="318" width="188" height="34" rx="17" fill="#fff" stroke="#cfe6f7" stroke-width="2"/><circle cx="532" cy="335" r="10" fill="#1b5f96"/><text x="532" y="340" text-anchor="middle" fill="#fff">4</text><text x="548" y="340">ダブルクリックで追加</text></g>
+      </g>
+
+      <!-- 5 カットされる区間 -->
+      <g class="gs" data-s="5">
+        <rect x="400" y="86" width="72" height="206" rx="6" fill="url(#editor1-hatch)" stroke="#ff5a5a" stroke-width="1.5" stroke-opacity=".6"/>
+        <circle cx="436" cy="282" r="12" fill="#1b5f96" stroke="#fff" stroke-width="2"/>
+        <text x="436" y="287" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">5</text>
+        <g font-size="13" font-weight="700" fill="#1f2d3d"><rect x="714" y="318" width="146" height="34" rx="17" fill="#fff" stroke="#cfe6f7" stroke-width="2"/><circle cx="732" cy="335" r="10" fill="#1b5f96"/><text x="732" y="340" text-anchor="middle" fill="#fff">5</text><text x="748" y="340">斜線はカット</text></g>
+      </g>
+
     </g>
   </svg>
   </div>
@@ -99,7 +152,7 @@
     <tr><td>見た目</td><td>右の「見た目」（TotonouMovie の字幕のデザイン）・「出かた」・「書体」・「縦書き」</td></tr>
     <tr><td>位置</td><td>「位置 X／Y」に 0〜1 の数（左上が 0）。顔にかかる字幕を下に逃がすときなど</td></tr>
     <tr><td>色</td><td>「文字色」「縁の色」「帯・箱の色」</td></tr>
-    <tr><td>一部の文字だけ色を変える</td><td>「部分装飾」に <code>[{"range":[0,2],"color":"#e02020"}]</code>（0文字目から2文字ぶんを赤）</td></tr>
+    <tr><td>一部の文字だけ色を変える</td><td>AI タブの「直してもらう」に「12秒の字幕『コップ1杯の』の、最初の2文字を赤に」のように頼みます<details class="more"><summary>自分で書くとき（上級者向け）</summary><p>「部分装飾」に <code>[{"range":[0,2],"color":"#e02020"}]</code>（0文字目から2文字ぶんを赤）</p></details></td></tr>
     <tr><td>字幕を足す</td><td>字幕の段の空いている所をダブルクリック。または「文字起こし」の段の発話を選んで「この発話から字幕を作る」</td></tr>
   </tbody></table></div>
   <div class="callout warn"><b>画面の字幕は近似です</b><p>正確な見た目（書体・縁取り・動き）は <b>📷 静止画</b> で確かめます。完成と同じ仕組みで1コマを作ります。白い文字が背景に埋もれるときは、プロパティの「字幕の読みやすさを自動補正」。</p></div>
@@ -150,12 +203,12 @@
   <ul>
     <li>進み具合は右下のカードに出ます。「ログ」で詳しい様子、「中止」で止められます</li>
     <li>検査の結果が🟡（注意）でも、書き出しはできています。気になる所だけ確かめます。⚠（FAIL）のときは直して書き出し直します</li>
-    <li>ショートのループ化・字幕ファイル（SRT）・YouTube のチャプター・完成の確認の記録は、AI に「仕上げて」と頼むと、TotonouMovie の手順どおりに行います</li>
+    <li>⬇ 書き出しは、完成動画に加えて、ショートは投稿用のループ版（<code>_loopable.mp4</code>）、横の動画は字幕ファイル（SRT）も作り直します。YouTube のチャプターと完成の確認の記録は、AI タブで「チャプターを作り直して」「完成の確認をして」と頼みます</li>
   </ul>
   <figure><img src="images/app-export.jpg" alt="書き出しの画面"><figcaption>書き出しの画面。</figcaption></figure>
 </section>
 
 <section>
   <h2 id="files">素材・出力タブ</h2>
-  <p>完成動画・試作・静止画・差し込み画像の一覧です。クリックでその場で再生・表示でき、「Finder で開く」（Windows はエクスプローラー）で保存場所を開けます。完成の確認の記録があると、緑の表示が出ます。</p>
+  <p>完成動画・試作・静止画・差し込み画像の一覧です。クリックでその場で再生・表示でき、「<span class="os-mac" style="display:inline">Finder</span><span class="os-win" style="display:inline">エクスプローラー</span>で開く」で保存場所を開けます。完成の確認の記録があると、緑の表示が出ます。</p>
 </section>

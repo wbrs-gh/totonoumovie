@@ -1,10 +1,10 @@
-<!--meta {"title": "はじめての1本", "desc": "動画を渡してから完成するまで。4回の確認の答え方、完成した動画の場所、直したいときの伝え方。"} -->
+<!--meta {"title": "はじめての1本", "desc": "動画を渡してから完成するまで。4つの確認の答え方、完成した動画の場所、直したいときの伝え方。"} -->
 <header class="page-head">
   <div class="eyebrow">使い方</div>
   <h1>はじめての1本</h1>
-  <p class="lead">動画を1本渡してから完成するまでの流れです。途中で止まって確認を求めるのは<b>4回だけ</b>。それ以外は AI が進めます。</p>
+  <p class="lead">動画を1本渡してから完成するまでの流れです。あなたが答えるのは<b>4つの確認だけ</b>。それ以外は AI が進めます。</p>
 </header>
-<div class="tt-tip" data-pose="good" data-id="site_first">止まって聞くのは4回だけ。迷ったら、いちばん上のおすすめを選べば大丈夫だよ。</div>
+<div class="tt-tip" data-pose="good" data-id="site_first">答えるのは4つの確認だけ。迷ったら、いちばん上のおすすめを選べば大丈夫だよ。</div>
 
 
 <section>
@@ -15,68 +15,149 @@
 <section>
   <h2 id="give"><span class="num">1</span>動画を渡す</h2>
   <ol>
-    <li>作業フォルダで <code>totonoumovie</code> を起動します（<a href="install.html#daily">起動のしかた</a>）</li>
+    <li><code>totonoumovie</code> を起動します（<a href="install.html#daily">起動のしかた</a>）</li>
     <li>上の <b>🎬 AIで作る</b> を押します</li>
     <li>「話している動画」を選び、<b>選ぶ</b> ボタンで動画ファイルを選びます（<span class="term" data-tip="パソコンの中でのファイルの場所を表す文字。選ぶボタンを使えば自動で入ります。">パス</span>を直接貼ってもかまいません）</li>
-    <li>画像・BGM・人名の表記があれば「今回だけの追加の指示」に書き、<b>AI で作り始める</b> を押します</li>
+    <li>画像・BGM・人名の表記があれば「今回だけ伝えたいこと」に書き、<b>AI で作り始める</b> を押します</li>
   </ol>
-  <figure><img src="images/app-create.jpg" alt="AIで作る の画面"><figcaption>「AIで作る」の画面。オリジナルの指示（例：テンポよく）もチェックで足せます。</figcaption></figure>
-  <div class="cmd tm"><span class="lab">「今回だけの追加の指示」の書き方の例</span><pre>画像は /Users/あなたの名前/Pictures/talk-images に入っています。BGM は /Users/あなたの名前/Music/calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <figure><img src="images/app-create.jpg" alt="AIで作る の画面"><figcaption>「AIで作る」の画面。いつもの指示（例：テンポよく）もチェックで足せます。</figcaption></figure>
+  <div class="cmd tm os-mac"><span class="lab">「今回だけ伝えたいこと」の書き方の例</span><pre>画像は /Users/あなたの名前/Pictures/talk-images に入っています。BGM は /Users/あなたの名前/Music/calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <div class="cmd tm os-win"><span class="lab">「今回だけ伝えたいこと」の書き方の例</span><pre>画像は C:\Users\あなたの名前\Pictures\talk-images に入っています。BGM は C:\Users\あなたの名前\Music\calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <p class="muted os-mac">フォルダの場所は、Finder でフォルダを選んで <kbd>⌥ Option</kbd>＋<kbd>⌘</kbd>＋<kbd>C</kbd> でコピーできます。</p>
+  <p class="muted os-win">フォルダの場所は、エクスプローラーでフォルダを <kbd>Shift</kbd>＋右クリック →「パスのコピー」でコピーできます。</p>
   <h3>どんな動画になるかは、自動で決まります</h3>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 260" role="img" aria-label="渡した動画によって作り方が決まる：縦の動画はショート、3分を超える横の動画はロング、3分以下の横や正方形は1回聞かれる、声の録音と素材のフォルダはアフレコ動画">
-    <defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" fill="#9aa1ab"/></marker></defs>
-    <g font-family="sans-serif">
-      <rect x="10" y="95" width="150" height="70" rx="14" fill="#2d6b5f"/><text x="85" y="126" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">渡したもの</text><text x="85" y="148" text-anchor="middle" fill="#cfe9e1" font-size="12">向きと長さを見る</text>
-      <g stroke="#9aa1ab" stroke-width="2.5" fill="none" marker-end="url(#a3)"><path d="M162 130 C210 130 210 30 255 30"/><path d="M162 130 C210 130 210 95 255 95"/><path d="M162 130 C210 130 210 162 255 162"/><path d="M162 130 C210 130 210 228 255 228"/></g>
-      <g font-size="15">
-        <rect x="260" y="8" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="274" y="17" width="15" height="26" rx="3" fill="#26303a"/><text x="300" y="36" fill="#1d2126">縦の動画</text>
-        <rect x="260" y="73" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="272" y="85" width="26" height="15" rx="3" fill="#26303a"/><text x="308" y="101" fill="#1d2126">横・3分を超える</text>
-        <rect x="260" y="140" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><rect x="272" y="152" width="26" height="15" rx="3" fill="#9aa1ab"/><text x="308" y="168" fill="#1d2126">横・3分以下／正方形</text>
-        <rect x="260" y="206" width="240" height="44" rx="10" fill="#fff" stroke="#e1dbcf" stroke-width="2"/><text x="274" y="234" fill="#1d2126">🎙 声 ＋ 📁 素材フォルダ</text>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 11, "pose": "point", "id": "fig_first_1_1", "t": "渡した動画の向きと長さを、まず見るんだよ。"}, {"s": 2, "x": 62, "pose": "explain", "id": "fig_first_1_2", "t": "縦の動画なら、リールやショート向けの縦動画になるよ。"}, {"s": 3, "x": 62, "pose": "explain", "id": "fig_first_1_3", "t": "横で3分を超える動画は、YouTube向けのロングだよ。"}, {"s": 4, "x": 62, "pose": "think", "id": "fig_first_1_4", "t": "横で3分以下や正方形なら、どう作るか1回だけ聞くね。"}, {"s": 5, "x": 62, "pose": "point", "id": "fig_first_1_5", "t": "声の録音と素材のフォルダなら、縦のアフレコ動画になるよ。"}, {"s": 6, "x": 50, "pose": "good", "id": "fig_first_1_6", "t": "作り方は自動で決まるから、動画を渡すだけで大丈夫だよ。"}]'>
+  <svg viewBox="0 0 960 300" role="img" aria-label="渡した動画によって作り方が決まる：縦の動画はショート、3分を超える横の動画はロング、3分以下の横や正方形は1回聞かれる、声の録音と素材のフォルダはアフレコ動画">
+    <defs>
+      <marker id="first1-arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,2 Q2,1 3,1.5 L10.5,5.2 Q11.5,6 10.5,6.8 L3,10.5 Q2,11 2,10 Z" fill="#2f8fd0"/></marker>
+      <marker id="first1-arrow-l" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,2 Q2,1 3,1.5 L10.5,5.2 Q11.5,6 10.5,6.8 L3,10.5 Q2,11 2,10 Z" fill="#a8d8f5"/></marker>
+      <linearGradient id="first1-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <filter id="first1-shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e5a96" flood-opacity=".14"/></filter>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <path d="M0 278 Q120 258 240 278 T480 278 T720 278 T960 278" fill="none" stroke="#e6f3fc" stroke-width="6" stroke-linecap="round"/>
       </g>
-      <g stroke="#9aa1ab" stroke-width="2.5" marker-end="url(#a3)"><line x1="502" y1="30" x2="560" y2="30"/><line x1="502" y1="95" x2="560" y2="95"/><line x1="502" y1="162" x2="560" y2="162"/><line x1="502" y1="228" x2="560" y2="228"/></g>
-      <g font-size="15" font-weight="800">
-        <rect x="566" y="8" width="320" height="44" rx="10" fill="#fff1e6"/><text x="582" y="36" fill="#c4551a">ショート（リール・Shorts・TikTok）</text>
-        <rect x="566" y="73" width="320" height="44" rx="10" fill="#eaf1fd"/><text x="582" y="101" fill="#2f5fb8">ロング（YouTube）</text>
-        <rect x="566" y="140" width="320" height="44" rx="10" fill="#f3f0e9"/><text x="582" y="168" fill="#4a515b">どう作るかを1回だけ聞かれる</text>
-        <rect x="566" y="206" width="320" height="44" rx="10" fill="#e5f0ec"/><text x="582" y="234" fill="#1f4f46">アフレコ動画（縦）</text>
+      <g class="gs" data-s="1">
+        <rect x="20" y="100" width="172" height="100" rx="22" fill="url(#first1-main)" filter="url(#first1-shadow)"/>
+        <image href="assets/icons/film.png" x="84" y="108" width="44" height="44"/>
+        <text x="106" y="172" text-anchor="middle" fill="#fff" font-size="18" font-weight="900">渡したもの</text>
+        <text x="106" y="191" text-anchor="middle" fill="#e6f3fc" font-size="13" font-weight="700">向きと長さを見る</text>
+      </g>
+      <g class="gs" data-s="2">
+        <path class="flow" d="M194 150 C222 150 218 45 244 45" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow-l)"/>
+        <rect x="252" y="20" width="270" height="50" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#first1-shadow)"/>
+        <rect x="272" y="29" width="18" height="32" rx="5" fill="#1b5f96"/>
+        <text x="306" y="51" fill="#1f2d3d" font-size="16" font-weight="700">縦の動画</text>
+        <path class="flow" d="M528 45 H578" fill="none" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow)"/>
+        <rect x="590" y="20" width="350" height="50" rx="18" fill="#fff3e8" stroke="#ff8f3a" stroke-width="2"/>
+        <text x="610" y="51" fill="#c25a12" font-size="18" font-weight="900">ショート</text>
+        <text x="696" y="50" fill="#c25a12" font-size="13" font-weight="700">リール・Shorts・TikTok</text>
+      </g>
+      <g class="gs" data-s="3">
+        <path class="flow" d="M194 150 C222 150 218 115 244 115" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow-l)"/>
+        <rect x="252" y="90" width="270" height="50" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#first1-shadow)"/>
+        <rect x="267" y="106" width="30" height="18" rx="5" fill="#1b5f96"/>
+        <text x="310" y="121" fill="#1f2d3d" font-size="16" font-weight="700">横・3分を超える</text>
+        <path class="flow" d="M528 115 H578" fill="none" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow)"/>
+        <rect x="590" y="90" width="350" height="50" rx="18" fill="url(#first1-main)" filter="url(#first1-shadow)"/>
+        <text x="610" y="121" fill="#fff" font-size="18" font-weight="900">ロング</text>
+        <text x="676" y="120" fill="#fff" font-size="13" font-weight="700">YouTube</text>
+      </g>
+      <g class="gs" data-s="4">
+        <path class="flow" d="M194 150 C222 150 218 185 244 185" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow-l)"/>
+        <rect x="252" y="160" width="270" height="50" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#first1-shadow)"/>
+        <rect x="267" y="177" width="26" height="16" rx="4" fill="#70c0f0"/>
+        <rect x="298" y="175" width="20" height="20" rx="4" fill="#70c0f0"/>
+        <text x="330" y="191" fill="#1f2d3d" font-size="16" font-weight="700">横・3分以下／正方形</text>
+        <path class="flow" d="M528 185 H578" fill="none" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow)"/>
+        <rect x="590" y="160" width="350" height="50" rx="18" fill="#fff" stroke="#70c0f0" stroke-width="2" stroke-dasharray="6 5"/>
+        <image href="assets/icons/question.png" x="602" y="167" width="36" height="36"/>
+        <text x="648" y="191" fill="#1b5f96" font-size="16" font-weight="900">どう作るかを1回だけ聞かれる</text>
+      </g>
+      <g class="gs" data-s="5">
+        <path class="flow" d="M194 150 C222 150 218 255 244 255" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow-l)"/>
+        <rect x="252" y="230" width="270" height="50" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#first1-shadow)"/>
+        <image href="assets/icons/sound.png" x="262" y="237" width="36" height="36"/>
+        <text x="304" y="261" fill="#1f2d3d" font-size="16" font-weight="700">声</text>
+        <text x="326" y="261" fill="#7d8a99" font-size="16" font-weight="700">＋</text>
+        <path d="M350 246 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#70c0f0"/>
+        <text x="390" y="261" fill="#1f2d3d" font-size="16" font-weight="700">素材フォルダ</text>
+        <path class="flow" d="M528 255 H578" fill="none" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first1-arrow)"/>
+        <rect x="590" y="230" width="350" height="50" rx="18" fill="#e5f7f0" stroke="#23a07a" stroke-width="2"/>
+        <text x="610" y="261" fill="#23a07a" font-size="18" font-weight="900">アフレコ動画</text>
+        <text x="726" y="260" fill="#23a07a" font-size="13" font-weight="700">縦</text>
       </g>
     </g>
   </svg>
   </div>
-  <p>判定の理由は、AI の作業の画面に1行で出ます（例「縦 1080x1920・14.3秒 → ショートとして進めます」）。追加の指示に「YouTube 用」「リールにして」などと書けば、聞かれません。</p>
+  <div class="route two">
+    <a href="reels.html"><b>📱 縦の動画（リール・ショート）を作る方</b><span>字幕の雰囲気の選び方、冒頭のつかみ（フック）、最後の案内文、投稿するファイル</span><em>リール・ショートへ →</em></a>
+    <a href="youtube.html"><b>📺 横の動画（YouTube）を作る方</b><span>章・チャプター・字幕ファイル、長い動画の時間の目安</span><em>YouTube 動画へ →</em></a>
+  </div>
+  <p>判定の理由は、AI の作業の画面に1行で出ます（例「縦 1080x1920・14.3秒 → ショートとして進めます」）。「今回だけ伝えたいこと」に「YouTube 用」「リールにして」などと書けば、聞かれません。</p>
 </section>
 
 <section>
-  <h2 id="four"><span class="num">2</span>4回の確認に答える</h2>
-  <div class="fig-svg">
-  <svg viewBox="0 0 960 250" role="img" aria-label="4回の確認：①最初の確認、自動で文字起こしとカット候補、②カットの承認、自動で字幕と演出、③仕上がりの確認、自動で書き出しと検査、④完成の視聴">
-    <g font-family="sans-serif" text-anchor="middle">
-      <line x1="60" y1="96" x2="900" y2="96" stroke="#e1dbcf" stroke-width="6" stroke-linecap="round"/>
-      <g>
-        <circle cx="90" cy="96" r="40" fill="#ff7a30"/><text x="90" y="92" font-size="24" fill="#fff">✋</text><text x="90" y="114" font-size="13" font-weight="800" fill="#fff">①</text>
-        <text x="90" y="166" font-size="15" font-weight="800" fill="#1d2126">最初の確認</text><text x="90" y="186" font-size="12.5" fill="#4a515b">雰囲気・テンポ</text><text x="90" y="204" font-size="12.5" fill="#4a515b">持ち込み素材</text>
+  <h2 id="four"><span class="num">2</span>4つの確認に答える</h2>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 9, "pose": "point", "id": "fig_first_2_1", "t": "1回目は最初の確認。雰囲気やテンポ、持ち込む素材を聞くよ。"}, {"s": 2, "x": 30, "pose": "explain", "id": "fig_first_2_2", "t": "文字起こしとカット候補は自動。2回目はカットを聞いて選んでね。"}, {"s": 3, "x": 57, "pose": "explain", "id": "fig_first_2_3", "t": "字幕と演出も自動だよ。3回目は静止画や試作で仕上がりを見てね。"}, {"s": 4, "x": 84, "pose": "point", "id": "fig_first_2_4", "t": "書き出しと検査のあと、4回目は完成した動画を最後まで見てね。"}, {"s": 5, "x": 50, "pose": "good", "id": "fig_first_2_5", "t": "この間ずっと、編集画面で字幕や効果音を直せるよ。"}]'>
+  <svg viewBox="0 0 960 280" role="img" aria-label="4つの確認：①最初の確認、自動で文字起こしとカット候補、②カットの承認、自動で字幕と演出、③仕上がりの確認、自動で書き出しと検査、④完成の視聴">
+    <defs>
+      <marker id="first2-arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,2 Q2,1 3,1.5 L10.5,5.2 Q11.5,6 10.5,6.8 L3,10.5 Q2,11 2,10 Z" fill="#a8d8f5"/></marker>
+      <linearGradient id="first2-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <filter id="first2-shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".15"/></filter>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif" text-anchor="middle">
+      <g class="gbg">
+        <path d="M0 262 Q120 244 240 262 T480 262 T720 262 T960 262" fill="none" stroke="#f4f9fd" stroke-width="10" stroke-linecap="round"/>
+        <line x1="90" y1="92" x2="870" y2="92" stroke="#e6f3fc" stroke-width="10" stroke-linecap="round"/>
       </g>
-      <g><rect x="165" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="220" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
-        <text x="220" y="146" font-size="12" fill="#7a818c">文字起こし</text><text x="220" y="163" font-size="12" fill="#7a818c">誤字の修正</text><text x="220" y="180" font-size="12" fill="#7a818c">カット候補</text></g>
-      <g>
-        <circle cx="350" cy="96" r="40" fill="#ff7a30"/><text x="350" y="92" font-size="24" fill="#fff">✂️</text><text x="350" y="114" font-size="13" font-weight="800" fill="#fff">②</text>
-        <text x="350" y="166" font-size="15" font-weight="800" fill="#1d2126">カットの承認</text><text x="350" y="186" font-size="12.5" fill="#4a515b">聞いて選ぶ</text>
+      <g class="gs" data-s="1">
+        <circle cx="90" cy="92" r="42" fill="#fff" stroke="url(#first2-main)" stroke-width="5" filter="url(#first2-shadow)"/>
+        <image href="assets/icons/question.png" x="68" y="70" width="44" height="44"/>
+        <circle cx="122" cy="60" r="15" fill="#ff8f3a" stroke="#fff" stroke-width="3"/><text x="122" y="66" font-size="16" font-weight="900" fill="#fff">1</text>
+        <text x="90" y="160" font-size="17" font-weight="900" fill="#1f2d3d">最初の確認</text>
+        <text x="90" y="181" font-size="13.5" fill="#4b5b6e">雰囲気・テンポ</text>
+        <text x="90" y="199" font-size="13.5" fill="#4b5b6e">持ち込み素材</text>
       </g>
-      <g><rect x="425" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="480" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
-        <text x="480" y="146" font-size="12" fill="#7a818c">字幕</text><text x="480" y="163" font-size="12" fill="#7a818c">演出・効果音</text></g>
-      <g>
-        <circle cx="610" cy="96" r="40" fill="#ff7a30"/><text x="610" y="92" font-size="24" fill="#fff">👀</text><text x="610" y="114" font-size="13" font-weight="800" fill="#fff">③</text>
-        <text x="610" y="166" font-size="15" font-weight="800" fill="#1d2126">仕上がりの確認</text><text x="610" y="186" font-size="12.5" fill="#4a515b">静止画・試作</text>
+      <g class="gs" data-s="2">
+        <path class="flow" d="M138 92 H302" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first2-arrow)"/>
+        <rect x="170" y="74" width="100" height="36" rx="18" fill="#e6f3fc" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/gear.png" x="178" y="78" width="28" height="28"/><text x="234" y="98" font-size="14" font-weight="700" fill="#1b5f96">自動</text>
+        <text x="220" y="140" font-size="13" fill="#7d8a99">文字起こし</text><text x="220" y="158" font-size="13" fill="#7d8a99">誤字の修正</text><text x="220" y="176" font-size="13" fill="#7d8a99">カット候補</text>
+        <circle cx="350" cy="92" r="42" fill="#fff" stroke="url(#first2-main)" stroke-width="5" filter="url(#first2-shadow)"/>
+        <image href="assets/icons/scissors.png" x="328" y="70" width="44" height="44"/>
+        <circle cx="382" cy="60" r="15" fill="#ff8f3a" stroke="#fff" stroke-width="3"/><text x="382" y="66" font-size="16" font-weight="900" fill="#fff">2</text>
+        <text x="350" y="160" font-size="17" font-weight="900" fill="#1f2d3d">カットの承認</text>
+        <text x="350" y="181" font-size="13.5" fill="#4b5b6e">聞いて選ぶ</text>
       </g>
-      <g><rect x="685" y="76" width="110" height="40" rx="20" fill="#e5f0ec"/><text x="740" y="101" font-size="12.5" fill="#1f4f46">⚙ 自動</text>
-        <text x="740" y="146" font-size="12" fill="#7a818c">書き出し</text><text x="740" y="163" font-size="12" fill="#7a818c">音声の仕上げ・検査</text></g>
-      <g>
-        <circle cx="870" cy="96" r="40" fill="#ff7a30"/><text x="870" y="92" font-size="24" fill="#fff">▶</text><text x="870" y="114" font-size="13" font-weight="800" fill="#fff">④</text>
-        <text x="870" y="166" font-size="15" font-weight="800" fill="#1d2126">完成の視聴</text><text x="870" y="186" font-size="12.5" fill="#4a515b">最後まで見て OK</text>
+      <g class="gs" data-s="3">
+        <path class="flow" d="M398 92 H562" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first2-arrow)"/>
+        <rect x="430" y="74" width="100" height="36" rx="18" fill="#e6f3fc" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/gear.png" x="438" y="78" width="28" height="28"/><text x="494" y="98" font-size="14" font-weight="700" fill="#1b5f96">自動</text>
+        <text x="480" y="140" font-size="13" fill="#7d8a99">字幕</text><text x="480" y="158" font-size="13" fill="#7d8a99">演出・効果音</text>
+        <circle cx="610" cy="92" r="42" fill="#fff" stroke="url(#first2-main)" stroke-width="5" filter="url(#first2-shadow)"/>
+        <image href="assets/icons/inspect.png" x="588" y="70" width="44" height="44"/>
+        <circle cx="642" cy="60" r="15" fill="#ff8f3a" stroke="#fff" stroke-width="3"/><text x="642" y="66" font-size="16" font-weight="900" fill="#fff">3</text>
+        <text x="610" y="160" font-size="17" font-weight="900" fill="#1f2d3d">仕上がりの確認</text>
+        <text x="610" y="181" font-size="13.5" fill="#4b5b6e">静止画・試作</text>
       </g>
-      <text x="480" y="236" font-size="13.5" fill="#2d6b5f" font-weight="700">✏️ この間ずっと、編集画面で字幕や効果音を直せます（AI が作業中でなければ）</text>
+      <g class="gs" data-s="4">
+        <path class="flow" d="M658 92 H822" fill="none" stroke="#a8d8f5" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#first2-arrow)"/>
+        <rect x="690" y="74" width="100" height="36" rx="18" fill="#e6f3fc" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/gear.png" x="698" y="78" width="28" height="28"/><text x="754" y="98" font-size="14" font-weight="700" fill="#1b5f96">自動</text>
+        <text x="740" y="140" font-size="13" fill="#7d8a99">書き出し</text><text x="740" y="158" font-size="13" fill="#7d8a99">音声の仕上げ・検査</text>
+        <circle cx="870" cy="92" r="42" fill="url(#first2-main)" filter="url(#first2-shadow)"/>
+        <image href="assets/icons/trophy.png" x="848" y="70" width="44" height="44"/>
+        <circle cx="902" cy="60" r="15" fill="#ff8f3a" stroke="#fff" stroke-width="3"/><text x="902" y="66" font-size="16" font-weight="900" fill="#fff">4</text>
+        <text x="870" y="160" font-size="17" font-weight="900" fill="#1f2d3d">完成の視聴</text>
+        <text x="870" y="181" font-size="13.5" fill="#4b5b6e">最後まで見て OK</text>
+      </g>
+      <g class="gs" data-s="5">
+        <rect x="150" y="218" width="660" height="40" rx="20" fill="#fff3e8" stroke="#ff8f3a" stroke-width="2"/>
+        <g transform="translate(178 228) rotate(45 10 10)"><rect x="6" y="-2" width="8" height="20" rx="2" fill="#ff8f3a"/><path d="M6 18 L10 25 L14 18 Z" fill="#c25a12"/></g>
+        <text x="492" y="244" font-size="14.5" font-weight="700" fill="#c25a12">この間ずっと、編集画面で字幕や効果音を直せます（AI が作業中でなければ）</text>
+      </g>
     </g>
   </svg>
   </div>
@@ -117,25 +198,61 @@
 
 <section>
   <h2 id="where"><span class="num">3</span>完成した動画の場所</h2>
-  <p>作業フォルダの中に、動画ごとのフォルダができます。左の「素材・出力」タブの <b>Finder で開く</b>（Windows はエクスプローラー）で、すぐ開けます。</p>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 330" role="img" aria-label="動画ごとのフォルダの中身：out に完成動画と字幕ファイルと試作、output に YouTube のチャプター、work に途中のファイル、そのほかは触らない">
-    <g font-family="sans-serif" font-size="15">
-      <rect x="10" y="10" width="300" height="46" rx="10" fill="#2d6b5f"/><text x="30" y="40" fill="#fff" font-weight="800">📁 作業フォルダ/朝の時間の使い方</text>
-      <g stroke="#cfc8ba" stroke-width="2"><line x1="40" y1="56" x2="40" y2="292"/><line x1="40" y1="90" x2="70" y2="90"/><line x1="40" y1="176" x2="70" y2="176"/><line x1="40" y1="226" x2="70" y2="226"/><line x1="40" y1="292" x2="70" y2="292"/></g>
-      <rect x="70" y="68" width="250" height="44" rx="10" fill="#fff1e6" stroke="#ffb98f"/><text x="88" y="96" font-weight="800" fill="#c4551a">📁 out　← 完成はここ</text>
-      <g font-size="14" fill="#1d2126">
-        <text x="345" y="80">〇〇_loopable.mp4　…ショートの完成（これを投稿）</text>
-        <text x="345" y="104">〇〇.mp4　…ロングの完成（ショートはループ前の版）</text>
-        <text x="345" y="128">〇〇.srt　…YouTube の字幕ファイル（ロング）</text>
-        <text x="345" y="152">〇〇_voice.mp4　…BGM を重ねる前の声だけの版</text>
+  <div class="callout ok"><b>投稿・アップロードするのは、この1つ</b><p>📱 ショート・リール：<code>out</code> の中の、名前の最後が <b><code>_loopable.mp4</code></b> のファイル<br>📺 YouTube：<code>out</code> の中の <code>〇〇.mp4</code>（字幕ファイル <code>〇〇.srt</code> と、<code>output</code> の中のチャプターも使います）</p></div>
+  <p>作業フォルダ（totonoumovie のフォルダの中の <code>projects</code>）の中に、動画ごとのフォルダができます。左の「素材・出力」タブの <b><span class="os-mac" style="display:inline">Finder</span><span class="os-win" style="display:inline">エクスプローラー</span>で開く</b>で、すぐ開けます。</p>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 18, "pose": "point", "id": "fig_first_3_1", "t": "作業フォルダの中に、動画ごとのフォルダができるよ。"}, {"s": 2, "x": 50, "pose": "explain", "id": "fig_first_3_2", "t": "完成した動画は out の中。ショートはループ版を投稿してね。"}, {"s": 3, "x": 50, "pose": "explain", "id": "fig_first_3_3", "t": "output には、概要欄に貼るチャプターが入るよ。"}, {"s": 4, "x": 45, "pose": "explain", "id": "fig_first_3_4", "t": "work は途中のファイル。確認用の画像などが入っているよ。"}, {"s": 5, "x": 45, "pose": "good", "id": "fig_first_3_5", "t": "ほかのフォルダは触らないでね。直すのはアプリの画面からだよ。"}]'>
+  <svg viewBox="0 0 960 380" role="img" aria-label="動画ごとのフォルダの中身：out に完成動画と字幕ファイルと試作、output に YouTube のチャプター、work に途中のファイル、そのほかは触らない">
+    <defs>
+      <linearGradient id="first3-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <filter id="first3-shadow" x="-20%" y="-30%" width="140%" height="170%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e5a96" flood-opacity=".13"/></filter>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <path d="M380 374 Q520 360 660 374 T940 374" fill="none" stroke="#e6f3fc" stroke-width="6" stroke-linecap="round"/>
       </g>
-      <rect x="70" y="154" width="250" height="44" rx="10" fill="#eaf1fd" stroke="#b9cff5"/><text x="88" y="182" font-weight="800" fill="#2f5fb8">📁 output</text>
-      <text x="345" y="182" font-size="14" fill="#1d2126">youtube_chapters.txt　…概要欄に貼るチャプター（ロング・5分超）</text>
-      <rect x="70" y="204" width="250" height="44" rx="10" fill="#f3f0e9" stroke="#ddd5c6"/><text x="88" y="232" font-weight="800" fill="#4a515b">📁 work</text>
-      <text x="345" y="232" font-size="14" fill="#1d2126">途中のファイル（確認用の画像・カット候補の表など）</text>
-      <rect x="70" y="270" width="250" height="44" rx="10" fill="#f6f6f6" stroke="#e3e3e3"/><text x="88" y="298" fill="#9aa1ab">📁 data・public・src など</text>
-      <text x="345" y="298" font-size="14" fill="#9aa1ab">書き出しの部品。触りません（totonoumovie の画面で直します）</text>
+      <g class="gs" data-s="1">
+        <rect x="16" y="12" width="330" height="50" rx="20" fill="url(#first3-main)" filter="url(#first3-shadow)"/>
+        <path d="M34 28 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#fff"/>
+        <text x="78" y="43" fill="#fff" font-size="16" font-weight="900">作業フォルダ/朝の時間の使い方</text>
+        <path d="M44 62 V340" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="gs" data-s="2">
+        <path d="M44 98 H74" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+        <rect x="74" y="74" width="240" height="48" rx="18" fill="#fff3e8" stroke="#ff8f3a" stroke-width="2"/>
+        <path d="M90 90 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#ff8f3a"/>
+        <text x="132" y="104" fill="#c25a12" font-size="17" font-weight="900">out</text>
+        <text x="174" y="104" fill="#c25a12" font-size="15" font-weight="700">← 完成はここ</text>
+        <rect x="336" y="66" width="608" height="112" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#first3-shadow)"/>
+        <rect x="346" y="74" width="588" height="24" rx="12" fill="#fff3e8"/>
+        <g font-size="14">
+          <text x="358" y="91" fill="#c25a12" font-weight="900">〇〇_loopable.mp4</text><text x="545" y="91" fill="#c25a12" font-weight="700">ショートの完成（これを投稿）</text>
+          <text x="358" y="115" fill="#1f2d3d" font-weight="700">〇〇.mp4</text><text x="545" y="115" fill="#4b5b6e">ロングの完成（ショートはループ前の版）</text>
+          <text x="358" y="139" fill="#1f2d3d" font-weight="700">〇〇.srt</text><text x="545" y="139" fill="#4b5b6e">YouTube の字幕ファイル（ロング）</text>
+          <text x="358" y="163" fill="#7d8a99" font-weight="700">_voice・_raw.mp4</text><text x="545" y="163" fill="#7d8a99">途中の版（声だけ・仕上げ前）。投稿には使いません</text>
+        </g>
+      </g>
+      <g class="gs" data-s="3">
+        <path d="M44 216 H74" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+        <rect x="74" y="192" width="240" height="48" rx="18" fill="#e6f3fc" stroke="#a8d8f5" stroke-width="2"/>
+        <path d="M90 208 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#2f8fd0"/>
+        <text x="132" y="222" fill="#1b5f96" font-size="17" font-weight="900">output</text>
+        <text x="358" y="221" fill="#1f2d3d" font-size="14" font-weight="700">youtube_chapters.txt</text>
+        <text x="545" y="221" fill="#4b5b6e" font-size="14">概要欄に貼るチャプター（ロング・5分超）</text>
+      </g>
+      <g class="gs" data-s="4">
+        <path d="M44 278 H74" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+        <rect x="74" y="254" width="240" height="48" rx="18" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <path d="M90 270 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#70c0f0"/>
+        <text x="132" y="284" fill="#4b5b6e" font-size="17" font-weight="900">work</text>
+        <text x="358" y="283" fill="#4b5b6e" font-size="14">途中のファイル（確認用の画像・カット候補の表など）</text>
+      </g>
+      <g class="gs" data-s="5">
+        <path d="M44 340 H74" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+        <rect x="74" y="316" width="240" height="48" rx="18" fill="#f4f9fd" stroke="#dcebf6" stroke-width="2" stroke-dasharray="6 5"/>
+        <path d="M90 332 a3 3 0 0 1 3 -3 h8 l3 4 h14 a3 3 0 0 1 3 3 v14 a3 3 0 0 1 -3 3 h-25 a3 3 0 0 1 -3 -3 z" fill="#cfe6f7"/>
+        <text x="132" y="346" fill="#7d8a99" font-size="15" font-weight="700">data・public・src など</text>
+        <text x="358" y="345" fill="#7d8a99" font-size="14">書き出しの部品。触りません（totonoumovie の画面で直します）</text>
+      </g>
     </g>
   </svg>
   </div>
@@ -161,7 +278,7 @@
     <tr><td>ショート（35秒・縦）</td><td>約5分</td></tr>
     <tr><td>ロング（10分・横・画像3枚・BGM・章カード）</td><td>約24分（ほかの重い処理と重なると約50分）</td></tr>
   </tbody></table></div>
-  <p>Apple M5 Pro（メモリ48GB）での実測です。これに、確認に答える時間とカット候補を聞く時間が加わります。</p>
+  <p>Apple M5 Pro（メモリ48GB）での実測です。これに、確認に答える時間とカット候補を聞く時間が加わります。GPU のない Windows のノートパソコンなどでは、この2〜4倍ほどを見込んでください（実測ではなく目安です）。はじめは短い動画で時間を測ってみてください。</p>
 </section>
 
 <section>

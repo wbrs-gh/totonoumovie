@@ -44,6 +44,14 @@
 
   // ---- 歩く音（てくてく）：WebAudio でその場で作る小さな足音。声をオフにしているときは鳴らさない ----
   let actx = null;
+  // 声・動画が重ならないように：後から鳴ったもの以外は止める
+  function hushOthers(except) {
+    ALL.forEach((c) => { if (c !== except && c.audio && !c.audio.paused) c.yieldVoice(); });
+    document.querySelectorAll("video, audio").forEach((m) => { if (m !== except && !m.paused) m.pause(); });
+  }
+  // ページ上の動画が再生されたら、ほかの声・動画を止める（play は泡立たないので capture で拾う）
+  document.addEventListener("play", (e) => { if (e.target instanceof HTMLMediaElement) hushOthers(e.target); }, true);
+
   function stepSound(left) {
     if (muted()) return;
     try {
@@ -141,6 +149,7 @@
     async say(text, opts = {}) {
       await loadMeta();
       const my = ++this.speakId;
+      this._text = text;
       if (this.audio) { this.audio.pause(); this.audio = null; }
       if (opts.pose) this.setPose(opts.pose, opts.flip);
       this.bubble.classList.remove("hidden");
@@ -170,6 +179,7 @@
       let start = performance.now();
       const useAudio = src && !muted() && !opts.silent;   // silent：声を出さずに口と文字だけ動かす
       if (useAudio) {
+        hushOthers(this);
         this.audio = new Audio(src);
         try { await this.audio.play(); start = performance.now(); } catch (e) { this.audio = null; }
       }
@@ -191,6 +201,12 @@
       });
     }
     stop() { this.speakId++; if (this.audio) this.audio.pause(); this.setMouth("n"); }
+    // ほかの声・動画に譲って止まる（吹き出しは全文を出したまま。onYield で自動の続きを止めてもらう）
+    yieldVoice() {
+      this.stop();
+      if (this._text) this.textEl.textContent = this._text;
+      if (this.onYield) this.onYield();
+    }
     // 話さずに、吹き出しに文字だけを出す
     show(text, opts = {}) {
       loadMeta().then(() => { if (opts.pose) this.setPose(opts.pose, opts.flip); });

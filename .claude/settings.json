@@ -1,0 +1,17 @@
+{
+  "enabledPlugins": {
+    "totonou-movie@totonou": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/tm_app/session_env.py\" || python \"$CLAUDE_PROJECT_DIR/tm_app/session_env.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -18,4 +18,4 @@ w.add_metadata({"/Title": "totonoumovie 使い方マニュアル"})
 w.write(out)
 print(out, len(w.pages), "ページ")
 PY
-rm -rf "$TMP" /tmp/cdp-*
+rm -rf "$TMP" "${TMPDIR:-/tmp}"/cdp-*

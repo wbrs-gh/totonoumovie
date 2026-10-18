@@ -4,13 +4,14 @@
 totonoumovie - TotonouMovie の動画を、ブラウザの編集画面で作る・直すアプリ
 
 使い方:
-    totonoumovie [--workspace フォルダ] [--port 8780] [--no-open]
+    totonoumovie [作業フォルダ] [--port 8780] [--no-open]
 
 - Claude Code に導入済みの TotonouMovie プラグインを使う（エンジン・Remotion テンプレート・スキル）
-- 作業フォルダ（TotonouMovie の設定 workspaceDir。既定 ~/Movies/totonou）のプロジェクトを一覧する
+- 本体フォルダが「拠点」。動画（projects/）・自分好み（my/）・自作スキル（.claude/skills/）を全部この中に置く（tm_app/home.py）
+- 拠点の projects/ のプロジェクトを一覧する（v2 の作業フォルダのプロジェクトは「自分好み」の画面から引き継げる）
 - 編集画面で data/*.ts（字幕・カット・効果音・寄り・モーション・画像・章）を直し、Remotion で書き出す
 - 「AIで作る」「AIに直してもらう」は claude コマンドに TotonouMovie のスキル手順を実行させる
-- アプリ自身の記録・キャッシュは ~/.totonoumovie/ に置く
+- 再生用のキャッシュだけは ~/.totonoumovie/cache に置く（大きくて作り直せるため）
 """
 import argparse
 import hashlib
@@ -32,13 +33,18 @@ APP_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(APP_DIR, "static")
 sys.path.insert(0, APP_DIR)
 
+from tm_app import home  # noqa: E402
+
+# 拠点の準備（v2 からの引き継ぎ・フォルダを移したときの自己修復）。AI の作業の記録を読む前に行う
+STARTUP_NOTES = home.prepare()
+
 from tm_app import agent as agentmod  # noqa: E402
+from tm_app import customize  # noqa: E402
 from tm_app import jobs as jobsmod  # noqa: E402
 from tm_app import plugin as pluginmod  # noqa: E402
 from tm_app import tsdata  # noqa: E402
 
-USER_DIR = os.path.expanduser("~/.totonoumovie")
-CACHE_DIR = os.path.join(USER_DIR, "cache")
+CACHE_DIR = home.LOCAL_CACHE_DIR
 VIDEO_EXT = {"mov", "mp4", "m4v", "avi", "mkv", "webm", "mts"}
 AUDIO_EXT = {"mp3", "m4a", "wav", "aac", "flac", "ogg", "aiff", "aif"}
 IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif"}
@@ -64,7 +70,7 @@ def settings():
 
 
 def workspace():
-    return STATE["workspace_override"] or settings()["workspaceDir"]
+    return STATE["workspace_override"] or home.PROJECTS_DIR
 
 
 def resolve_project(name_or_path):
@@ -173,11 +179,11 @@ def list_projects():
         od = os.path.join(P, "out")
         if os.path.isdir(od):
             outs = sorted(f for f in os.listdir(od) if f.endswith(".mp4"))
-        mtime = max(os.path.getmtime(cfgp),
-                    *[os.path.getmtime(os.path.join(P, "data", f)) for f in os.listdir(os.path.join(P, "data"))
-                      if f.endswith(".ts")] if os.path.isdir(os.path.join(P, "data")) else [0])
+        dd = os.path.join(P, "data")
+        mtime = max([os.path.getmtime(cfgp)] + ([os.path.getmtime(os.path.join(dd, f)) for f in os.listdir(dd)
+                                                  if f.endswith(".ts")] if os.path.isdir(dd) else []))
         out.append({"name": name, "path": P, "title": cfg.get("title") or name, "format": cfg.get("format"),
-                    "mode": "voiceover" if cfg.get("voiceover") else ("shorts" if cfg.get("shorts") else "long"),
+                    "mode": "voiceover" if cfg.get("voiceover") else (cfg.get("mode") or ("shorts" if cfg.get("shorts") else "long")),
                     "outputs": outs, "mtime": mtime,
                     "running": [r["id"] for r in AGENTS.list(P) if r["status"] == "running"]})
     out.sort(key=lambda x: x["mtime"], reverse=True)
@@ -630,6 +636,27 @@ class Handler(BaseHTTPRequestHandler):
         n = int(self.headers.get("Content-Length", 0) or 0)
         return json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
 
+    def blocked(self, write):
+        """ほかのサイトからの依頼を断る（このパソコンのブラウザで開いている悪意あるページから操作されないように）
+
+        - Host：127.0.0.1／localhost 以外の名前で来たら断る（DNS リバインディング対策）
+        - Sec-Fetch-Site／Origin：ほかのサイトから送られた依頼は断る
+        - 書き込み（POST）：Content-Type が application/json のものだけ受け付ける
+          （ほかのサイトからは、ブラウザの事前確認なしでは送れない形）
+        """
+        port = self.server.server_address[1]
+        host = (self.headers.get("Host") or "").lower()
+        if host not in (f"127.0.0.1:{port}", f"localhost:{port}"):
+            return "このアドレスからは使えません"
+        if (self.headers.get("Sec-Fetch-Site") or "").lower() == "cross-site":
+            return "ほかのサイトからは使えません"
+        origin = (self.headers.get("Origin") or "").lower()
+        if origin and origin not in (f"http://127.0.0.1:{port}", f"http://localhost:{port}"):
+            return "ほかのサイトからは使えません"
+        if write and not (self.headers.get("Content-Type") or "").lower().startswith("application/json"):
+            return "この形式の依頼は受け付けません"
+        return None
+
     def project_file(self, P, rel):
         """プロジェクト内のファイルだけを返す（外へ出るパスは拒否）"""
         full = os.path.realpath(os.path.join(P, rel))
@@ -640,9 +667,14 @@ class Handler(BaseHTTPRequestHandler):
     # ---- GET ----
     def do_GET(self):
         u, q = self.parsed()
+        why = self.blocked(write=False)
+        if why:
+            return self.send_json({"error": why}, 403)
         try:
             if u.path in ("/", "/index.html"):
                 return self.send_file(os.path.join(STATIC_DIR, "index.html"), "text/html; charset=utf-8")
+            if u.path == "/favicon.ico":
+                return self.send_file(os.path.join(STATIC_DIR, "favicon.ico"))
             if u.path.startswith("/static/"):
                 f = os.path.realpath(os.path.join(STATIC_DIR, u.path[len("/static/"):]))
                 if not f.startswith(STATIC_DIR) or not os.path.isfile(f):
@@ -651,7 +683,8 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/status":
                 st = settings()
                 d = {"workspace": workspace(), "cloudSync": cloud_sync_folder(workspace()), "settingsFileExists": st.get("_settingsFileExists"),
-                     "reviewerName": st.get("reviewerName"), "claude": agentmod.claude_bin()}
+                     "reviewerName": st.get("reviewerName"), "claude": agentmod.claude_bin(),
+                     "base": home.BASE, "startupNotes": STARTUP_NOTES}
                 try:
                     root = plugin_root()
                     d["plugin"] = pluginmod.plugin_info(root)
@@ -703,10 +736,10 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/afile":
                 # AI が見せたい画像・動画（プロジェクト・作業フォルダ・ホーム配下のメディアだけ）
                 full = os.path.realpath(q.get("path", ""))
-                home = os.path.realpath(os.path.expanduser("~"))
+                home_dir = os.path.realpath(os.path.expanduser("~"))
                 ext = full.lower().rsplit(".", 1)[-1]
                 ws = os.path.realpath(workspace())
-                inside = full.startswith(home + os.sep) or full.startswith(ws + os.sep)
+                inside = full.startswith(home_dir + os.sep) or full.startswith(ws + os.sep)
                 if not inside or ext not in IMAGE_EXT | VIDEO_EXT | AUDIO_EXT:
                     return self.send_json({"error": "開けないファイルです"}, 403)
                 return self.send_file(full)
@@ -749,6 +782,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(j.to_dict() if j else {"error": "not found"}, 200 if j else 404)
             if u.path == "/api/prompts":
                 return self.send_json(agentmod.load_prompts())
+            if u.path == "/api/mine":
+                # 「自分好み」の画面の中身をまとめて返す（遅いエンジン呼び出しの設定は別）
+                return self.send_json({"base": home.BASE, "configDir": home.CONFIG_DIR,
+                                       "styles": customize.list_styles(), "skills": customize.list_skills(),
+                                       "glossary": customize.glossary(), "se": customize.se_view(),
+                                       "legacy": home.legacy_projects(), "legacyDirs": home.legacy_dirs(),
+                                       "pluginScope": home.plugin_scope(),
+                                       "projects": [{"name": x["name"], "path": x["path"], "title": x["title"], "mode": x["mode"]}
+                                                    for x in list_projects()]})
+            if u.path == "/api/mine_settings":
+                return self.send_json(customize.settings_view())
             if u.path == "/api/runs":
                 P = resolve_project(q["p"]) if q.get("p") else None
                 return self.send_json({"runs": AGENTS.list(P)})
@@ -765,6 +809,9 @@ class Handler(BaseHTTPRequestHandler):
     # ---- POST ----
     def do_POST(self):
         u, _ = self.parsed()
+        why = self.blocked(write=True)
+        if why:
+            return self.send_json({"error": why}, 403)
         try:
             b = self.read_body()
             if u.path == "/api/data":
@@ -834,6 +881,8 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/prompts":
                 agentmod.save_prompts(b)
                 return self.send_json({"ok": True})
+            if u.path == "/api/mine":
+                return self.send_json(self.mine_post(b))
             if u.path == "/api/run_start":
                 return self.send_json(self.run_start(b))
             if u.path == "/api/run_answer":
@@ -865,6 +914,11 @@ class Handler(BaseHTTPRequestHandler):
                     raise FileNotFoundError("素材フォルダが見つかりません")
                 vars_["materials"] = mats
             title = ("AIで作る：" if kind == "create" else "アフレコ：") + os.path.basename(video)
+        elif kind == "base":
+            vars_["request"] = b.get("request") or ""
+            if not vars_["request"].strip():
+                raise ValueError("依頼の内容を書いてください")
+            title = "AIに依頼（自分好み・設定）"
         elif kind in ("fix", "free"):
             P = resolve_project(b.get("p"))
             vars_["project"] = P
@@ -874,7 +928,8 @@ class Handler(BaseHTTPRequestHandler):
             title = ("AIに直してもらう：" if kind == "fix" else "AIに依頼：") + os.path.basename(P)
         else:
             raise ValueError("不明な種類です")
-        prompt = build = agentmod.build_prompt(kind, prompts, vars_, b.get("presets") or [], b.get("extra") or "")
+        prompt = build = agentmod.build_prompt(kind, prompts, vars_, b.get("presets") or [], b.get("extra") or "",
+                                               style=b.get("style"), skills=b.get("skills") or [])
         if b.get("dryRun"):
             return {"prompt": build}
         os.makedirs(workspace(), exist_ok=True)
@@ -882,8 +937,50 @@ class Handler(BaseHTTPRequestHandler):
         system_extra = (f"\n\n## 作業フォルダ（このアプリの決まり）\n- 作業フォルダは {ws} です。新しいプロジェクトは、"
                         f"init_project.py に --output \"{ws}/<プロジェクト名>\" を付けて、必ずこのフォルダの中に作ってください"
                         "（TotonouMovie の設定 workspaceDir ではなく、こちらを使う）。")
-        r = AGENTS.start(kind, title, ws, prompt, project=P, system_extra=system_extra)
+        # AI は拠点で動かす（拠点の .claude の17スキル・自作スキルと CLAUDE.md が効く）
+        r = AGENTS.start(kind, title, home.BASE, prompt, project=P, system_extra=system_extra)
         return {"run": {k: v for k, v in r.to_dict().items() if k != "events"}}
+
+    def mine_post(self, b):
+        """「自分好み」の画面からの変更（op で分ける）"""
+        op = b.get("op")
+        if op == "style_save":
+            # 拠点のプロジェクトでも、v2 の作業フォルダに残っているプロジェクトでもよい
+            P = resolve_project(b.get("p"))
+            return customize.save_style_from_project(P, b.get("name") or "", b.get("notes"), bool(b.get("overwrite")))
+        if op == "style_notes":
+            return customize.update_style_notes(b.get("name"), b.get("notes"))
+        if op == "style_rename":
+            customize.rename_style(b.get("name"), b.get("newName") or "")
+            return {"ok": True}
+        if op == "style_delete":
+            customize.delete_style(b.get("name"))
+            return {"ok": True}
+        if op == "skill_save":
+            return customize.save_skill(b.get("name"), b.get("description"), b.get("body"), b.get("oldName"))
+        if op == "skill_delete":
+            customize.delete_skill(b.get("name"))
+            return {"ok": True}
+        if op == "glossary":
+            return customize.save_glossary(b.get("entries"), b.get("terms"))
+        if op == "setting":
+            return customize.settings_set(b.get("key"), b.get("value"))
+        if op == "legacy_move":
+            return {"moved": home.move_legacy(b.get("paths") or [])}
+        if op == "plugin_scope":
+            return home.set_plugin_scope(bool(b.get("global")))
+        if op == "reveal":
+            what = {"skills": home.SKILLS_DIR, "se": os.path.join(home.CONFIG_DIR, "se-library"),
+                    "styles": customize.style_dir(), "base": home.BASE, "config": home.CONFIG_DIR}.get(b.get("what"))
+            if not what:
+                raise ValueError("不明な場所です")
+            os.makedirs(what, exist_ok=True)
+            if sys.platform == "darwin":
+                subprocess.run(["open", what])
+            else:
+                reveal(what)
+            return {"ok": True}
+        raise ValueError("不明な操作です")
 
     def run_cut_answer(self, b):
         """AI が止まったカット承認を、画面で人が承認→反映し、結果を AI に返す"""
@@ -918,13 +1015,20 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     ap = argparse.ArgumentParser(description="TotonouMovie の動画を作る・直すブラウザ編集アプリ")
-    ap.add_argument("folder", nargs="?", default=None, help="作業フォルダ（省略時は起動したフォルダ）")
+    ap.add_argument("folder", nargs="?", default=None, help="作業フォルダ（省略時は拠点の projects/。ふだんは指定しない）")
     ap.add_argument("--workspace", default=None, help="作業フォルダ（folder と同じ。互換のため残す）")
     ap.add_argument("--port", type=int, default=8780)
     ap.add_argument("--no-open", action="store_true", help="ブラウザを自動で開かない")
     args = ap.parse_args()
-    # 作業フォルダは「起動したフォルダ」（引数で指定もできる）。プロジェクトはこの中に作る
-    STATE["workspace_override"] = os.path.abspath(os.path.expanduser(args.folder or args.workspace or os.getcwd()))
+    # 作業フォルダは拠点の projects/（どこで起動しても同じ）。引数で別の場所を指定もできる
+    if args.folder or args.workspace:
+        STATE["workspace_override"] = os.path.abspath(os.path.expanduser(args.folder or args.workspace))
+    elif home.is_project(os.getcwd()):
+        # プロジェクトのフォルダの中で起動したときは、そのプロジェクトをすぐ開けるようにする（前と同じ）
+        STATE["workspace_override"] = os.getcwd()
+    print(f"拠点: {home.BASE}")
+    for n in STARTUP_NOTES:
+        print("・" + n)
     os.makedirs(CACHE_DIR, exist_ok=True)
     try:
         root = plugin_root()

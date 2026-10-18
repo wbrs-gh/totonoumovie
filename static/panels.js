@@ -23,7 +23,7 @@ window.renderHome = async function () {
       <a href="https://totonoumovie.aisys.earth/install.html#totonou" target="_blank" rel="noopener">「入れかた ${IS_WIN ? "A-6" : "A-7"}」</a>。</div>`);
   }
   if (!st.claude) notes.push(`<div class="notice bad">claude コマンドが見つかりません。「AIで作る」には Claude Code が必要です。</div>`);
-  if (st.cloudSync) notes.push(`<div class="notice bad">作業フォルダが Dropbox・iCloud などの同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります。同期フォルダの外（例：~/Movies/totonou）で <code>totonoumovie</code> を起動してください。</div>`);
+  if (st.cloudSync) notes.push(`<div class="notice bad">totonoumovie のフォルダが Dropbox・iCloud などの同期フォルダの中です。書き出し中に同期とぶつかって止まることがあります。書き出しが止まるときは、書き出しの間だけ同期を一時停止するか、totonoumovie のフォルダごと同期フォルダの外へ移してください（移してもそのまま使えます）。</div>`);
   if (st.plugin && !st.settingsFileExists) notes.push(`<div class="notice">TotonouMovie の初期設定がまだのようです。Claude Code で「TotonouMovie のセットアップをして」と話しかけてください（または「AIで作る」の最初に AI が案内します）。</div>`);
   $("#statusBox").innerHTML = notes.join("");
   // 作業フォルダはフォルダ名だけ（全体の場所はマウスを乗せると出る）
@@ -505,10 +505,12 @@ async function openCreate() {
     <div class="row hidden" id="crMatRow"><label>素材フォルダ</label><input type="text" id="crMat" class="grow"><button id="crChooseMat">選ぶ</button></div>
     <h3>いつもの指示 <span class="muted small">（任意・チェックした指示が AI に伝わります）</span></h3>
     <div>${presets.length ? presets.map((p, i) => `<label class="chk" style="margin-right:12px"><input type="checkbox" class="crPreset" value="${esc(p.name)}"> ${esc(p.name)}</label>`).join("") : `<span class="muted small">まだありません（「✍ プロンプト」で作れます）</span>`}</div>
+    <div id="crPick"></div>
     <h3>今回だけ伝えたいこと <span class="muted small">（任意）</span></h3>
     <textarea id="crExtra" placeholder="例：テンポよく、明るい雰囲気で。名前は「山田太郎」と表記してください。"></textarea>
     <div class="btnrow"><button class="primary" id="crGo">AI で作り始める</button><button id="crShow">AI に渡す内容を確認</button><button onclick="closeModal()">やめる</button></div>
     <pre class="log hidden" id="crPrompt"></pre>`);
+  fillPicker("#crPick", { style: true });
   let kind = "create";
   $$("#crKind button").forEach((b) => b.onclick = () => {
     kind = b.dataset.k;
@@ -519,7 +521,7 @@ async function openCreate() {
   $("#crChoose").onclick = async () => { const r = await api("/api/choose", { kind: "file", prompt: kind === "voiceover" ? "声の録音を選んでください" : "編集する動画を選んでください" }); if (r.path) $("#crVideo").value = r.path; };
   $("#crChooseMat").onclick = async () => { const r = await api("/api/choose", { kind: "folder", prompt: "素材フォルダを選んでください" }); if (r.path) $("#crMat").value = r.path; };
   const body = (dry) => ({ kind, video: $("#crVideo").value.trim(), materials: $("#crMat").value.trim(), extra: $("#crExtra").value,
-    presets: $$(".crPreset").filter((c) => c.checked).map((c) => c.value), dryRun: dry });
+    presets: $$(".crPreset").filter((c) => c.checked).map((c) => c.value), dryRun: dry, ...pickerValue("#crPick") });
   $("#crShow").onclick = async () => {
     try { const j = await api("/api/run_start", body(true)); $("#crPrompt").textContent = j.prompt; $("#crPrompt").classList.remove("hidden"); }
     catch (e) { toast(e.message, 4000); }
@@ -540,15 +542,17 @@ function renderAIPanel() {
     <div class="row"><select id="aiKind" class="grow"><option value="fix">直してもらう（fix の手順：字幕・話者・カット・演出など）</option><option value="free">自由に頼む（効果音を足して・章を作って・仕上げて 等）</option></select></div>
     <textarea id="aiReq" rows="4" placeholder="例：1分20秒あたりの字幕「機会」を「機械」に。冒頭の効果音を減らして。"></textarea>
     <div id="aiPresets" class="small"></div>
+    <div id="aiPick"></div>
     <div class="btnrow"><button class="primary" id="aiGo">AI に頼む</button></div>
     <h4>このプロジェクトの AI の作業</h4><div id="aiRuns" class="small muted">読み込み中…</div>`;
+  fillPicker("#aiPick");
   api("/api/prompts").then((pr) => {
     $("#aiPresets").innerHTML = (pr.presets || []).map((p) => `<label class="chk" style="margin-right:10px"><input type="checkbox" class="aiPreset" value="${esc(p.name)}"> ${esc(p.name)}</label>`).join("");
   }).catch(() => {});
   $("#aiGo").onclick = async () => {
     await flushSave();
     try {
-      const j = await api("/api/run_start", { kind: $("#aiKind").value, p: S.P, request: $("#aiReq").value, presets: $$(".aiPreset").filter((c) => c.checked).map((c) => c.value) });
+      const j = await api("/api/run_start", { kind: $("#aiKind").value, p: S.P, request: $("#aiReq").value, presets: $$(".aiPreset").filter((c) => c.checked).map((c) => c.value), ...pickerValue("#aiPick") });
       openRun(j.run.id);
     } catch (e) { toast(e.message, 5000); }
   };
@@ -777,7 +781,7 @@ async function openPrompts() {
     ["fix", "直してもらう", "{project} {request} {extra}"], ["free", "自由に頼む", "{project} {request} {extra}"],
     ["always", "毎回足す指示", "すべての依頼の最後に足します"], ["system", "AI への前提（上級者向け）", "確認のしかた（tm-ask）の決まりを含みます。消すと画面で確認できなくなります"]];
   openModal(`<h2>✍ プロンプト</h2>
-    <p class="small muted">AI（Claude Code）に渡す文章です。書き換えは ~/.totonoumovie/prompts.json に保存され、元の既定値はいつでも戻せます。</p>
+    <p class="small muted">AI（Claude Code）に渡す文章です。書き換えは拠点の my/app/prompts.json に保存され、元の既定値はいつでも戻せます。</p>
     <h3>いつもの指示（作るとき・頼むときに選んで足せます）</h3>
     <div id="pPresets">${(pr.presets || []).map(presetRow).join("")}</div>
     <button class="small" id="pAddPreset">＋ 指示を追加</button>
@@ -807,6 +811,8 @@ function presetRow(p) {
 // ツアー（トトノちゃん）
 // ======================================================================
 $("#btnTour").addEventListener("click", () => Totono.startTour(S.P ? "editor" : "home"));
+// 左上のロゴを押すと、トップ（プロジェクトの一覧）へ戻る（「📁 一覧」と同じ）
+$("#brandHome").addEventListener("click", () => { flushSave(); showHome(); });
 // 上のバーの声のオン・オフ（吹き出しの 🔊 と同じ設定）
 function updateMuteBtn() {
   const m = Totono.isMuted();

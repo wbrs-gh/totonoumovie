@@ -3,7 +3,7 @@
 TotonouMovie（ととのうムービー）で作る動画を、ブラウザの編集画面で作る・直すアプリ。
 
 - 導入と使い方：https://totonoumovie.aisys.earth/ （ソースは `_docs/site_src/`、`python3 build.py` で `_docs/site/` に書き出す）／PDF 版 `_docs/totonoumovie_使い方マニュアル.pdf`
-- 起動：作業フォルダで `totonoumovie`（Windows は `totonoumovie.cmd`）→ ブラウザで http://127.0.0.1:8780/ 。起動したフォルダが作業フォルダ（プロジェクトを作る・一覧する場所）になる
+- 起動：`totonoumovie`（Windows は `totonoumovie.cmd`）→ ブラウザで http://127.0.0.1:8780/ 。どこで起動しても、このフォルダ（拠点）の `projects/` が作業フォルダになる
 
 ## 前提
 
@@ -19,17 +19,29 @@ TotonouMovie（ととのうムービー）で作る動画を、ブラウザの�
 | `tm_app/tsdata.py` | プロジェクトの `data/*.ts` の配列だけを読み書き（ヘッダ・行末の印は保持） |
 | `tm_app/agent.py` | `claude -p` を動かし、スキルの「★確認」を ```` ```tm-ask ```` ブロックで受けて画面に出す |
 | `tm_app/jobs.py` | 静止画・試作・書き出し・検査・カット承認などの裏の作業 |
-| `prompts/default.json` | AI に渡すプロンプトの既定値（上書きは `~/.totonoumovie/prompts.json`） |
+| `tm_app/home.py` | 拠点（このフォルダ）の準備：v2 の設定の引き継ぎ・フォルダを移したときのパスの直し・17スキルを読み込む範囲 |
+| `tm_app/customize.py` | 「🌱 自分好み」の画面（マイスタイル・スキル・表記辞書・設定・効果音）の読み書き |
+| `tm_app/session_env.py` | Claude Code をこのフォルダで起動したときの準備（`.claude/settings.json` の SessionStart フック） |
+| `prompts/default.json` | AI に渡すプロンプトの既定値（上書きは `my/app/prompts.json`） |
 | `static/` | 画面（app.js＝プレビュー・タイムライン・プロパティ、panels.js＝一覧・カット承認・AI の作業画面・プロンプト、totono.js＝案内役トトノちゃんとツアー） |
 | `static/totono/` | トトノちゃんの絵（ポーズ・歩き）と口の位置（meta.json）、あらかじめ作った声（voice/） |
 | `static/icons/` | AI の作業画面などのアイコン |
 | `assets_src/totono/` | トトノちゃんの絵の整形（process.py）と、せりふの声づくり（make_voice.py・lines.json） |
 
+## 拠点（このフォルダに全部まとめる）
+
+- `projects/`＝動画、`my/config/`＝TotonouMovie の設定フォルダ（`TOTONOU_CONFIG_DIR`。マイスタイル・設定・表記辞書・自分の効果音）、`my/app/`＝いつもの指示と AI の作業の記録、`.claude/skills/`＝自作スキル。どれも git 管理外
+- フォルダごと別の場所へ移しても動く（起動時に `my/state.json` の前回の場所と比べ、設定とプロジェクトの記録のパスを直す）
+- 最初の起動で `~/.config/totonou-movie`（v2 の設定）と `~/.totonoumovie`（前の版のアプリ）を写す（元は残す）。v2 の作業フォルダの動画は「🌱 自分好み → 拠点・引き継ぎ」から移せる
+- 17スキルは `.claude/settings.json` でこの拠点だけ有効。グローバルの有効・無効は画面から切り替える。アプリの AI は `--settings` で必ず有効にして拠点で動かす
+- Claude Code だけで使うときの案内は `CLAUDE.md`
+- 再生用キャッシュだけは `~/.totonoumovie/cache`（大きくて作り直せるため）
+
 ## 決まりごと
 
 - カットは `data/cutData.ts` を直接書き換えない。TotonouMovie の承認（`gen_cut_plan.py approve → apply`）を画面から人が実行する
 - 完成の確認記録（`verify_render.py --record-human-check`）は AI に任せ、ユーザーの OK の後だけ
-- アプリの記録・キャッシュは `~/.totonoumovie/`（runs＝AI の作業、cache＝再生用の軽い動画・波形）
+- アプリの記録は `my/app/`（runs＝AI の作業）、キャッシュは `~/.totonoumovie/cache`（再生用の軽い動画・波形）
 - 開発時は環境変数 `TOTONOUMOVIE_PLUGIN_ROOT` でプラグインの場所を直接指定できる
 
 ## トトノちゃん

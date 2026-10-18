@@ -4,11 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>totonoumovie</title>
+<link rel="icon" href="/static/favicon.ico" sizes="48x48">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header id="topbar">
-  <div class="brand"><img src="/static/totono/logo.svg" alt="" class="brand-logo"> totonoumovie <span id="projName" class="muted"></span></div>
+  <div class="brand" id="brandHome" title="プロジェクトの一覧（トップ）へ戻る"><img src="/static/totono/logo.svg" alt="" class="brand-logo"> totonoumovie <span id="projName" class="muted"></span></div>
   <div class="proj">
     <button id="btnHome" title="プロジェクトの一覧へ">📁<span class="lbl"> 一覧</span></button>
     <select id="projSelect" title="プロジェクトを切り替え"></select>
@@ -19,6 +22,7 @@
     <button id="btnRedo" title="やり直し (⌘⇧Z)">↷</button>
     <button id="btnCreate" title="動画を渡して、TotonouMovie の手順で AI に作ってもらう">🎬 AIで作る</button>
     <button id="btnAI" title="AI の作業の様子と確認待ち">🤖 AI <span id="aiBadge" class="badge hidden"></span></button>
+    <button id="btnMine" title="自分好みに育てる（マイスタイル・スキル・表記辞書・設定・効果音・引き継ぎ）">🌱<span class="lbl"> 自分好み</span></button>
     <button id="btnPrompts" title="AI に渡すプロンプトを見る・書き換える・いつもの指示を作る">✍<span class="lbl"> プロンプト</span></button>
     <button id="btnTour" title="トトノちゃんが画面を案内します">🎓 ツアー</button>
     <button id="btnVideos" title="使い方を動画で見る（全体像・字幕・カット・書き出しなど）">▶ 使い方動画</button>
@@ -106,5 +110,6 @@
 <script src="/static/totono.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/panels.js"></script>
+<script src="/static/mine.js"></script>
 </body>
 </html>

@@ -1,8 +1,10 @@
 // ヘッドレス Chrome でページを PDF にする。使い方: node cdppdf.mjs <URL> <出力.pdf>
 import { spawn } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 const [url, out] = process.argv.slice(2);
-const prof = fs.mkdtempSync("/tmp/cdp-");
+const prof = fs.mkdtempSync(path.join(os.tmpdir(), "cdp-"));
 const chrome = spawn("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", ["--remote-debugging-port=9334", "--headless=new", `--user-data-dir=${prof}`, "about:blank"], { stdio: "ignore" });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let wsUrl;

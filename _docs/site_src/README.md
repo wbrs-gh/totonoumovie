@@ -20,4 +20,4 @@ python3 video/mkvideo.py video/specs/v04-first.json --out videos/v04-first.mp4  
 
 ## 公開
 
-Xserver の `（公開フォルダ）/` に `../site/` の中身を上げる（`_backup/` と `.user.ini` は残す）。
+公開サーバーの公開フォルダに `../site/` の中身を上げる（サーバー側の `_backup/`・`.user.ini`・`default_page.png` は残す）。接続先は手元のメモで管理し、リポジトリには書かない。

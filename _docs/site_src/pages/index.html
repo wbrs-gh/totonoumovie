@@ -1,30 +1,31 @@
 <!--meta {"title": "トップ", "desc": "撮った動画を渡すだけで、カット・字幕・効果音・音声の仕上げまで済んだ完成動画に。画面で見ながら直せる totonoumovie の使い方マニュアル。", "bodyClass": "home"} -->
-<section class="hero" style="background-image:url(images/hero.jpg)">
+<section class="hero">
   <div class="in">
-    <div class="eyebrow">totonoumovie ・ TotonouMovie v2.2.0 対応 ・ Mac／Windows</div>
-    <h1>撮った動画を1本渡すだけ。<br>完成まで、画面で見ながら。</h1>
+    <div class="eyebrow">TotonouMovie v2.2.0 対応 ・ Mac／Windows</div>
+    <h1><span class="nw">撮った動画を1本渡すだけ。</span><br><em class="nw">完成まで、画面で見ながら。</em></h1>
     <p>カット・字幕・効果音・音声の仕上げは AI が進めます。あなたは、出てきた確認に答えて、気になる所を画面で直すだけです。</p>
+    <div class="hero-points"><span>✂️ 無音と「えーっと」を切る</span><span>💬 読みやすい字幕</span><span>✨ 効果音・寄り・画像</span></div>
     <div class="btns">
       <a class="btn primary" href="install.html">いまから入れる →</a>
-      <a class="btn ghost" href="#movie">▶ 3分の動画で見る</a>
+      <a class="btn ghost" href="#movie">▶ 全体像を動画で見る</a>
     </div>
   </div>
+  <div class="stage" data-tt-hero data-pose="wave" data-id="site_hero">はじめまして、トトノちゃんだよ！動画づくり、いっしょにととのえよう。</div>
+  <div class="bubbles" aria-hidden="true"><i style="left:12%;bottom:20px;width:10px;height:10px;animation-delay:0s"></i><i style="left:38%;bottom:10px;width:16px;height:16px;animation-delay:2.5s"></i><i style="left:64%;bottom:30px;width:8px;height:8px;animation-delay:5s"></i><i style="left:86%;bottom:14px;width:12px;height:12px;animation-delay:7s"></i></div>
 </section>
 
-
-<div class="tt-tip" data-pose="wave" data-id="site_index">はじめまして、トトノちゃんだよ！動画を1本渡すだけで、完成まで案内するね。まずは、あなたに合う入口を選んでね。</div>
 <section>
   <h2 id="where">あなたはどこから？</h2>
-  <p>いまの状態に近いものを選んでください。必要なページだけを順番に案内します。</p>
+  <p>いまの状態に近いものを選んでください。必要なページだけを順番に案内します。右上（スマホは上）の <b>Mac／Windows</b> を選ぶと、手順やファイルの場所が、そのパソコン用に変わります。</p>
   <div class="route">
-    <a href="start.html"><b>🆕 はじめて</b><span>TotonouMovie も totonoumovie もまだ入れていない</span><em>準備から始める →</em></a>
-    <a href="install.html#app"><b>🎬 TotonouMovie は使っている</b><span>Claude Code で動画を作ったことがある。画面で直せるようにしたい</span><em>totonoumovie だけ入れる →</em></a>
+    <a href="start.html"><b>🆕 はじめて</b><span>編集の中身（TotonouMovie）も、画面のアプリ（totonoumovie）も、まだ入れていない</span><em>準備から始める →</em></a>
+    <a href="install.html#app"><b>🎬 TotonouMovie は使っている</b><span>Claude Code で動画を作ったことがある。画面で直せるようにしたい</span><em>画面のアプリ（totonoumovie）だけ入れる →</em></a>
     <a href="first.html"><b>✅ もう両方入れた</b><span>入れ終わった。最初の1本を作りたい</span><em>はじめての1本へ →</em></a>
   </div>
 </section>
 
 <section>
-  <h2 id="movie">3分でわかる totonoumovie</h2>
+  <h2 id="movie">まず見る：totonoumovie の全体像</h2>
   <div class="video"><video id="v01" src="videos/v01-overview.mp4" poster="videos/v01-overview.jpg" controls preload="none" playsinline></video></div>
   <div class="video-meta" data-chapters="v01"><span>🔊 音声あり・字幕つき</span></div>
 </section>
@@ -40,65 +41,183 @@
 </section>
 
 <section>
-  <h2 id="before-after">こう変わります（実際に作ったサンプル）</h2>
-  <p>同じ撮影素材を TotonouMovie で仕上げた例です。左が撮ったまま、右が完成です。無音と「えーっと」が切られ、字幕・強調・効果音・画像・寄りが入っています。</p>
-  <div class="ba">
-    <figure><video src="videos/sample-before.mp4" poster="videos/sample-before.jpg" controls preload="none" playsinline></video><figcaption>撮ったまま</figcaption></figure>
-    <figure><video src="videos/sample-after.mp4" poster="videos/sample-after.jpg" controls preload="none" playsinline></video><figcaption>完成（TotonouMovie で仕上げ）</figcaption></figure>
+  <h2 id="before-after">どう仕上がるの？</h2>
+  <p>撮ったままの動画が、どう仕上がるのかを、実際の見本（36秒の縦動画）の文字起こしで見てみましょう。AI が文字起こしから「いらないところ」を見つけ、あなたが選んだものだけを切って、字幕・画像・効果音を足してつなぎます。</p>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 12, "pose": "point", "id": "fig_index_1_1", "t": "まずは撮ったままの動画を、AIが文字に書き出すよ。"}, {"s": 2, "x": 50, "pose": "explain", "id": "fig_index_1_2", "t": "無音や、えっと、撮影中の合図みたいな、いらないところに印をつけるよ。"}, {"s": 3, "x": 55, "pose": "point", "id": "fig_index_1_3", "t": "ショートなら、いちばんいいひとことを冒頭に先に見せることもできるよ。"}, {"s": 4, "x": 40, "pose": "explain", "id": "fig_index_1_4", "t": "印をつけた所を切ってつなぐと、36秒が26.6秒になるよ。合図の所には画像が入るんだ。"}, {"s": 5, "x": 88, "pose": "cheer", "id": "fig_index_1_5", "t": "字幕と効果音も入って、完成だよ！切るかどうかは、あなたが選べるよ。"}]'>
+  <svg viewBox="0 0 960 560" role="img" aria-label="撮ったままの36秒の動画を文字起こしし、無音・えっと・撮影中の合図に印をつけ、選んだ所を切ってつなぐと26.6秒になり、合図の場所に画像、字幕と効果音が入って完成する">
+    <defs>
+      <clipPath id="ba-c1"><rect x="24" y="96" width="150" height="267" rx="18"/></clipPath>
+      <clipPath id="ba-c2"><rect x="786" y="96" width="150" height="267" rx="18"/></clipPath>
+      <pattern id="ba-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#fff3e8"/><line x1="0" y1="0" x2="0" y2="8" stroke="#ff8f3a" stroke-width="3"/></pattern>
+      <linearGradient id="ba-g" x1="0" x2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <marker id="ba-ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9 Q3,5 1,1z" fill="#ff8f3a"/></marker>
+      <marker id="ba-ar2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1,1 L9,5 L1,9 Q3,5 1,1z" fill="#2f8fd0"/></marker>
+      <filter id="ba-sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".14"/></filter>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg"><path d="M0 540 Q120 520 240 540 T480 540 T720 540 T960 540" fill="none" stroke="#e6f3fc" stroke-width="3"/></g>
+      <g class="gs" data-s="1">
+        <text x="99" y="80" text-anchor="middle" font-size="16" font-weight="900" fill="#1f2d3d">撮ったまま</text>
+        <rect x="18" y="90" width="162" height="279" rx="24" fill="#1f2d3d" filter="url(#ba-sh)"/>
+        <image href="videos/sample-before.jpg" x="24" y="96" width="150" height="267" clip-path="url(#ba-c1)" preserveAspectRatio="xMidYMid slice"/>
+        <text x="99" y="392" text-anchor="middle" font-size="15" font-weight="700" fill="#4b5b6e">36秒</text>
+        <text x="200" y="80" font-size="16" font-weight="900" fill="#1b5f96">文字起こし</text>
+        <text x="290" y="80" font-size="13" fill="#7d8a99">AI が話した言葉を書き出す</text>
+        <rect x="200" y="96" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="116" font-size="12.5" fill="#7d8a99">0:00</text><text x="252" y="116" font-size="14" fill="#1f2d3d">はい、</text><text x="302.6" y="116" font-size="14" fill="#1f2d3d">おはようございます。</text><rect x="200" y="129" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="149" font-size="12.5" fill="#7d8a99">0:03</text><text x="252" y="149" font-size="14" fill="#1f2d3d">今日は朝の時間の使い方を3つ紹介します。</text><rect x="200" y="162" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="182" font-size="12.5" fill="#7d8a99">0:08</text><text x="252" y="182" font-size="14" fill="#1f2d3d">えっと、</text><text x="316.8" y="182" font-size="14" fill="#1f2d3d">1つ目は起きてすぐコップ1杯の水を飲むこと。</text><rect x="200" y="195" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="215" font-size="12.5" fill="#7d8a99">0:12</text><text x="252" y="215" font-size="14" fill="#1f2d3d">体がすっきり目覚めます。</text><rect x="200" y="228" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="248" font-size="12.5" fill="#7d8a99">0:16</text><text x="252" y="248" font-size="14" fill="#1f2d3d">編集さん、ここに画像。</text><text x="416.2" y="248" font-size="14" fill="#7d8a99">（撮影中の合図）</text><rect x="200" y="261" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="281" font-size="12.5" fill="#7d8a99">0:20</text><text x="252" y="281" font-size="14" fill="#1f2d3d">2つ目は最初の30分はスマホを見ないこと。</text><rect x="200" y="294" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="314" font-size="12.5" fill="#7d8a99">0:24</text><text x="252" y="314" font-size="14" fill="#1f2d3d">3つ目は今日やることを紙に書き出すことです。</text><rect x="200" y="327" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="347" font-size="12.5" fill="#7d8a99">0:29</text><text x="252" y="347" font-size="14" fill="#1f2d3d">朝が変わると1日が変わります。</text><rect x="200" y="360" width="560" height="30" rx="9" fill="#f4f9fd"/><text x="212" y="380" font-size="12.5" fill="#7d8a99">0:32</text><text x="252" y="380" font-size="14" fill="#1f2d3d">ぜひ試してみてください。</text>
+        <text x="190" y="427" text-anchor="end" font-size="13" font-weight="700" fill="#4b5b6e">撮ったまま</text>
+        <rect x="200" y="410" width="560" height="24" rx="6" fill="#a8d8f5"/>
+      </g>
+      <g class="gs" data-s="2">
+        <rect x="248" y="99" width="50.599999999999994" height="24" rx="7" fill="#fff3e8" stroke="#ff8f3a" stroke-width="1.5"/><text x="252" y="116" font-size="14" fill="#b0b8c2">はい、</text><line x1="250" y1="111" x2="296.6" y2="111" stroke="#ff8f3a" stroke-width="2.5"/><rect x="248" y="165" width="64.8" height="24" rx="7" fill="#fff3e8" stroke="#ff8f3a" stroke-width="1.5"/><text x="252" y="182" font-size="14" fill="#b0b8c2">えっと、</text><line x1="250" y1="177" x2="310.8" y2="177" stroke="#ff8f3a" stroke-width="2.5"/><rect x="248" y="231" width="164.2" height="24" rx="7" fill="#fff3e8" stroke="#ff8f3a" stroke-width="1.5"/><text x="252" y="248" font-size="14" fill="#b0b8c2">編集さん、ここに画像。</text><line x1="250" y1="243" x2="410.2" y2="243" stroke="#ff8f3a" stroke-width="2.5"/><rect x="704" y="102" width="48" height="18" rx="9" fill="#e8edf2"/><text x="728" y="115" font-size="11.5" text-anchor="middle" fill="#7d8a99">無音✂</text><rect x="704" y="168" width="48" height="18" rx="9" fill="#e8edf2"/><text x="728" y="181" font-size="11.5" text-anchor="middle" fill="#7d8a99">無音✂</text><rect x="704" y="234" width="48" height="18" rx="9" fill="#e8edf2"/><text x="728" y="247" font-size="11.5" text-anchor="middle" fill="#7d8a99">無音✂</text><rect x="704" y="300" width="48" height="18" rx="9" fill="#e8edf2"/><text x="728" y="313" font-size="11.5" text-anchor="middle" fill="#7d8a99">無音✂</text><rect x="704" y="333" width="48" height="18" rx="9" fill="#e8edf2"/><text x="728" y="346" font-size="11.5" text-anchor="middle" fill="#7d8a99">無音✂</text><line x1="250" y1="243" x2="410.2" y2="243" stroke="#ff8f3a" stroke-width="2.5"/>
+        <rect x="200.0" y="410" width="23.8" height="24" fill="url(#ba-hatch)"/><rect x="310.0" y="410" width="41.1" height="24" fill="url(#ba-hatch)"/><rect x="418.6" y="410" width="5.9" height="24" fill="url(#ba-hatch)"/><rect x="451.8" y="410" width="64.9" height="24" fill="url(#ba-hatch)"/><rect x="580.3" y="410" width="5.4" height="24" fill="url(#ba-hatch)"/><rect x="649.1" y="410" width="6.4" height="24" fill="url(#ba-hatch)"/>
+        <text x="770" y="427" font-size="13" font-weight="700" fill="#c25a12">切る候補</text>
+      </g>
+      <g class="gs" data-s="3">
+        <rect x="200" y="327" width="560" height="30" rx="9" fill="none" stroke="#ff8f3a" stroke-width="2.5"/>
+        <rect x="560" y="52" width="200" height="34" rx="17" fill="#ff8f3a"/>
+        <text x="660" y="74" text-anchor="middle" font-size="13.5" font-weight="900" fill="#fff">冒頭で先に見せる（フック）</text>
+        <path class="flow" d="M760 342 C 800 342, 800 69, 764 69" fill="none" stroke="#ff8f3a" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#ba-ar)"/>
+      </g>
+      <g class="gs" data-s="4">
+        <text x="190" y="487" text-anchor="end" font-size="13" font-weight="700" fill="#1b5f96">完成</text>
+        <rect x="200" y="470" width="413.8" height="24" rx="6" fill="url(#ba-g)"/>
+        <text x="623.8" y="487" font-size="13.5" font-weight="900" fill="#1b5f96">26.6秒</text>
+        <path class="flow" d="M480.0 436 L381.1 468" stroke="#2f8fd0" stroke-width="2.5" stroke-dasharray="6 6" fill="none" marker-end="url(#ba-ar2)"/>
+        <rect x="365.1" y="500" width="32" height="32" rx="8" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/film.png" x="368.1" y="503" width="26" height="26"/>
+        <text x="403.1" y="521" font-size="13" fill="#4b5b6e">合図の所に画像</text>
+      </g>
+      <g class="gs" data-s="5">
+        <rect x="216" y="500" width="32" height="32" rx="8" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/subtitle.png" x="219" y="503" width="26" height="26"/>
+        <text x="256" y="521" font-size="13" fill="#4b5b6e">字幕</text>
+        <rect x="560" y="500" width="32" height="32" rx="8" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <image href="assets/icons/sound.png" x="563" y="503" width="26" height="26"/>
+        <text x="600" y="521" font-size="13" fill="#4b5b6e">効果音・音量</text>
+        <text x="861" y="80" text-anchor="middle" font-size="16" font-weight="900" fill="#1b5f96">完成</text>
+        <rect x="780" y="90" width="162" height="279" rx="24" fill="#2f8fd0" filter="url(#ba-sh)"/>
+        <image href="videos/sample-after.jpg" x="786" y="96" width="150" height="267" clip-path="url(#ba-c2)" preserveAspectRatio="xMidYMid slice"/>
+        <text x="861" y="392" text-anchor="middle" font-size="15" font-weight="900" fill="#1b5f96">26.6秒</text>
+      </g>
+    </g>
+  </svg>
   </div>
-  <p class="muted" style="font-size:13.5px">※ 説明のためのサンプルです。人物の写真は AI で作り、声は合成音声（VOICEVOX:もち子さん）です。</p>
+  <p class="muted" style="font-size:13.5px">※ 見本の人物は AI で作った架空の人で、声は合成音声（VOICEVOX:もち子さん）です。編集は TotonouMovie で実際に行いました。この見本ではフックは使っていません（ショートで選べます）。</p>
 </section>
 
 <section>
   <h2 id="how">どう動くの？</h2>
   <p>totonoumovie は、あなたのパソコンに入っている <b>Claude Code</b> と <b>TotonouMovie</b> を、ブラウザの画面から動かすアプリです。動画はパソコンの中で処理され、編集の内容もパソコンの中に保存されます。</p>
-  <div class="fig-svg">
-  <svg viewBox="0 0 960 360" role="img" aria-label="totonoumovie の仕組み：撮った動画を totonoumovie に渡すと、Claude Code と TotonouMovie が編集し、確認と手直しを画面で行い、完成動画ができる">
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 8, "pose": "point", "id": "fig_index_1_1", "t": "まずはスマホやカメラで、動画を撮るよ。"}, {"s": 2, "x": 35, "pose": "explain", "id": "fig_index_1_2", "t": "ととのうムービーの画面で、あなたが動画を渡して操作するよ。"}, {"s": 3, "x": 67, "pose": "point", "id": "fig_index_1_3", "t": "お願いは、あなたのパソコンのClaude Codeが受けて編集するんだ。"}, {"s": 4, "x": 55, "pose": "explain", "id": "fig_index_1_4", "t": "結果や確認は画面に戻ってくるよ。決めるのはいつもあなただよ。"}, {"s": 5, "x": 93, "pose": "cheer", "id": "fig_index_1_5", "t": "最後まで見て確かめたら、完成動画のできあがりだよ！"}]'>
+  <svg viewBox="0 0 960 400" role="img" aria-label="totonoumovie の仕組み：撮った動画を totonoumovie に渡すと、Claude Code と TotonouMovie が編集し、確認と手直しを画面で行い、完成動画ができる">
     <defs>
-      <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2d6b5f"/></marker>
-      <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#2d6b5f"/><stop offset="1" stop-color="#3f8c7c"/></linearGradient>
+      <linearGradient id="index1-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <linearGradient id="index1-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6f3fc"/><stop offset="1" stop-color="#a8d8f5"/></linearGradient>
+      <filter id="index1-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".14"/></filter>
+      <marker id="index1-arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,1.5 Q1,1 1.6,2.4 L3.4,6 L1.6,9.6 Q1,11 2,10.5 L10.6,6.6 Q11.6,6 10.6,5.4 Z" fill="#2f8fd0"/></marker>
+      <marker id="index1-arrow-o" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,1.5 Q1,1 1.6,2.4 L3.4,6 L1.6,9.6 Q1,11 2,10.5 L10.6,6.6 Q11.6,6 10.6,5.4 Z" fill="#ff8f3a"/></marker>
     </defs>
-    <g font-family="sans-serif">
-      <!-- 1 撮る -->
-      <rect x="10" y="110" width="150" height="150" rx="18" fill="#fff" stroke="#e1dbcf" stroke-width="2"/>
-      <rect x="62" y="132" width="46" height="80" rx="9" fill="#26303a"/><rect x="67" y="140" width="36" height="62" rx="4" fill="#9fd4c6"/><circle cx="85" cy="206" r="3" fill="#fff"/>
-      <text x="85" y="238" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2126">1. 撮る</text>
-      <text x="85" y="300" text-anchor="middle" font-size="13" fill="#7a818c">スマホ・カメラで</text>
-      <!-- 2 totonoumovie -->
-      <rect x="215" y="40" width="300" height="290" rx="22" fill="url(#g1)"/>
-      <text x="365" y="78" text-anchor="middle" font-size="21" font-weight="800" fill="#fff">2. totonoumovie</text>
-      <text x="365" y="100" text-anchor="middle" font-size="13" fill="#cfe9e1">ブラウザの画面（あなたが操作）</text>
-      <g font-size="14.5" fill="#fff">
-        <rect x="238" y="118" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="144">🎬 動画を渡して「AI で作る」</text>
-        <rect x="238" y="166" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="192">✋ 確認に答える（4回）</text>
-        <rect x="238" y="214" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="240">✏️ 字幕・カット・演出を直す</text>
-        <rect x="238" y="262" width="254" height="40" rx="10" fill="#ffffff22"/><text x="258" y="288">⬇ 静止画・試作・書き出し</text>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <rect x="0" y="0" width="960" height="400" rx="24" fill="#f4f9fd"/>
+        <path d="M0 352 Q 80 326 160 352 T 320 352 T 480 352 T 640 352 T 800 352 T 960 352" fill="none" stroke="#e6f3fc" stroke-width="10" stroke-linecap="round"/>
+        <path d="M0 372 Q 80 350 160 372 T 320 372 T 480 372 T 640 372 T 800 372 T 960 372" fill="none" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+        <!-- あなたのパソコンの中（画面と処理をまとめる枠） -->
+        <rect x="172" y="22" width="652" height="356" rx="24" fill="#ffffff" fill-opacity=".6" stroke="#a8d8f5" stroke-width="2" stroke-dasharray="6 6"/>
+        <rect x="408" y="10" width="180" height="26" rx="13" fill="#f4f9fd" stroke="#a8d8f5" stroke-width="2"/>
+        <g transform="translate(424 16)"><rect x="2" y="1" width="16" height="11" rx="2" fill="none" stroke="#2f8fd0" stroke-width="2"/><path d="M0 15 H20" stroke="#2f8fd0" stroke-width="2.4" stroke-linecap="round"/></g>
+        <text x="510" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5f96">あなたのパソコンの中</text>
       </g>
-      <!-- 3 Claude Code -->
-      <rect x="575" y="40" width="210" height="290" rx="22" fill="#fff" stroke="#2d6b5f" stroke-width="2.5" stroke-dasharray="7 6"/>
-      <text x="680" y="78" text-anchor="middle" font-size="17" font-weight="800" fill="#2d6b5f">3. あなたの Claude Code</text>
-      <rect x="595" y="98" width="170" height="86" rx="12" fill="#e5f0ec"/>
-      <text x="680" y="132" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2126">TotonouMovie</text>
-      <text x="680" y="156" text-anchor="middle" font-size="12.5" fill="#4a515b">編集の手順と部品</text>
-      <rect x="595" y="196" width="170" height="116" rx="12" fill="#f6f4ef"/>
-      <text x="680" y="224" text-anchor="middle" font-size="13" fill="#4a515b">文字起こし</text>
-      <text x="680" y="248" text-anchor="middle" font-size="13" fill="#4a515b">カット候補・字幕</text>
-      <text x="680" y="272" text-anchor="middle" font-size="13" fill="#4a515b">書き出し・検査</text>
-      <text x="680" y="298" text-anchor="middle" font-size="11.5" fill="#7a818c">（パソコンの中で処理）</text>
-      <!-- 4 完成 -->
-      <rect x="840" y="110" width="110" height="150" rx="18" fill="#fff" stroke="#e1dbcf" stroke-width="2"/>
-      <circle cx="895" cy="160" r="26" fill="#2f8a5b"/><path d="M882 160l9 9 17-18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <text x="895" y="218" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2126">4. 完成</text>
-      <text x="895" y="240" text-anchor="middle" font-size="13" fill="#7a818c">MP4</text>
-      <!-- 矢印 -->
-      <g stroke="#2d6b5f" stroke-width="3" fill="none" marker-end="url(#a1)">
-        <line x1="163" y1="185" x2="208" y2="185"/>
-        <path d="M518 150 C540 150 548 150 568 150"/>
-        <path d="M572 230 C550 230 542 230 522 230"/>
-        <line x1="788" y1="185" x2="833" y2="185"/>
+
+      <!-- 1. 撮る -->
+      <g class="gs" data-s="1">
+        <rect x="12" y="96" width="130" height="220" rx="22" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#index1-shadow)"/>
+        <circle cx="77" cy="96" r="15" fill="url(#index1-main)" stroke="#fff" stroke-width="3"/>
+        <text x="77" y="101" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">1</text>
+        <rect x="50" y="128" width="54" height="94" rx="12" fill="#1b5f96"/>
+        <rect x="55" y="138" width="44" height="72" rx="6" fill="url(#index1-screen)"/>
+        <path d="M71 162 L71 186 L90 174 Z" fill="#2f8fd0"/>
+        <circle cx="77" cy="216" r="2.6" fill="#a8d8f5"/>
+        <circle cx="93" cy="146" r="4" fill="#ff8fa8"/>
+        <text x="77" y="258" text-anchor="middle" font-size="19" font-weight="900" fill="#1f2d3d">撮る</text>
+        <text x="77" y="284" text-anchor="middle" font-size="13" fill="#4b5b6e">スマホ・カメラで</text>
+        <line x1="146" y1="206" x2="192" y2="206" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#index1-arrow)"/>
       </g>
-      <text x="545" y="140" text-anchor="middle" font-size="12" fill="#7a818c">お願い</text>
-      <text x="545" y="250" text-anchor="middle" font-size="12" fill="#7a818c">結果・確認</text>
+
+      <!-- 2. totonoumovie の画面 -->
+      <g class="gs" data-s="2">
+        <rect x="200" y="52" width="276" height="306" rx="22" fill="url(#index1-main)" filter="url(#index1-shadow)"/>
+        <circle cx="222" cy="68" r="4" fill="#fff" fill-opacity=".7"/><circle cx="236" cy="68" r="4" fill="#fff" fill-opacity=".7"/><circle cx="250" cy="68" r="4" fill="#ff8fa8"/>
+        <circle cx="228" cy="96" r="14" fill="#fff"/>
+        <text x="228" y="101" text-anchor="middle" font-size="15" font-weight="900" fill="#2f8fd0">2</text>
+        <text x="250" y="102" font-size="20" font-weight="900" fill="#fff">totonoumovie</text>
+        <rect x="212" y="114" width="252" height="232" rx="16" fill="#fff"/>
+        <text x="338" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="#2f8fd0">ブラウザの画面（あなたが操作）</text>
+        <g font-size="14" font-weight="700" fill="#1f2d3d">
+          <rect x="220" y="146" width="236" height="44" rx="12" fill="#f4f9fd" stroke="#dcebf6" stroke-width="2"/>
+          <image href="assets/icons/film.png" x="228" y="153" width="30" height="30"/>
+          <text x="266" y="173">動画を渡して「AI で作る」</text>
+          <rect x="220" y="196" width="236" height="44" rx="12" fill="#f4f9fd" stroke="#dcebf6" stroke-width="2"/>
+          <image href="assets/icons/question.png" x="228" y="203" width="30" height="30"/>
+          <text x="266" y="223">4つの確認に答える</text>
+          <rect x="220" y="246" width="236" height="44" rx="12" fill="#f4f9fd" stroke="#dcebf6" stroke-width="2"/>
+          <image href="assets/icons/subtitle.png" x="228" y="253" width="30" height="30"/>
+          <text x="266" y="273">字幕・カット・演出を直す</text>
+          <rect x="220" y="296" width="236" height="44" rx="12" fill="#f4f9fd" stroke="#dcebf6" stroke-width="2"/>
+          <image href="assets/icons/export.png" x="228" y="303" width="30" height="30"/>
+          <text x="266" y="323">静止画・試作・書き出し</text>
+        </g>
+      </g>
+
+      <!-- 3. お願い → パソコンの Claude Code と TotonouMovie -->
+      <g class="gs" data-s="3">
+        <rect x="498" y="134" width="72" height="24" rx="12" fill="#e6f3fc"/>
+        <text x="534" y="151" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5f96">お願い</text>
+        <line x1="482" y1="172" x2="582" y2="172" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#index1-arrow)"/>
+        <rect x="590" y="52" width="216" height="306" rx="22" fill="#fff" stroke="#2f8fd0" stroke-width="2.5" filter="url(#index1-shadow)"/>
+        <circle cx="614" cy="84" r="14" fill="url(#index1-main)"/>
+        <text x="614" y="89" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">3</text>
+        <text x="636" y="90" font-size="18" font-weight="900" fill="#1b5f96">Claude Code</text>
+        <text x="608" y="114" font-size="13" fill="#4b5b6e">あなたのパソコンで動く</text>
+        <rect x="604" y="126" width="188" height="62" rx="16" fill="url(#index1-main)"/>
+        <text x="698" y="153" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">TotonouMovie</text>
+        <text x="698" y="175" text-anchor="middle" font-size="13" fill="#fff">編集の手順と部品</text>
+        <g font-size="14" font-weight="700" fill="#1f2d3d">
+          <rect x="604" y="198" width="188" height="38" rx="12" fill="#f4f9fd"/>
+          <image href="assets/icons/transcribe.png" x="612" y="203" width="28" height="28"/>
+          <text x="648" y="222">文字起こし</text>
+          <rect x="604" y="242" width="188" height="38" rx="12" fill="#f4f9fd"/>
+          <image href="assets/icons/scissors.png" x="612" y="247" width="28" height="28"/>
+          <text x="648" y="266">カット候補・字幕</text>
+          <rect x="604" y="286" width="188" height="38" rx="12" fill="#f4f9fd"/>
+          <image href="assets/icons/inspect.png" x="612" y="291" width="28" height="28"/>
+          <text x="648" y="310">書き出し・検査</text>
+        </g>
+        <text x="698" y="346" text-anchor="middle" font-size="13" fill="#7d8a99">（パソコンの中で処理）</text>
+      </g>
+
+      <!-- 4. 結果・確認が画面に戻る -->
+      <g class="gs" data-s="4">
+        <line x1="584" y1="236" x2="484" y2="236" class="flow" stroke="#ff8f3a" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#index1-arrow-o)"/>
+        <rect x="490" y="248" width="92" height="24" rx="12" fill="#fff3e8"/>
+        <text x="536" y="265" text-anchor="middle" font-size="13" font-weight="700" fill="#c25a12">結果・確認</text>
+        <rect x="218" y="194" width="240" height="48" rx="14" fill="none" stroke="#ff8f3a" stroke-width="3"/>
+        <rect x="386" y="182" width="66" height="20" rx="10" fill="#ff8f3a"/>
+        <text x="419" y="197" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">届く</text>
+      </g>
+
+      <!-- 5. 完成 -->
+      <g class="gs" data-s="5">
+        <line x1="810" y1="206" x2="846" y2="206" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#index1-arrow)"/>
+        <rect x="852" y="96" width="98" height="220" rx="22" fill="#fff" stroke="#23a07a" stroke-width="2.5" filter="url(#index1-shadow)"/>
+        <circle cx="901" cy="96" r="15" fill="#23a07a" stroke="#fff" stroke-width="3"/>
+        <text x="901" y="101" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">4</text>
+        <circle cx="901" cy="162" r="32" fill="#e5f7f0"/>
+        <image href="assets/icons/trophy.png" x="879" y="140" width="44" height="44"/>
+        <text x="901" y="230" text-anchor="middle" font-size="19" font-weight="900" fill="#1f2d3d">完成</text>
+        <rect x="871" y="246" width="60" height="26" rx="13" fill="#23a07a"/>
+        <text x="901" y="264" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">MP4</text>
+      </g>
     </g>
   </svg>
   </div>
@@ -135,6 +254,6 @@
 
 <section>
   <h2 id="know">はじめに知っておいてほしいこと</h2>
-  <div class="callout warn"><b>作業フォルダは、クラウド同期の外に</b><p>Dropbox・Google ドライブ・OneDrive・iCloud の中で編集すると、書き出し中に同期とぶつかって止まることがあります。作業はパソコンの中のフォルダ（例：ムービーの中の totonou）で行い、完成した動画だけをコピーします。</p></div>
+  <div class="callout warn"><b>totonoumovie のフォルダは、なるべくクラウド同期の外に</b><p>動画も自分好みも、totonoumovie のフォルダ（ふつうはホームの totonoumovie）の中にまとまります。Dropbox・Google ドライブ・OneDrive・iCloud の中に置くと、書き出し中に同期とぶつかって止まることがあります。置くときは、書き出しの間だけ同期を一時停止します。フォルダごと移しても、そのまま使えます。</p></div>
   <div class="callout info"><b>音声ファイルは外に送りません</b><p>文字起こしはパソコンの中で動きます。文字起こしの文章や確認用の画像は、Claude Code のふだんの会話と同じように Claude が読みます。書き出しのときは字幕の字体（Google Fonts）をインターネットから取得するので、接続は必要です。</p></div>
 </section>

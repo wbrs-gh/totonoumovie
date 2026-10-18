@@ -6,7 +6,8 @@
 - スキルの「★確認」は、AI が最後に書く ```tm-ask {...}``` ブロックで受け取り、画面で答えてもらう
 - 答えは claude -p --resume <セッション> で同じ会話に返す
 - API キーは使わず、claude コマンドにログインしているアカウントで動く
-- 実行の記録は ~/.totonoumovie/runs/<id>.json に残す（アプリを再起動しても続きから答えられる）
+- 実行の記録は <拠点>/my/app/runs/<id>.json に残す（アプリを再起動しても続きから答えられる）
+- 拠点（本体フォルダ）で動かすので、拠点の .claude（17スキルの有効化・自作スキル）と CLAUDE.md が効く
 """
 import json
 import os
@@ -17,8 +18,10 @@ import threading
 import time
 import uuid
 
+from . import home
+
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-USER_DIR = os.path.expanduser("~/.totonoumovie")
+USER_DIR = home.APP_USER_DIR
 RUNS_DIR = os.path.join(USER_DIR, "runs")
 PROMPTS_USER = os.path.join(USER_DIR, "prompts.json")
 PROMPTS_DEFAULT = os.path.join(APP_DIR, "prompts", "default.json")
@@ -60,10 +63,20 @@ def save_prompts(data):
         json.dump(out, f, ensure_ascii=False, indent=2)
 
 
-def build_prompt(kind, prompts, vars_, preset_names=(), extra=""):
-    """種類別のプロンプトに、選んだオリジナル指示・毎回の指示・今回の追加指示を足す"""
+def build_prompt(kind, prompts, vars_, preset_names=(), extra="", style=None, skills=()):
+    """種類別のプロンプトに、マイスタイル・使うスキル・選んだいつもの指示・毎回の指示・今回の追加指示を足す
+
+    style: None＝AI に任せる（保存済みがあれば produce が聞く）／"" ＝使わない（新しく決める）／名前＝そのマイスタイル
+    """
     tmpl = prompts.get(kind) or ""
     adds = []
+    if style:
+        adds.append(f"マイスタイル「{style}」を使ってください（「前回と同じで」の質問はせず、この名前で確定。"
+                    "tm_style.py use の出力の notes に書かれたことは、この動画の編集のルールとして守る）")
+    elif style == "" and kind in ("create", "voiceover"):
+        adds.append("マイスタイルは使いません（「前回と同じで」の質問はせず、新しく決める）")
+    if skills:
+        adds.append("次のスキルも使ってください（手順や決まりはそのスキルに従う）: " + "、".join(skills))
     for p in prompts.get("presets", []):
         if p.get("name") in preset_names and p.get("text"):
             adds.append(p["text"].strip())
@@ -240,6 +253,10 @@ class AgentManager:
         prompts = load_prompts()
         cmd = [exe, "-p", message, "--output-format", "stream-json", "--verbose",
                "--append-system-prompt", prompts.get("system", "") + (r.system_extra or "")]
+        # 17スキルをグローバルで無効にしてあっても、アプリの作業では必ず有効にする
+        sa = home.claude_settings_arg()
+        if sa:
+            cmd += ["--settings", sa]
         tools = prompts.get("allowedTools") or []
         if tools:
             cmd += ["--allowedTools", ",".join(tools)]
@@ -252,7 +269,7 @@ class AgentManager:
             root = self.plugin_root_getter()
         except Exception:
             pass
-        add_dirs = {d for d in (r.project, root, os.path.expanduser("~/.config/totonou-movie")) if d}
+        add_dirs = {d for d in (r.project, root, home.CONFIG_DIR) if d}
         for d in sorted(add_dirs):
             cmd += ["--add-dir", d]
         env = dict(os.environ)
@@ -260,6 +277,7 @@ class AgentManager:
                                        env.get("PATH", "")])
         if root:
             env["CLAUDE_PLUGIN_ROOT"] = root
+        env[home.CONFIG_ENV] = home.CONFIG_DIR
         os.makedirs(r.cwd, exist_ok=True)
         r.turns.append({"t": time.time(), "text": message, "resume": resume})
         r.add("user", message if resume else "▶ 開始しました\n" + message)

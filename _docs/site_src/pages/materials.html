@@ -9,22 +9,56 @@
 
 <section>
   <h2 id="cue">撮影中の合図</h2>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 250" role="img" aria-label="撮影中に「編集さん、ここに画像」と言うと、合図の声は切られて、その場所に画像が入る">
-    <g font-family="sans-serif">
-      <rect x="10" y="20" width="250" height="150" rx="16" fill="#fff" stroke="#e1dbcf" stroke-width="2"/>
-      <circle cx="70" cy="95" r="34" fill="#e8c4a8"/><rect x="40" y="128" width="60" height="42" rx="20" fill="#c9b49a"/>
-      <path d="M118 60 h126 a10 10 0 0 1 10 10 v40 a10 10 0 0 1 -10 10 h-96 l-16 16 v-16 h-14 a10 10 0 0 1 -10 -10 v-40 a10 10 0 0 1 10 -10z" fill="#ff7a30"/>
-      <text x="183" y="86" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">編集さん、</text><text x="183" y="106" text-anchor="middle" font-size="13.5" font-weight="800" fill="#fff">ここに画像</text>
-      <text x="135" y="200" text-anchor="middle" font-size="13.5" fill="#4a515b">撮りながら、少し間を空けて単独で言う</text>
-      <path d="M275 95 h60" stroke="#9aa1ab" stroke-width="3" marker-end="url(#a5)"/>
-      <defs><marker id="a5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" fill="#9aa1ab"/></marker></defs>
-      <g transform="translate(350,30)">
-        <rect x="0" y="40" width="200" height="40" rx="8" fill="#e5f0ec"/><text x="100" y="65" text-anchor="middle" font-size="13" fill="#1f4f46">直前の話（水を飲む）</text>
-        <rect x="205" y="40" width="80" height="40" rx="8" fill="#ff5a5a" opacity=".25"/><text x="245" y="58" text-anchor="middle" font-size="11.5" fill="#b4472f" font-weight="800">合図の声</text><text x="245" y="73" text-anchor="middle" font-size="11.5" fill="#b4472f">→ 切る</text>
-        <rect x="290" y="40" width="200" height="40" rx="8" fill="#e5f0ec"/><text x="390" y="65" text-anchor="middle" font-size="13" fill="#1f4f46">次の話</text>
-        <rect x="40" y="100" width="160" height="70" rx="10" fill="#2f6fb3"/><text x="120" y="132" text-anchor="middle" font-size="13" fill="#fff" font-weight="800">🖼 画像が入る</text><text x="120" y="152" text-anchor="middle" font-size="11.5" fill="#dbe6fb">内容に合う持ち込み画像</text>
-        <path d="M120 98 v-16" stroke="#2f6fb3" stroke-width="2.5"/>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 16, "pose": "point", "id": "fig_materials_1_1", "t": "撮りながら、編集さん、ここに画像って言うよ。前後に少し間をあけてね。"}, {"s": 2, "x": 68, "pose": "explain", "id": "fig_materials_1_2", "t": "合図の声のところは、あとで切られるから心配いらないよ。"}, {"s": 3, "x": 49, "pose": "point", "id": "fig_materials_1_3", "t": "そして、その場所に、話の内容に合う画像が入るんだ。"}, {"s": 4, "x": 50, "pose": "cheer", "id": "fig_materials_1_4", "t": "言うだけで画像が入るから、とってもかんたんだよ。"}]'>
+  <svg viewBox="0 0 960 300" role="img" aria-label="撮影中に「編集さん、ここに画像」と言うと、合図の声は切られて、その場所に画像が入る">
+    <defs>
+      <filter id="materials1-shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".14"/></filter>
+      <linearGradient id="materials1-main" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <marker id="materials1-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1.5 L9 5 L2 8.5 Q0.5 5 2 1.5Z" fill="#2f8fd0" stroke="#2f8fd0" stroke-linejoin="round"/></marker>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <rect x="0" y="0" width="960" height="300" rx="24" fill="#f4f9fd"/>
+        <path d="M0 262 Q120 236 240 262 T480 262 T720 262 T960 262" fill="none" stroke="#e6f3fc" stroke-width="10" stroke-linecap="round"/>
+        <path d="M0 284 Q120 262 240 284 T480 284 T720 284 T960 284" fill="none" stroke="#cfe6f7" stroke-width="3" stroke-linecap="round"/>
+      </g>
+
+      <g class="gs" data-s="1">
+        <rect x="20" y="26" width="270" height="214" rx="22" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#materials1-shadow)"/>
+        <!-- 話している人 -->
+        <circle cx="78" cy="100" r="30" fill="#a8d8f5"/>
+        <circle cx="68" cy="98" r="3.5" fill="#1b5f96"/><circle cx="88" cy="98" r="3.5" fill="#1b5f96"/>
+        <path d="M70 112 Q78 119 86 112" fill="none" stroke="#1b5f96" stroke-width="3" stroke-linecap="round"/>
+        <rect x="46" y="136" width="64" height="48" rx="24" fill="#70c0f0"/>
+        <!-- 吹き出し -->
+        <path d="M134 56 h132 a14 14 0 0 1 14 14 v46 a14 14 0 0 1 -14 14 h-100 l-20 18 v-18 h-12 a14 14 0 0 1 -14 -14 v-46 a14 14 0 0 1 14 -14z" fill="#ff8f3a"/>
+        <text x="200" y="86" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">編集さん、</text>
+        <text x="200" y="110" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">ここに画像</text>
+        <text x="155" y="210" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2d3d">撮りながら言うだけ</text>
+        <text x="155" y="229" text-anchor="middle" font-size="13" fill="#4b5b6e">少し間を空けて、単独で言う</text>
+      </g>
+
+      <g class="gs" data-s="2">
+        <path class="flow" d="M300 104 H346" stroke="#2f8fd0" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 7" fill="none" marker-end="url(#materials1-arrow)"/>
+        <text x="650" y="56" text-anchor="middle" font-size="16" font-weight="800" fill="#1b5f96">動画の流れ</text>
+        <rect x="362" y="76" width="218" height="56" rx="18" fill="#e6f3fc" stroke="#cfe6f7" stroke-width="2"/>
+        <text x="471" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2d3d">直前の話（水を飲む）</text>
+        <rect x="590" y="76" width="110" height="56" rx="18" fill="#fff3e8" stroke="#ff8f3a" stroke-width="2.5" stroke-dasharray="6 5"/>
+        <text x="645" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#c25a12">合図の声</text>
+        <text x="645" y="121" text-anchor="middle" font-size="13" font-weight="700" fill="#c25a12">→ 切る</text>
+        <rect x="710" y="76" width="226" height="56" rx="18" fill="#e6f3fc" stroke="#cfe6f7" stroke-width="2"/>
+        <text x="823" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2d3d">次の話</text>
+      </g>
+
+      <g class="gs" data-s="3">
+        <path d="M471 136 V164" stroke="#2f8fd0" stroke-width="3" stroke-linecap="round" fill="none" marker-end="url(#materials1-arrow)"/>
+        <rect x="381" y="170" width="180" height="76" rx="20" fill="url(#materials1-main)" filter="url(#materials1-shadow)"/>
+        <!-- 画像の絵 -->
+        <rect x="397" y="187" width="40" height="32" rx="6" fill="#fff"/>
+        <circle cx="427" cy="196" r="4" fill="#ff8f3a"/>
+        <path d="M400 216 L411 203 L420 211 L426 206 L434 216Z" fill="#70c0f0"/>
+        <text x="497" y="202" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">画像が入る</text>
+        <text x="471" y="234" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">内容に合う持ち込み画像</text>
       </g>
     </g>
   </svg>
@@ -52,31 +86,77 @@
     <li>画像が足りないときは、画像を作るための依頼文（生成 AI に渡す文）を書いて渡します。TotonouMovie は画像を生成しません</li>
   </ul>
   <h3>3つのレイアウト</h3>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 250" role="img" aria-label="画像の3つのレイアウト：分割、収める、全画面">
-    <g font-family="sans-serif">
-      <g transform="translate(15,10)">
-        <rect width="270" height="152" rx="10" fill="#d8cfc2"/>
-        <rect x="0" y="0" width="108" height="152" rx="10" fill="#c7b9a6"/><circle cx="54" cy="62" r="22" fill="#e8c4a8"/><rect x="26" y="88" width="56" height="64" rx="22" fill="#a89580"/>
-        <rect x="108" y="0" width="162" height="152" fill="#f1ece4"/><rect x="128" y="20" width="122" height="112" rx="10" fill="#fff" stroke="#ddd"/><rect x="140" y="32" width="98" height="88" rx="6" fill="#9fc4e8"/>
-        <text x="135" y="186" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2126">分割</text>
-        <text x="135" y="208" text-anchor="middle" font-size="12.5" fill="#4a515b">人物を片側に残し、反対側にカード</text>
-        <text x="135" y="228" text-anchor="middle" font-size="12.5" fill="#2d6b5f">縦長のスクショ・SNS 投稿（横動画だけ）</text>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 17, "pose": "point", "id": "fig_materials_2_1", "t": "分割は、人を片側に残して、反対側に画像のカードを出すよ。横動画だけだよ。"}, {"s": 2, "x": 50, "pose": "explain", "id": "fig_materials_2_2", "t": "収めるは、すりガラスの上に画像全体を収めるよ。横長の画面にぴったり。"}, {"s": 3, "x": 83, "pose": "point", "id": "fig_materials_2_3", "t": "全画面は、画面いっぱいに出して、ゆっくり寄るよ。写真に向いてるんだ。"}, {"s": 4, "x": 50, "pose": "good", "id": "fig_materials_2_4", "t": "画像に合わせて、この3つから選ばれるよ。あとから変えてもいいんだ。"}]'>
+  <svg viewBox="0 0 960 300" role="img" aria-label="画像の3つのレイアウト：分割、収める、全画面">
+    <defs>
+      <filter id="materials2-shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#1e5a96" flood-opacity=".13"/></filter>
+      <linearGradient id="materials2-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8d8f5"/><stop offset="1" stop-color="#e6f3fc"/></linearGradient>
+      <linearGradient id="materials2-main" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <clipPath id="materials2-c1"><rect x="0" y="0" width="260" height="146" rx="12"/></clipPath>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <rect x="0" y="0" width="960" height="300" rx="24" fill="#f4f9fd"/>
+        <path d="M0 40 Q160 16 320 40 T640 40 T960 40" fill="none" stroke="#e6f3fc" stroke-width="10" stroke-linecap="round"/>
       </g>
-      <g transform="translate(315,10)">
-        <rect width="270" height="152" rx="10" fill="#e9e3d9"/>
-        <rect x="30" y="18" width="210" height="116" rx="8" fill="#fff" stroke="#ddd"/><rect x="42" y="30" width="186" height="92" rx="4" fill="#b8d4ef"/><rect x="52" y="40" width="80" height="10" rx="3" fill="#fff"/>
-        <text x="135" y="186" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2126">収める</text>
-        <text x="135" y="208" text-anchor="middle" font-size="12.5" fill="#4a515b">すりガラスの上に画像全体を収める</text>
-        <text x="135" y="228" text-anchor="middle" font-size="12.5" fill="#2d6b5f">横長の画面・製品のページ</text>
-      </g>
-      <g transform="translate(615,10)">
-        <rect width="270" height="152" rx="10" fill="#9bc0a8"/><circle cx="200" cy="44" r="20" fill="#ffe7a8"/><path d="M0 120 L70 70 L130 110 L190 60 L270 118 V152 H0z" fill="#5f8f6f"/>
-        <path d="M110 76 l20 0 m-10 -10 v20" stroke="#fff" stroke-width="3" opacity=".8"/>
-        <text x="135" y="186" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2126">全画面</text>
-        <text x="135" y="208" text-anchor="middle" font-size="12.5" fill="#4a515b">画面いっぱいに出し、ゆっくり寄る</text>
-        <text x="135" y="228" text-anchor="middle" font-size="12.5" fill="#2d6b5f">写真</text>
-      </g>
+
+      <!-- 分割 -->
+      <g class="gs" data-s="1"><g transform="translate(20,18)">
+        <rect width="290" height="266" rx="22" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#materials2-shadow)"/>
+        <g transform="translate(15,15)" clip-path="url(#materials2-c1)">
+          <rect width="260" height="146" fill="#e6f3fc"/>
+          <rect width="104" height="146" fill="#a8d8f5"/>
+          <circle cx="52" cy="58" r="22" fill="#fff"/>
+          <rect x="22" y="86" width="60" height="70" rx="26" fill="#2f8fd0"/>
+          <rect x="122" y="16" width="122" height="114" rx="12" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+          <rect x="134" y="28" width="98" height="90" rx="8" fill="#70c0f0"/>
+          <path d="M138 114 L166 84 L184 100 L198 88 L228 114Z" fill="#2f8fd0"/>
+        </g>
+        <text x="145" y="190" text-anchor="middle" font-size="19" font-weight="900" fill="#1f2d3d">分割</text>
+        <text x="145" y="214" text-anchor="middle" font-size="14" fill="#4b5b6e">人物を片側に残し、反対側にカード</text>
+        <rect x="4" y="227" width="282" height="26" rx="13" fill="#e6f3fc"/>
+        <text x="145" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5f96">縦長のスクショ・SNS 投稿（横動画だけ）</text>
+      </g></g>
+
+      <!-- 収める -->
+      <g class="gs" data-s="2"><g transform="translate(335,18)">
+        <rect width="290" height="266" rx="22" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#materials2-shadow)"/>
+        <g transform="translate(15,15)" clip-path="url(#materials2-c1)">
+          <rect width="260" height="146" fill="#a8d8f5"/>
+          <circle cx="40" cy="30" r="36" fill="#e6f3fc" opacity=".8"/>
+          <circle cx="220" cy="120" r="44" fill="#70c0f0" opacity=".5"/>
+          <rect width="260" height="146" fill="#fff" opacity=".35"/>
+          <rect x="30" y="18" width="200" height="110" rx="10" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+          <rect x="40" y="28" width="180" height="90" rx="6" fill="#e6f3fc"/>
+          <rect x="50" y="38" width="80" height="10" rx="5" fill="#2f8fd0"/>
+          <rect x="50" y="56" width="150" height="8" rx="4" fill="#a8d8f5"/>
+          <rect x="50" y="70" width="120" height="8" rx="4" fill="#a8d8f5"/>
+          <rect x="50" y="88" width="56" height="20" rx="10" fill="#ff8f3a"/>
+        </g>
+        <text x="145" y="190" text-anchor="middle" font-size="19" font-weight="900" fill="#1f2d3d">収める</text>
+        <text x="145" y="214" text-anchor="middle" font-size="14" fill="#4b5b6e">すりガラスの上に画像全体を収める</text>
+        <rect x="45" y="227" width="200" height="26" rx="13" fill="#e6f3fc"/>
+        <text x="145" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5f96">横長の画面・製品のページ</text>
+      </g></g>
+
+      <!-- 全画面 -->
+      <g class="gs" data-s="3"><g transform="translate(650,18)">
+        <rect width="290" height="266" rx="22" fill="#fff" stroke="#cfe6f7" stroke-width="2" filter="url(#materials2-shadow)"/>
+        <g transform="translate(15,15)" clip-path="url(#materials2-c1)">
+          <rect width="260" height="146" fill="url(#materials2-sky)"/>
+          <circle cx="226" cy="28" r="15" fill="#fff3e8" stroke="#ff8f3a" stroke-width="3"/>
+          <path d="M0 116 L66 66 L120 104 L180 58 L260 112 V146 H0Z" fill="#70c0f0"/>
+          <path d="M0 136 L80 100 L150 128 L210 96 L260 120 V146 H0Z" fill="#2f8fd0"/>
+          <!-- ゆっくり寄る -->
+          <g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round">
+            <path d="M84 40 h-14 v14"/><path d="M176 40 h14 v14"/><path d="M84 106 h-14 v-14"/><path d="M176 106 h14 v-14"/>
+          </g>
+        </g>
+        <text x="145" y="190" text-anchor="middle" font-size="19" font-weight="900" fill="#1f2d3d">全画面</text>
+        <text x="145" y="214" text-anchor="middle" font-size="14" fill="#4b5b6e">画面いっぱいに出し、ゆっくり寄る</text>
+        <rect x="110" y="227" width="70" height="26" rx="13" fill="#e6f3fc"/>
+        <text x="145" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5f96">写真</text>
+      </g></g>
     </g>
   </svg>
   </div>
@@ -85,17 +165,53 @@
 
 <section>
   <h2 id="bgm">BGM</h2>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 200" role="img" aria-label="BGM の音量：話していない間は少し聞こえ、話している間は自動で下がり、章カードの間は止まる">
-    <g font-family="sans-serif">
-      <text x="10" y="30" font-size="13" font-weight="800" fill="#4a515b">🎙 声</text>
-      <g fill="#2d6b5f"><rect x="90" y="18" width="180" height="16" rx="4"/><rect x="330" y="18" width="160" height="16" rx="4"/><rect x="640" y="18" width="200" height="16" rx="4"/></g>
-      <rect x="540" y="10" width="60" height="150" rx="6" fill="#1f4f46" opacity=".12"/><text x="570" y="178" text-anchor="middle" font-size="12" fill="#1f4f46" font-weight="700">章カード</text>
-      <text x="10" y="110" font-size="13" font-weight="800" fill="#4a515b">🎵 BGM</text>
-      <path d="M70 90 L90 90 L100 130 L265 130 L280 90 L325 90 L340 130 L485 130 L500 90 L540 90 L550 150 L590 150 L600 90 L630 90 L645 130 L835 130 L850 90 L880 90" stroke="#ff7a30" stroke-width="3.5" fill="none"/>
-      <text x="300" y="80" text-anchor="middle" font-size="12" fill="#c4551a">間では少し聞こえる</text>
-      <text x="180" y="150" text-anchor="middle" font-size="12" fill="#c4551a">話している間は下がる</text>
-      <text x="570" y="140" text-anchor="middle" font-size="11" fill="#c4551a">止まる</text>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 52, "pose": "point", "id": "fig_materials_3_1", "t": "上の青い帯は、あなたが話しているところだよ。"}, {"s": 2, "x": 30, "pose": "explain", "id": "fig_materials_3_2", "t": "話している間は、BGMが自動で下がるよ。話の切れ目では少し聞こえるんだ。"}, {"s": 3, "x": 64, "pose": "point", "id": "fig_materials_3_3", "t": "章カードの間は、BGMが止まるよ。"}, {"s": 4, "x": 50, "pose": "good", "id": "fig_materials_3_4", "t": "声のじゃまをしないように、音量は自動で調整されるよ。"}]'>
+  <svg viewBox="0 0 960 260" role="img" aria-label="BGM の音量：話していない間は少し聞こえ、話している間は自動で下がり、章カードの間は止まる">
+    <defs>
+      <filter id="materials3-shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e5a96" flood-opacity=".13"/></filter>
+      <linearGradient id="materials3-voice" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif">
+      <g class="gbg">
+        <rect x="0" y="0" width="960" height="260" rx="24" fill="#f4f9fd"/>
+        <path d="M0 246 Q120 226 240 246 T480 246 T720 246 T960 246" fill="none" stroke="#e6f3fc" stroke-width="8" stroke-linecap="round"/>
+        <!-- 行の見出し -->
+        <rect x="16" y="30" width="86" height="40" rx="20" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <g transform="translate(30,38)" fill="none" stroke="#2f8fd0" stroke-width="2.5" stroke-linecap="round">
+          <rect x="4" y="0" width="10" height="16" rx="5" fill="#2f8fd0"/><path d="M0 11 a9 9 0 0 0 18 0"/><path d="M9 20 v4"/>
+        </g>
+        <text x="74" y="56" text-anchor="middle" font-size="16" font-weight="800" fill="#1f2d3d">声</text>
+        <rect x="16" y="106" width="86" height="40" rx="20" fill="#fff" stroke="#cfe6f7" stroke-width="2"/>
+        <g transform="translate(28,114)" fill="#ff8f3a">
+          <path d="M6 18 V3 L18 0 V15" fill="none" stroke="#ff8f3a" stroke-width="2.5" stroke-linejoin="round"/><circle cx="4" cy="18" r="4"/><circle cx="16" cy="15" r="4"/>
+        </g>
+        <text x="72" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#1f2d3d">BGM</text>
+        <!-- 音量の目安線 -->
+        <path d="M120 105 H935 M120 145 H935" stroke="#dcebf6" stroke-width="2" stroke-dasharray="4 6"/>
+      </g>
+
+      <g class="gs" data-s="3">
+        <rect x="580" y="22" width="60" height="196" rx="14" fill="#e6f3fc" stroke="#a8d8f5" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="610" y="240" text-anchor="middle" font-size="14" font-weight="800" fill="#1b5f96">章カード</text>
+        <text x="610" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#c25a12">止まる</text>
+      </g>
+
+      <g class="gs" data-s="1">
+        <rect x="130" y="40" width="180" height="20" rx="10" fill="url(#materials3-voice)"/>
+        <rect x="370" y="40" width="160" height="20" rx="10" fill="url(#materials3-voice)"/>
+        <rect x="680" y="40" width="200" height="20" rx="10" fill="url(#materials3-voice)"/>
+        <text x="220" y="32" text-anchor="middle" font-size="13" fill="#4b5b6e">話している</text>
+        <text x="450" y="32" text-anchor="middle" font-size="13" fill="#4b5b6e">話している</text>
+        <text x="780" y="32" text-anchor="middle" font-size="13" fill="#4b5b6e">話している</text>
+      </g>
+
+      <g class="gs" data-s="2">
+        <path d="M110 105 L130 105 L140 145 L305 145 L320 105 L365 105 L380 145 L525 145 L540 105 L580 105 L590 190 L630 190 L640 105 L670 105 L685 145 L875 145 L890 105 L930 105" stroke="#ff8f3a" stroke-width="4" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+        <rect x="270" y="78" width="140" height="22" rx="11" fill="#fff3e8"/>
+        <text x="340" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#c25a12">間では少し聞こえる</text>
+        <rect x="150" y="155" width="150" height="22" rx="11" fill="#fff3e8"/>
+        <text x="225" y="171" text-anchor="middle" font-size="13" font-weight="700" fill="#c25a12">話している間は下がる</text>
+      </g>
     </g>
   </svg>
   </div>
@@ -109,14 +225,14 @@
 <section>
   <h2 id="glossary">人名・用語の表記</h2>
   <p>人名・社名・商品名・専門用語の正しい表記を、最初に1回だけ伝えます。文字起こし・誤字の修正・字幕・検査の4か所で使われるので、同じ間違いを何度も直さずに済みます。</p>
-  <div class="cmd tm"><span class="lab">「今回だけの追加の指示」に書く例</span><pre>表記は「山田太郎」「ととのう」「整え方メソッド」</pre></div>
+  <div class="cmd tm"><span class="lab">「今回だけ伝えたいこと」に書く例</span><pre>表記は「山田太郎」「ととのう」「整え方メソッド」</pre></div>
   <p>2本以上の動画で同じ直しが出たら、共通の辞書に足すかを提案されます（自動では足しません）。</p>
 </section>
 
 <section>
   <h2 id="all">まとめて渡す書き方</h2>
-  <div class="cmd tm os-mac"><span class="lab">「今回だけの追加の指示」</span><pre>画像は /Users/あなたの名前/Pictures/talk-images に入っています。BGM は /Users/あなたの名前/Music/calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
-  <div class="cmd tm os-win"><span class="lab">「今回だけの追加の指示」</span><pre>画像は C:\Users\あなたの名前\Pictures\talk-images に入っています。BGM は C:\Users\あなたの名前\Music\calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <div class="cmd tm os-mac"><span class="lab">「今回だけ伝えたいこと」</span><pre>画像は /Users/あなたの名前/Pictures/talk-images に入っています。BGM は /Users/あなたの名前/Music/calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
+  <div class="cmd tm os-win"><span class="lab">「今回だけ伝えたいこと」</span><pre>画像は C:\Users\あなたの名前\Pictures\talk-images に入っています。BGM は C:\Users\あなたの名前\Music\calm.mp3（権利確認済み）。表記は「山田太郎」「ととのう」。</pre></div>
   <p>最初から書かなくても、①の確認で「画像フォルダ・BGM の曲・人名や用語の表記があれば」と聞かれるので、そのときに答えても同じです。</p>
   <div class="callout info"><b>権利と出所の記録</b><p>持ち込んだ画像と曲の権利は、あなたが確認します。TotonouMovie は、どのファイルをどこで使ったかの記録（<code>work/assets_log.json</code>）を残します。</p></div>
 </section>

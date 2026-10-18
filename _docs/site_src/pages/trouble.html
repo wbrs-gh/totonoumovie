@@ -18,14 +18,15 @@
 <section class="finder-scope">
   <h2 id="install">導入のとき</h2>
   <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
-    <tr><td><code>brew: command not found</code></td><td>Homebrew の導入の最後に出る「Next steps」の2行を実行し、ターミナルを開き直します</td></tr>
+    <tr><td><code>python</code> と打つと Microsoft Store が開く</td><td>設定 →「アプリ」→「アプリの詳細設定」→「アプリ実行エイリアス」で、python と python3 をオフにします。そのあと PowerShell を開き直します</td></tr>
+    <tr><td><code>brew: command not found</code></td><td>Homebrew の導入の最後に出る「Next steps」の下に出た行（Apple シリコンの Mac なら3行）を実行し、ターミナルを開き直します</td></tr>
     <tr><td>winget が見つからない</td><td>Microsoft Store で「アプリ インストーラー」を更新します</td></tr>
     <tr><td><code>claude</code> が見つからない（command not found・認識されません）</td><td>Claude Code のターミナル版が入っていないか、入れたあとに開き直していません。開き直して <code>claude --version</code> で確かめます</td></tr>
     <tr><td><code>uv</code>・<code>ffmpeg</code>・<code>gh</code>・<code>python</code> が見つからない</td><td>ターミナル（PowerShell）を開き直します。Windows で直らなければパソコンを再起動します</td></tr>
     <tr><td><code>/plugin isn't available in this environment</code></td><td>デスクトップアプリの Code タブでは /plugin が使えません。ターミナル（PowerShell）で <code>claude plugin marketplace add</code> から始まる行を送ります（<a href="install.html#totonou">入れかた</a>）</td></tr>
     <tr><td><code>marketplace add</code> でエラー</td><td>TotonouMovie フォルダがホーム（ユーザー）フォルダの直下にあるか確かめます。中に README.md と plugins フォルダが見えるフォルダが正解です</td></tr>
     <tr><td>急に「failed to load」と出る</td><td>TotonouMovie フォルダを消したり動かしたりしていないか確かめます。元の場所に戻せば直ります</td></tr>
-    <tr><td><code>gh repo clone</code> で「Could not resolve to a Repository」</td><td>招待を受けていない、または別のアカウントでログインしています。招待メールの承認と、<code>gh auth status</code> のアカウント名を確かめます</td></tr>
+    <tr><td><code>git clone</code> で「command not found」「認識されません」</td><td>git が入っていません。Mac は <code>xcode-select --install</code>、Windows は <code>winget install --id=Git.Git -e</code> で入れて、ターミナル（PowerShell）を開き直します</td></tr>
     <tr><td><code>totonoumovie: command not found</code>・認識されません</td><td>入れかたの「どこからでも起動できるようにする」のあと、ターミナル（PowerShell）を開き直します。それでもだめなら、<span class="os-mac" style="display:inline"><code>~/totonoumovie/totonoumovie</code></span><span class="os-win" style="display:inline"><code>$HOME\totonoumovie\totonoumovie.cmd</code></span> で直接起動できます</td></tr>
   </tbody></table></div>
 
@@ -35,7 +36,7 @@
     <tr><td>黄色い帯「初期設定がまだのようです」</td><td>Claude Code で「TotonouMovie のセットアップをして」と話しかけ、PASS まで進めます</td></tr>
     <tr><td>赤い帯「同期フォルダの中です」</td><td>Dropbox・iCloud・Google ドライブ・OneDrive の外のフォルダ（例：<span class="os-mac" style="display:inline">~/Movies/totonou</span><span class="os-win" style="display:inline">Videos\totonou</span>）に移動してから起動します</td></tr>
     <tr><td>「claude コマンドが見つかりません」</td><td>Claude Code のターミナル版を入れて、ターミナルを開き直します（<code>claude --version</code> で確認）</td></tr>
-    <tr><td>プロジェクトが一覧に出ない</td><td>totonoumovie は起動したフォルダの中を一覧します。プロジェクトのある作業フォルダで起動し直します</td></tr>
+    <tr><td>プロジェクトが一覧に出ない</td><td>totonoumovie は、totonoumovie のフォルダの中の <code>projects</code> を一覧します。前の版（Claude Code だけ）で作った動画は、<b>🌱 自分好み</b> →「🏠 拠点・引き継ぎ」で移します</td></tr>
     <tr><td>動画が再生されない・カクカクする</td><td>右下に「軽い再生用の動画を準備中」と出ている間は少し待ちます。Google Chrome を使ってください</td></tr>
     <tr><td>画面の字幕と完成の見た目が違う</td><td>画面の重ね表示は近似です。正確な見た目は「📷 静止画」で確かめます</td></tr>
     <tr><td>カットの承認で「候補または素材が変更されています」</td><td>候補を作ったあとに素材や字幕の元が変わりました。「候補を作り直す」を押してから選び直します</td></tr>
@@ -64,7 +65,7 @@
 
   <h2 id="edit">編集・書き出しのとき</h2>
   <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
-    <tr><td>書き出しが途中で止まる・遅い</td><td>作業フォルダがクラウド同期の中にないか確かめます。ほかの重い作業と重なると、数倍遅くなることもあります</td></tr>
+    <tr><td>書き出しが途中で止まる・遅い</td><td>totonoumovie のフォルダがクラウド同期の中にないか確かめます（中にあるときは、書き出しの間だけ同期を一時停止）。ほかの重い作業と重なると、数倍遅くなることもあります</td></tr>
     <tr><td>字幕の字体がいつもと違う</td><td>書き出しのときに字体をインターネットから取得します。接続を確かめます。オフラインだと標準の字体に置き換わります</td></tr>
     <tr><td>はじめての文字起こしが遅い</td><td>最初の1回は、約3GBの文字起こしモデルを取得します。2回目からは速くなります</td></tr>
     <tr><td>字幕が声より早い・遅い</td><td>編集画面で字幕をドラッグして合わせるか、「1分10秒あたりの字幕が声より早い」と AI に伝えます</td></tr>

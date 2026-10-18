@@ -2,24 +2,36 @@
 <header class="page-head">
   <div class="eyebrow">導入</div>
   <h1>入れかた</h1>
-  <p class="lead">上から順に、黒い枠のコマンドを「コピー」→貼り付け→Enter で進めます。終わった手順は「できた」を押すと、次の手順まで自動で進みます。<b>右上で Mac／Windows を選んでから</b>始めてください。</p>
+  <p class="lead">上から順に、黒い枠のコマンドを「コピー」→貼り付け→Enter で進めます。終わった手順は「できた」を押すと、次の手順まで自動で進みます。<b>まず下のボタンで、あなたのパソコン（Mac か Windows）を選んでください。</b>選んだほうの手順だけが出ます。</p>
 </header>
+<div class="os-pick"></div>
 <div class="tt-tip" data-pose="point" data-id="site_install">コピーボタンを押して、貼り付けて、エンターを押すだけだよ。終わったら「できた」を押してね。次の手順まで連れていくよ。</div>
 
 
 <section>
+  <div class="two-things">
+    <div><span class="tag">A</span><b>編集の中身</b><em>TotonouMovie（大文字の T と M）</em><p>Claude Code に入れる追加機能（プラグイン）。動画を実際に編集するのはこちらです。A では、その準備（道具と Claude Code）もいっしょに入れます。</p></div>
+    <div><span class="tag">B</span><b>画面のアプリ</b><em>totonoumovie（ぜんぶ小文字）</em><p>A をブラウザの画面から操作するためのアプリ。直したり確かめたりは、ここで行います。</p></div>
+  </div>
+  <div class="checklist">
+    <b>始める前に、この2つを用意してください</b>
+    <label><input type="checkbox"> Claude の有料プラン（Pro・Max・Team・Enterprise のどれか）のアカウント</label>
+    <label><input type="checkbox"> 配布元から受け取った <code>TotonouMovie-v2.2.0.zip</code></label>
+  </div>
   <div class="video"><video src="videos/v02-install-mac.mp4" poster="videos/v02-install-mac.jpg" controls preload="none" playsinline class="os-mac"></video><video src="videos/v03-install-win.mp4" poster="videos/v03-install-win.jpg" controls preload="none" playsinline class="os-win"></video></div>
   <div class="video-meta"><span>🎬 先に動画で流れを見ておくと、迷いません</span></div>
-  <div class="callout info"><b>TotonouMovie をすでに使っている方</b><p>Claude Code で「TotonouMovie のセットアップをして」が PASS まで済んでいれば、<a href="#app">後半の「B. totonoumovie を入れる」</a>だけで大丈夫です。</p></div>
+  <div class="callout info"><b>動画との違い</b><p>動画の中の「GitHub の招待を受ける」「GitHub にログインする」は、今は要りません。画面のアプリは公開しているので、下の手順の <code>git clone</code> の1行だけで入ります（GitHub のアカウントも不要です）。</p></div>
+  <div class="callout info"><b>TotonouMovie をすでに使っている方</b><p>Claude Code で「TotonouMovie のセットアップをして」が PASS まで済んでいれば、<a href="#app">後半の「B. 画面のアプリ（totonoumovie）を入れる」</a>だけで大丈夫です。</p></div>
 </section>
 
 <div data-progress="install">
 
 <!-- ======================= A. TotonouMovie ======================= -->
 <section>
-  <h2 id="totonou"><span class="num">A</span>TotonouMovie を入れる</h2>
+  <h2 id="totonou"><span class="num">A</span>準備と、編集の中身（TotonouMovie）を入れる</h2>
   <p>動画を編集する中身（TotonouMovie）を、Claude Code に入れます。配布元の導入ガイドと同じ手順です。</p>
 
+  <div class="os-pick mini"></div>
   <!-- Mac -->
   <div class="os-mac">
     <div class="step" data-id="m-term" data-n="1"><h3>ターミナルを開く<span class="time">10秒</span></h3>
@@ -34,12 +46,16 @@
         <li>Mac のパスワードを聞かれたら、入力して Enter（入力中は文字が見えませんが、入っています）</li>
         <li>「Press RETURN」と出たら Enter。開発用の部品（Xcode のコマンドラインツール）の取得が始まったら、数分〜十数分待ちます</li>
       </ul>
-      <div class="callout warn"><b>最後に「Next steps」が出たら</b><p>表示された2行のコマンドを順に貼り付けて実行し、ターミナルを開き直してから、もう一度 <code>brew -v</code> で確かめます。入れたのに「command not found」と出るときは、この2行がまだ実行されていません。</p></div>
+      <div class="callout warn"><b>最後に「==&gt; Next steps:」が出たら</b><p>その下に出ている行（<code>echo</code> や <code>eval</code> で始まる行）を、上から順に貼り付けて実行します。Apple シリコンの Mac（M1〜M5）なら、次の3行と同じです。入れたのに「command not found」と出るときは、ここがまだです。</p></div>
+      <div class="cmd"><span class="lab">ターミナル（Apple シリコンの Mac）</span><pre>echo >> ~/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"</pre></div>
+      <p>ターミナルを閉じて開き直し、もう一度 <code>brew -v</code> で確かめます。</p>
     </div>
     <div class="step" data-id="m-tools" data-n="3"><h3>動画編集の道具をまとめて入れる<span class="time">3〜10分</span></h3>
-      <div class="cmd"><span class="lab">ターミナル</span><pre>brew install uv ffmpeg node gh python</pre></div>
+      <div class="cmd"><span class="lab">ターミナル</span><pre>brew install uv ffmpeg node python</pre></div>
       <p class="result">最後にプロンプト（% の記号）が戻る</p>
-      <p><span class="term" data-tip="Python のプログラムを動かす道具。TotonouMovie の処理に使います。">uv</span>・<span class="term" data-tip="動画と音声を処理する道具。">ffmpeg</span>・<span class="term" data-tip="動画の書き出しに使う道具。">Node.js</span> は TotonouMovie に、<span class="term" data-tip="GitHub を操作する道具。totonoumovie を入れるときに使います。">gh</span>・Python は totonoumovie に使います。</p>
+      <p><span class="term" data-tip="Python のプログラムを動かす道具。TotonouMovie の処理に使います。">uv</span>・<span class="term" data-tip="動画と音声を処理する道具。">ffmpeg</span>・<span class="term" data-tip="動画の書き出しに使う道具。">Node.js</span> は TotonouMovie に、Python は totonoumovie に使います。totonoumovie を入れるときに使う <span class="term" data-tip="プログラムを取ってくる道具。Homebrew を入れたときに一緒に入っています。">git</span> は、Homebrew と一緒に入っています。</p>
     </div>
     <div class="step" data-id="m-claude" data-n="4"><h3>Claude Code のターミナル版を入れる<span class="time">3分</span></h3>
       <div class="cmd"><span class="lab">ターミナル</span><pre>claude --version</pre></div>
@@ -48,6 +64,16 @@
       <div class="cmd"><span class="lab">ターミナル</span><pre>curl -fsSL https://claude.ai/install.sh | bash</pre></div>
       <p>終わったらターミナルの窓を閉じて新しく開き、もう一度 <code>claude --version</code> で確かめます。</p>
       <div class="callout info"><b>なぜターミナル版？</b><p>プラグインを入れるコマンドは、デスクトップアプリの Code タブでは使えないためです。入れたあとは、デスクトップアプリとターミナル版のどちらからでも TotonouMovie を使えます。</p></div>
+    </div>
+    <div class="step" data-id="m-login"><h3>Claude Code にログインする（はじめてのときだけ）<span class="time">2分</span></h3>
+      <div class="cmd"><span class="lab">ターミナル</span><pre>claude</pre></div>
+      <ol>
+        <li>英語の画面が出ても大丈夫です。文字の色（テーマ）を聞かれたら、そのまま <kbd>Enter</kbd></li>
+        <li>ログインのしかたを聞かれたら、<b>Claude account with subscription</b>（Pro・Max・Team・Enterprise のアカウント）を選んで <kbd>Enter</kbd></li>
+        <li>ブラウザが開くので、Claude にログインして「承認（Authorize）」を押します</li>
+        <li>ターミナルに戻り、<kbd>Enter</kbd> で進めます。「このフォルダを信頼するか」を聞かれたら、自分のフォルダなので <b>Yes</b></li>
+      </ol>
+      <p class="result">下に <code>&gt;</code> の入力欄が出る（ここに話しかけられる）。いったん <code>/exit</code> と入れて Enter で閉じます</p>
     </div>
     <div class="step" data-id="m-folder" data-n="5"><h3>TotonouMovie のフォルダを置く<span class="time">1分</span></h3>
       <ol>
@@ -62,7 +88,12 @@
   <!-- Windows -->
   <div class="os-win">
     <div class="step" data-id="w-ps" data-n="1"><h3>PowerShell を開く<span class="time">10秒</span></h3>
-      <p>スタートメニューで「PowerShell」と入力して開きます。<code>PS C:\Users\あなたの名前&gt;</code> と出た窓に、このページの黒い枠のコマンドを貼り付けて Enter を押します。</p>
+      <ol>
+        <li>画面左下のスタートボタン（Windows のマーク）を押し、そのまま「PowerShell」と入力します</li>
+        <li>出てきた候補の「<b>Windows PowerShell</b>」を押します（「ISE」と付いていないほう）</li>
+        <li>青か黒の窓に <code>PS C:\Users\あなたの名前&gt;</code> と出れば開けています</li>
+      </ol>
+      <p>このページの黒い枠の「コピー」を押し、PowerShell の窓の中で <kbd>Ctrl</kbd>＋<kbd>V</kbd>（または右クリック）で貼り付けて、<kbd>Enter</kbd> を押します。</p>
     </div>
     <div class="step" data-id="w-tools" data-n="2"><h3>道具を1行ずつ入れる<span class="time">5〜15分</span></h3>
       <p>1行ずつ貼り付けて Enter。終わって <code>PS C:\...&gt;</code> がもう一度出てから、次の行に進みます。</p>
@@ -70,14 +101,13 @@
       <div class="cmd"><span class="lab">PowerShell</span><pre>winget install --id=astral-sh.uv -e</pre></div>
       <div class="cmd"><span class="lab">PowerShell</span><pre>winget install --id=Gyan.FFmpeg -e</pre></div>
       <div class="cmd"><span class="lab">PowerShell</span><pre>winget install --id=OpenJS.NodeJS.LTS -e</pre></div>
-      <div class="cmd"><span class="lab">PowerShell</span><pre>winget install --id=GitHub.cli -e</pre></div>
       <div class="cmd"><span class="lab">PowerShell</span><pre>winget install --id=Python.Python.3.12 -e</pre></div>
       <ul>
         <li>はじめて winget を使うときは利用条件への同意を聞かれます。<kbd>Y</kbd> を入力して Enter</li>
         <li>「このアプリがデバイスに変更を加えることを許可しますか？」には「はい」</li>
       </ul>
-      <div class="callout warn"><b>全部終わったら、PowerShell と Claude Code をいったん両方閉じる</b><p>入れた道具を Windows に認識させるためです。開き直して、次の1行で確かめます。</p></div>
-      <div class="cmd"><span class="lab">PowerShell</span><pre>uv --version; node -v; ffmpeg -version; gh --version; python --version</pre></div>
+      <div class="callout warn"><b>全部終わったら、PowerShell をいったん閉じて開き直す</b><p>入れた道具を Windows に認識させるためです（Claude Code をすでに開いている方は、それも閉じます）。開き直して、次の1行で確かめます。</p></div>
+      <div class="cmd"><span class="lab">PowerShell</span><pre>uv --version; node -v; ffmpeg -version; git --version; python --version</pre></div>
       <p class="result">どれもバージョン（数字）が出る</p>
       <p>「認識されません」と出たものがあれば、パソコンを再起動してから、もう一度確かめます。Git for Windows を入れておくと、Claude Code のコマンドが安定し、日本語の文字化けも起きにくくなります。</p>
     </div>
@@ -87,6 +117,16 @@
       <p>「認識されません」と出たら入れます（管理者として開く必要はありません）。</p>
       <div class="cmd"><span class="lab">PowerShell</span><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
       <p>終わったら PowerShell を閉じて開き直し、もう一度 <code>claude --version</code> で確かめます。</p>
+    </div>
+    <div class="step" data-id="w-login"><h3>Claude Code にログインする（はじめてのときだけ）<span class="time">2分</span></h3>
+      <div class="cmd"><span class="lab">PowerShell</span><pre>claude</pre></div>
+      <ol>
+        <li>英語の画面が出ても大丈夫です。文字の色（テーマ）を聞かれたら、そのまま <kbd>Enter</kbd></li>
+        <li>ログインのしかたを聞かれたら、<b>Claude account with subscription</b>（Pro・Max・Team・Enterprise のアカウント）を選んで <kbd>Enter</kbd></li>
+        <li>ブラウザが開くので、Claude にログインして「承認（Authorize）」を押します</li>
+        <li>PowerShell に戻り、<kbd>Enter</kbd> で進めます。「このフォルダを信頼するか」を聞かれたら、自分のフォルダなので <b>Yes</b></li>
+      </ol>
+      <p class="result">下に <code>&gt;</code> の入力欄が出る（ここに話しかけられる）。いったん <code>/exit</code> と入れて Enter で閉じます</p>
     </div>
     <div class="step" data-id="w-folder" data-n="4"><h3>TotonouMovie のフォルダを置く<span class="time">1分</span></h3>
       <ol>
@@ -107,84 +147,72 @@
     <p class="result">Successfully installed plugin: totonou-movie@totonou</p>
     <div class="cmd"><span class="lab">ターミナル・PowerShell</span><pre>claude plugin list</pre></div>
     <p class="result">totonou-movie@totonou と enabled が出る</p>
-    <p>開いていた Claude Code（デスクトップアプリかターミナル版）を一度閉じて、開き直します。</p>
+    <p>開いていた Claude Code があれば、一度閉じます（次の手順で開き直します）。</p>
   </div>
 
   <div class="step" data-id="setup" data-n="✦"><h3>セットアップと動作テスト<span class="time">10〜20分</span></h3>
-    <p>Claude Code を開きます（デスクトップアプリは Code タブでフォルダを選んで始める。ターミナル版は <code>claude</code> と入力）。はじめてのフォルダでは「信頼するか」を聞かれるので、自分のフォルダなら Yes。そして、こう話しかけます。</p>
+    <p><span class="os-mac" style="display:inline">ターミナル</span><span class="os-win" style="display:inline">PowerShell</span> で、次の2行を順に入れて Claude Code を開きます（ホームフォルダで開きます）。</p>
+    <div class="cmd os-mac"><span class="lab">ターミナル（1行目）</span><pre>cd ~</pre></div>
+    <div class="cmd os-mac"><span class="lab">ターミナル（2行目）</span><pre>claude</pre></div>
+    <div class="cmd os-win"><span class="lab">PowerShell（1行目）</span><pre>cd ~</pre></div>
+    <div class="cmd os-win"><span class="lab">PowerShell（2行目）</span><pre>claude</pre></div>
+    <p>下の <code>&gt;</code> の入力欄に、次の言葉を貼り付けて <kbd>Enter</kbd> を押します。</p>
     <div class="cmd cc"><span class="lab">Claude Code に送る</span><pre>TotonouMovie のセットアップをして</pre></div>
     <p>足りないものの確認 → 作業フォルダと名前の設定 → 文字起こしのモデルの準備（約3GB）→ 3秒のテスト書き出し、と順に案内してくれます。</p>
     <div class="scroll"><table class="tbl"><thead><tr><th>聞かれること</th><th>答え方</th></tr></thead><tbody>
-      <tr><td>作業フォルダ</td><td>そのままで大丈夫です（<span class="os-mac" style="display:inline">ムービーの中の totonou</span><span class="os-win" style="display:inline">C:\Users\あなたの名前\Videos\totonou</span>）。Google ドライブ・OneDrive・iCloud・Dropbox の中は選びません</td></tr>
+      <tr><td>作業フォルダ</td><td>そのままで大丈夫です（<span class="os-mac" style="display:inline">ムービーの中の totonou</span><span class="os-win" style="display:inline">C:\Users\あなたの名前\Videos\totonou</span>）。Google ドライブ・OneDrive・iCloud・Dropbox の中は選びません（このあと B で totonoumovie を入れると、totonoumovie のフォルダの中の <code>projects</code> が作業フォルダになり、ここで決めた場所の動画も引き継げます）</td></tr>
       <tr><td>完成動画のコピー先（任意）</td><td>完成した動画だけを Google ドライブなどに置きたいときに指定。なければ「なし」</td></tr>
       <tr><td>名前</td><td>カットの承認と完成の確認の記録に残ります</td></tr>
       <tr><td>コマンドを実行してよいか</td><td><code>uv run</code> で始まる TotonouMovie の処理なら「Yes」。何度も聞かれるときは、内容を確かめて「Yes, and don't ask again」</td></tr>
     </tbody></table></div>
     <p class="result">最後のテスト書き出しで PASS</p>
+    <details class="more"><summary>Claude Code のデスクトップアプリを使っている方は</summary><p>デスクトップアプリでもセットアップできます。Code タブでホームフォルダを選んで始め、同じ言葉を送ります。プラグインを入れるコマンドだけは、デスクトップアプリでは使えません。</p></details>
   </div>
 </section>
 
 <!-- ======================= B. totonoumovie ======================= -->
 <section>
-  <h2 id="app"><span class="num">B</span>totonoumovie を入れる</h2>
+  <h2 id="app"><span class="num">B</span>画面のアプリ（totonoumovie）を入れる</h2>
   <p>画面で操作するアプリ（totonoumovie）を入れます。A が終わっていることが前提です。</p>
+  <div class="os-pick mini"></div>
 
-  <div class="step" data-id="gh-invite" data-n="1"><h3>GitHub の招待を受ける<span class="time">1分</span></h3>
-    <p>配布者から届いた GitHub の招待メールを開き、「<b>Accept invitation</b>」を押します。GitHub のアカウントが無い方は、先に <a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a> で作ってから、そのアカウント名を配布者に伝えます。</p>
+  <div class="step os-mac" data-id="m-clone" data-n="1"><h3>totonoumovie を入れる<span class="time">1分</span></h3>
+    <div class="cmd"><span class="lab">ターミナル</span><pre>git clone https://github.com/wbrs-gh/totonoumovie.git ~/totonoumovie</pre></div>
+    <p class="result">ホームフォルダに totonoumovie フォルダができる（GitHub のアカウントやログインは要りません）</p>
   </div>
-
-  <div class="step os-mac" data-id="m-gh" data-n="2"><h3>GitHub にログインする<span class="time">2分</span></h3>
-    <p class="muted">（A で <code>gh</code> と <code>python</code> を入れていない方は、先に <code>brew install gh python</code>）</p>
-    <div class="cmd"><span class="lab">ターミナル</span><pre>gh auth login</pre></div>
-    <p>質問には上から「<b>GitHub.com</b>」→「<b>HTTPS</b>」→「<b>Yes</b>」→「<b>Login with a web browser</b>」を選んで Enter。表示された8桁のコードを、開いたブラウザに入れて承認します。</p>
-    <p class="result">Logged in as あなたのアカウント名</p>
-  </div>
-  <div class="step os-win" data-id="w-gh" data-n="2"><h3>GitHub にログインする<span class="time">2分</span></h3>
-    <p class="muted">（A で GitHub.cli と Python を入れていない方は、先に手順2の最後の2行を実行）</p>
-    <div class="cmd"><span class="lab">PowerShell</span><pre>gh auth login</pre></div>
-    <p>質問には上から「<b>GitHub.com</b>」→「<b>HTTPS</b>」→「<b>Yes</b>」→「<b>Login with a web browser</b>」を選んで Enter。表示された8桁のコードを、開いたブラウザに入れて承認します。</p>
-    <p class="result">Logged in as あなたのアカウント名</p>
+  <div class="step os-win" data-id="w-clone" data-n="1"><h3>totonoumovie を入れる<span class="time">1分</span></h3>
+    <div class="cmd"><span class="lab">PowerShell</span><pre>git clone https://github.com/wbrs-gh/totonoumovie.git "$HOME\totonoumovie"</pre></div>
+    <p class="result">ユーザーフォルダに totonoumovie フォルダができる（GitHub のアカウントやログインは要りません）</p>
   </div>
 
-  <div class="step os-mac" data-id="m-clone" data-n="3"><h3>totonoumovie を入れる<span class="time">1分</span></h3>
-    <div class="cmd"><span class="lab">ターミナル</span><pre>gh repo clone wbrs-gh/totonoumovie ~/totonoumovie</pre></div>
-    <p class="result">ホームフォルダに totonoumovie フォルダができる</p>
-  </div>
-  <div class="step os-win" data-id="w-clone" data-n="3"><h3>totonoumovie を入れる<span class="time">1分</span></h3>
-    <div class="cmd"><span class="lab">PowerShell</span><pre>gh repo clone wbrs-gh/totonoumovie "$HOME\totonoumovie"</pre></div>
-    <p class="result">ユーザーフォルダに totonoumovie フォルダができる</p>
-  </div>
-
-  <div class="step os-mac" data-id="m-path" data-n="4"><h3>どこからでも起動できるようにする<span class="time">30秒</span></h3>
+  <div class="step os-mac" data-id="m-path" data-n="2"><h3>どこからでも起動できるようにする<span class="time">30秒</span></h3>
     <div class="cmd"><span class="lab">ターミナル</span><pre>echo 'export PATH="$HOME/totonoumovie:$PATH"' >> ~/.zshrc
 source ~/.zshrc</pre></div>
-    <p>これで、ターミナルに <code>totonoumovie</code> と入れるだけで起動できるようになります。</p>
+    <p>これで、ターミナルに <code>totonoumovie</code> と入れるだけで起動できるようになります。この2行は1回だけで大丈夫です（2回貼っても動きは変わりません）。</p>
+    <div class="cmd"><span class="lab">ターミナル（確かめる）</span><pre>which totonoumovie</pre></div>
+    <p class="result">/Users/あなたの名前/totonoumovie/totonoumovie と出る</p>
   </div>
-  <div class="step os-win" data-id="w-path" data-n="4"><h3>どこからでも起動できるようにする<span class="time">30秒</span></h3>
+  <div class="step os-win" data-id="w-path" data-n="2"><h3>どこからでも起動できるようにする<span class="time">30秒</span></h3>
     <div class="cmd"><span class="lab">PowerShell</span><pre>$p = [Environment]::GetEnvironmentVariable("Path", "User")
 [Environment]::SetEnvironmentVariable("Path", "$p;$HOME\totonoumovie", "User")</pre></div>
     <p>終わったら PowerShell を閉じて開き直します。これで <code>totonoumovie</code> と入れるだけで起動できます。</p>
   </div>
 
-  <div class="step" data-id="launch" data-n="5"><h3>作業フォルダで起動して確かめる<span class="time">30秒</span></h3>
-    <p><b>起動したフォルダが「作業フォルダ」</b>になります（動画のプロジェクトはこの中に作られます）。おすすめの場所で起動します。</p>
-    <div class="cmd os-mac"><span class="lab">ターミナル</span><pre>mkdir -p ~/Movies/totonou && cd ~/Movies/totonou
-totonoumovie</pre></div>
-    <div class="cmd os-win"><span class="lab">PowerShell</span><pre>mkdir "$HOME\Videos\totonou" -Force; cd "$HOME\Videos\totonou"
-totonoumovie</pre></div>
-    <p class="result">ブラウザが開き、上に緑の帯「TotonouMovie 2.2.0 を使います」</p>
-    <figure><img src="images/app-home.jpg" alt="起動したときのプロジェクト一覧の画面"><figcaption>起動するとブラウザでこの画面が開きます。</figcaption></figure>
-    <div class="callout warn"><b>赤い帯が出たとき</b><p>「TotonouMovie プラグインが見つかりません」→ A の「プラグインを入れる」が済んでいません。<br>「同期フォルダの中です」→ Dropbox・iCloud などの外のフォルダで起動し直します。</p></div>
+  <div class="step" data-id="launch" data-n="3"><h3>起動して確かめる<span class="time">30秒</span></h3>
+    <p>どこで起動してもかまいません。動画のプロジェクトは、いつも totonoumovie のフォルダの中の <code>projects</code> に作られます（マイスタイルや設定も同じフォルダの中にまとまります）。</p>
+    <div class="cmd"><span class="lab">ターミナル・PowerShell</span><pre>totonoumovie</pre></div>
+    <p class="result">ブラウザが開き、トトノちゃんのいる最初の画面が出る（赤い帯が出ず、左上に「保存先: projects」と出れば成功）</p>
+    <figure><img src="images/app-welcome.jpg" alt="はじめて起動したときの画面。真ん中にトトノちゃんと「動画を渡して AI で作る」のボタン"><figcaption>はじめて起動すると、この画面が開きます。左上に「保存先: projects」と出て、赤い帯が出ていなければ成功です。</figcaption></figure>
+    <div class="callout warn"><b>赤い帯が出たとき</b><p>「TotonouMovie プラグインが見つかりません」→ A の「プラグインを入れる」が済んでいません。<br>「同期フォルダの中です」→ totonoumovie のフォルダが Dropbox・iCloud などの中にあります。書き出しが止まるときは、書き出しの間だけ同期を一時停止してください。</p></div>
+    <div class="callout info"><b>おすすめ：17スキルを動画の作業だけで使う</b><p>上の <b>🌱 自分好み</b> →「🏠 拠点・引き継ぎ」→「この拠点でだけ使う」を押すと、動画と関係ない Claude Code の作業では TotonouMovie のスキルが読み込まれなくなります。Claude Code だけで動画を編集するときは、totonoumovie のフォルダで <code>claude</code> を起動します（<a href="customize.html#base">くわしく</a>）。</p></div>
+    <div class="callout ok"><b>前の版（Claude Code だけ）を使っていた方</b><p>最初の起動で、設定・マイスタイル・表記辞書・自分の効果音が自動で引き継がれます。前の作業フォルダの動画は「🏠 拠点・引き継ぎ」タブで移せます（<a href="customize.html#base">くわしく</a>）。</p></div>
   </div>
 </section>
 </div>
 
 <section>
   <h2 id="daily">2回目からの起動</h2>
-  <div class="cmd os-mac"><span class="lab">ターミナル</span><pre>cd ~/Movies/totonou
-totonoumovie</pre></div>
-  <div class="cmd os-win"><span class="lab">PowerShell</span><pre>cd "$HOME\Videos\totonou"
-totonoumovie</pre></div>
+  <div class="cmd"><span class="lab">ターミナル・PowerShell</span><pre>totonoumovie</pre></div>
   <ul>
     <li><b>終わるとき</b>：起動したターミナル（PowerShell）で <kbd>Ctrl</kbd>＋<kbd>C</kbd>。編集は自動で保存されています</li>
     <li>ブラウザを閉じてしまったら、ターミナルに出ている <code>http://127.0.0.1:8780/</code> を開けば戻れます</li>
@@ -206,19 +234,19 @@ totonoumovie</pre></div>
   <div class="cmd"><span class="lab">ターミナル・PowerShell</span><pre>claude plugin marketplace update totonou</pre></div>
   <div class="cmd"><span class="lab">ターミナル・PowerShell</span><pre>claude plugin update totonou-movie@totonou</pre></div>
   <p class="result">updated from（古い版）to（新しい版）</p>
-  <p>Claude Code と totonoumovie を開き直します。作業フォルダ・名前・マイスタイル・プロンプト・これまでの動画は、そのまま残ります。</p>
+  <p>Claude Code と totonoumovie を開き直します。名前・設定・マイスタイル・自作スキル・プロンプト・これまでの動画は、そのまま残ります（どれも totonoumovie のフォルダの <code>projects</code>・<code>my</code>・<code>.claude/skills</code> にあり、更新では書き換わりません）。</p>
 </section>
 
 <section>
   <h2 id="trouble">うまくいかないとき</h2>
   <div class="scroll"><table class="tbl"><thead><tr><th>こんなとき</th><th>どうする</th></tr></thead><tbody>
-    <tr class="os-mac"><td><code>brew: command not found</code></td><td>Homebrew の導入の最後に出る「Next steps」の2行を実行し、ターミナルを開き直します</td></tr>
+    <tr class="os-mac"><td><code>brew: command not found</code></td><td>Homebrew の導入の最後に出る「Next steps」の下に出た行（Apple シリコンの Mac なら3行）を実行し、ターミナルを開き直します</td></tr>
     <tr class="os-win"><td>winget が見つからない</td><td>Microsoft Store で「アプリ インストーラー」を更新します</td></tr>
     <tr><td><code>claude</code>・<code>uv</code>・<code>totonoumovie</code> が見つからない</td><td>入れたあと、ターミナル（PowerShell）を開き直していないことがあります。開き直して確かめます。Windows はパソコンの再起動も試します</td></tr>
     <tr><td><code>/plugin isn't available in this environment</code></td><td>デスクトップアプリの Code タブで /plugin を送ったときの表示です。ターミナル（PowerShell）で「プラグインを入れる」の行を送ります</td></tr>
     <tr><td><code>marketplace add</code> でエラー</td><td>TotonouMovie フォルダがホーム（ユーザー）フォルダの直下にあるか確かめます。中に README.md と plugins が見えるフォルダが正解です<span class="os-mac">。<code>claude plugin marketplace add </code>（最後に空白）まで入力してから、フォルダをターミナルの窓にドラッグしても入れられます</span></td></tr>
     <tr><td>急に「failed to load」と出る</td><td>TotonouMovie フォルダを消したり動かしたりしていないか確かめます。元の場所に戻せば直ります</td></tr>
-    <tr><td><code>gh repo clone</code> で「Could not resolve to a Repository」</td><td>招待を受けていない、または別のアカウントでログインしています。招待メールの承認と、<code>gh auth status</code> のアカウント名を確かめます</td></tr>
+    <tr><td><code>git clone</code> で「command not found」「認識されません」</td><td><span class="os-mac">Mac は <code>xcode-select --install</code> で git を入れて、ターミナルを開き直します</span><span class="os-win">Windows は <code>winget install --id=Git.Git -e</code> で git を入れて、PowerShell を開き直します</span></td></tr>
     <tr><td>動作テストが FAIL・「Timed out」</td><td>回線が遅いと時間切れになります。<a href="trouble.html#timeout">遅い回線のとき</a>の手順で実行し直します</td></tr>
     <tr><td>それ以外</td><td>Claude Code に「TotonouMovie が動かない」と伝えると診断します。<a href="trouble.html">困ったとき</a>も見てください</td></tr>
   </tbody></table></div>

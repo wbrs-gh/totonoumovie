@@ -46,6 +46,9 @@ textarea { padding: 6px; resize: vertical; }
 #topbar { display: flex; align-items: center; gap: 10px; padding: 0 12px; background: var(--panel);
   border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 rgba(20,40,70,.03); }
 #topbar .brand { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+#brandHome { cursor: pointer; }
+#brandHome:hover .brand-logo { transform: scale(1.08); }
+.brand-logo { transition: transform .15s; }
 #projName { font-size: 12px; font-weight: 400; margin-left: 6px; }
 #topbar .proj, #topbar .actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
 #projSelect { max-width: 220px; }
@@ -324,3 +327,15 @@ html { overflow-x: hidden; }
 /* ホームのトトノちゃんは押すとまた話しかけてくれる（押せると分かるように） */
 @keyframes tt-wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
 #welcomeChara .tt-body:hover { animation: tt-wiggle .5s ease-in-out; }
+
+/* 自分好み */
+.mine-card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+.mine-card-h { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
+.mine-card textarea { width: 100%; }
+.pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 1px 8px; font-size: 11px; margin: 2px 0; }
+.pill.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.gl-row { display: flex; gap: 6px; align-items: center; margin-bottom: 5px; }
+.gl-row input { flex: 1; min-width: 0; }
+.mine-ask { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.mine-ask-box { background: var(--panel, #fff); color: inherit; border-radius: 12px; padding: 16px; width: min(420px, 92vw); box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+.pkSkills summary { cursor: pointer; margin: 6px 0; }

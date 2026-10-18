@@ -1,30 +1,100 @@
-<!--meta {"title": "自分好みに育てる", "desc": "マイスタイル・設定・表記辞書・効果音・プロンプトとオリジナルの指示・直し方のコツ。"} -->
+<!--meta {"title": "自分好みに育てる", "desc": "🌱 自分好みの画面・マイスタイル・自作スキル・設定・表記辞書・効果音・いつもの指示・Claude Code だけで使うとき・直し方のコツ。"} -->
 <header class="page-head">
   <div class="eyebrow">もっと活かす</div>
   <h1>自分好みに育てる</h1>
-  <p class="lead">使うほど自分に合うようにできます。見た目は「マイスタイル」に、言い方や秒数は「設定」に、人名や用語は「表記辞書」に、毎回の頼みごとは totonoumovie の「オリジナルの指示」に覚えさせます。</p>
+  <p class="lead">使うほど自分に合うようにできます。見た目は「マイスタイル」に、言い方や秒数は「設定」に、人名や用語は「表記辞書」に、毎回の頼みごとは「いつもの指示」に、自分の編集ルールは「自作スキル」に覚えさせます。どれも totonoumovie の <b>🌱 自分好み</b> の画面で育てられ、Claude Code だけで使うときにも同じものが効きます。</p>
 </header>
 <div class="tt-tip" data-pose="cheer" data-id="site_customize">気に入った見た目は、マイスタイルに保存しておこう。次から「前回と同じで」で呼び出せるよ。</div>
 
 
 <section>
   <h2 id="cycle">育て方の流れ</h2>
-  <div class="fig-svg">
-  <svg viewBox="0 0 900 260" role="img" aria-label="育て方の流れ：作る、気づく、直す、残す、呼び出す、を繰り返す">
-    <g font-family="sans-serif" text-anchor="middle">
-      <path d="M150 180 C150 250 750 250 750 180" stroke="#ff7a30" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
-      <text x="450" y="250" font-size="13" fill="#c4551a" font-weight="700">2本目からは①の質問が減り、直しも少なくなっていく</text>
-      <g font-size="14">
-        <circle cx="90" cy="110" r="60" fill="#2d6b5f"/><text x="90" y="104" fill="#fff" font-size="26">🎬</text><text x="90" y="132" fill="#fff" font-weight="800">1. 作る</text>
-        <circle cx="270" cy="110" r="60" fill="#3a7b6e"/><text x="270" y="104" fill="#fff" font-size="26">👀</text><text x="270" y="132" fill="#fff" font-weight="800">2. 気づく</text>
-        <circle cx="450" cy="110" r="60" fill="#468b7d"/><text x="450" y="104" fill="#fff" font-size="26">✏️</text><text x="450" y="132" fill="#fff" font-weight="800">3. 直す</text>
-        <circle cx="630" cy="110" r="60" fill="#539b8c"/><text x="630" y="104" fill="#fff" font-size="26">💾</text><text x="630" y="132" fill="#fff" font-weight="800">4. 残す</text>
-        <circle cx="810" cy="110" r="60" fill="#ff7a30"/><text x="810" y="104" fill="#fff" font-size="26">⚡</text><text x="810" y="132" fill="#fff" font-weight="800">5. 呼び出す</text>
+  <div class="fig-svg" data-guide='[{"s": 1, "x": 10, "pose": "point", "id": "fig_customize_1_1", "t": "まずは1本、最後まで仕上げてみよう。"}, {"s": 2, "x": 30, "pose": "explain", "id": "fig_customize_1_2", "t": "4つ目の確認で見るときに、気になる所をメモしてね。"}, {"s": 3, "x": 50, "pose": "explain", "id": "fig_customize_1_3", "t": "画面で自分で直すか、4つのポイントで頼んで直すよ。"}, {"s": 4, "x": 70, "pose": "point", "id": "fig_customize_1_4", "t": "気に入った見た目は、マイスタイルに保存して残そう。"}, {"s": 5, "x": 90, "pose": "explain", "id": "fig_customize_1_5", "t": "次からは「前回と同じで」と言うだけで呼び出せるよ。"}, {"s": 6, "x": 50, "pose": "good", "id": "fig_customize_1_6", "t": "くり返すほど質問も直しも減って、どんどん楽になるよ。"}]'>
+  <svg viewBox="0 0 900 300" role="img" aria-label="育て方の流れ：作る、気づく、直す、残す、呼び出す、を繰り返す">
+    <defs>
+      <linearGradient id="customize1-main" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#70c0f0"/><stop offset="1" stop-color="#2f8fd0"/></linearGradient>
+      <linearGradient id="customize1-orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb57a"/><stop offset="1" stop-color="#ff8f3a"/></linearGradient>
+      <filter id="customize1-shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e5a96" flood-opacity=".13"/></filter>
+      <marker id="customize1-arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,1.5 Q1,1 1.6,2.4 L3.4,6 L1.6,9.6 Q1,11 2,10.5 L10.6,6.6 Q11.6,6 10.6,5.4 Z" fill="#2f8fd0"/></marker>
+      <marker id="customize1-arrow-o" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="5" markerHeight="5" orient="auto"><path d="M2,1.5 Q1,1 1.6,2.4 L3.4,6 L1.6,9.6 Q1,11 2,10.5 L10.6,6.6 Q11.6,6 10.6,5.4 Z" fill="#ff8f3a"/></marker>
+    </defs>
+    <g font-family="'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif" text-anchor="middle">
+      <g class="gbg">
+        <rect x="0" y="0" width="900" height="300" rx="24" fill="#f4f9fd"/>
+        <path d="M0 22 Q 75 6 150 22 T 300 22 T 450 22 T 600 22 T 750 22 T 900 22" fill="none" stroke="#e6f3fc" stroke-width="8" stroke-linecap="round"/>
       </g>
-      <g font-size="12" fill="#4a515b"><text x="90" y="196">1本仕上げる</text><text x="270" y="196">④の視聴でメモ</text><text x="450" y="196">画面で直す・4点で頼む</text><text x="630" y="196">マイスタイルに保存</text><text x="810" y="196">「前回と同じで」</text></g>
+      <g class="gs" data-s="1">
+        <circle cx="90" cy="96" r="56" fill="#fff" stroke="#70c0f0" stroke-width="3" filter="url(#customize1-shadow)"/>
+        <circle cx="50" cy="52" r="15" fill="url(#customize1-main)" stroke="#fff" stroke-width="3"/>
+        <text x="50" y="57" font-size="15" font-weight="900" fill="#fff">1</text>
+        <image href="assets/icons/film.png" x="68" y="70" width="44" height="44"/>
+        <text x="90" y="138" font-size="17" font-weight="900" fill="#1f2d3d">作る</text>
+        <rect x="10" y="166" width="160" height="28" rx="14" fill="#e6f3fc"/>
+        <text x="90" y="185" font-size="13" font-weight="700" fill="#1b5f96">1本仕上げる</text>
+      </g>
+      <g class="gs" data-s="2">
+        <line x1="152" y1="96" x2="204" y2="96" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#customize1-arrow)"/>
+        <circle cx="270" cy="96" r="56" fill="#fff" stroke="#70c0f0" stroke-width="3" filter="url(#customize1-shadow)"/>
+        <circle cx="230" cy="52" r="15" fill="url(#customize1-main)" stroke="#fff" stroke-width="3"/>
+        <text x="230" y="57" font-size="15" font-weight="900" fill="#fff">2</text>
+        <image href="assets/icons/inspect.png" x="248" y="70" width="44" height="44"/>
+        <text x="270" y="138" font-size="17" font-weight="900" fill="#1f2d3d">気づく</text>
+        <rect x="190" y="166" width="160" height="28" rx="14" fill="#e6f3fc"/>
+        <text x="270" y="185" font-size="13" font-weight="700" fill="#1b5f96">④の視聴でメモ</text>
+      </g>
+      <g class="gs" data-s="3">
+        <line x1="332" y1="96" x2="384" y2="96" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#customize1-arrow)"/>
+        <circle cx="450" cy="96" r="56" fill="#fff" stroke="#70c0f0" stroke-width="3" filter="url(#customize1-shadow)"/>
+        <circle cx="410" cy="52" r="15" fill="url(#customize1-main)" stroke="#fff" stroke-width="3"/>
+        <text x="410" y="57" font-size="15" font-weight="900" fill="#fff">3</text>
+        <g transform="translate(450 92) rotate(45)"><rect x="-6" y="-20" width="12" height="30" rx="2" fill="#2f8fd0"/><rect x="-6" y="-24" width="12" height="7" rx="2.5" fill="#ff8fa8"/><path d="M-6 10 L0 21 L6 10 Z" fill="#a8d8f5"/><path d="M-2 17 L0 21 L2 17 Z" fill="#1b5f96"/></g>
+        <text x="450" y="138" font-size="17" font-weight="900" fill="#1f2d3d">直す</text>
+        <rect x="370" y="166" width="160" height="28" rx="14" fill="#e6f3fc"/>
+        <text x="450" y="185" font-size="13" font-weight="700" fill="#1b5f96">画面で直す・4点で頼む</text>
+      </g>
+      <g class="gs" data-s="4">
+        <line x1="512" y1="96" x2="564" y2="96" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#customize1-arrow)"/>
+        <circle cx="630" cy="96" r="56" fill="#fff" stroke="#70c0f0" stroke-width="3" filter="url(#customize1-shadow)"/>
+        <circle cx="590" cy="52" r="15" fill="url(#customize1-main)" stroke="#fff" stroke-width="3"/>
+        <text x="590" y="57" font-size="15" font-weight="900" fill="#fff">4</text>
+        <image href="assets/icons/export.png" x="608" y="70" width="44" height="44"/>
+        <text x="630" y="138" font-size="17" font-weight="900" fill="#1f2d3d">残す</text>
+        <rect x="550" y="166" width="160" height="28" rx="14" fill="#e6f3fc"/>
+        <text x="630" y="185" font-size="13" font-weight="700" fill="#1b5f96">マイスタイルに保存</text>
+      </g>
+      <g class="gs" data-s="5">
+        <line x1="692" y1="96" x2="744" y2="96" class="flow" stroke="#2f8fd0" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#customize1-arrow)"/>
+        <circle cx="810" cy="96" r="56" fill="#fff3e8" stroke="#ff8f3a" stroke-width="3" filter="url(#customize1-shadow)"/>
+        <circle cx="770" cy="52" r="15" fill="url(#customize1-orange)" stroke="#fff" stroke-width="3"/>
+        <text x="770" y="57" font-size="15" font-weight="900" fill="#fff">5</text>
+        <image href="assets/icons/sparkle.png" x="788" y="70" width="44" height="44"/>
+        <text x="810" y="138" font-size="17" font-weight="900" fill="#1f2d3d">呼び出す</text>
+        <rect x="730" y="166" width="160" height="28" rx="14" fill="#fff3e8"/>
+        <text x="810" y="185" font-size="13" font-weight="700" fill="#c25a12">「前回と同じで」</text>
+      </g>
+      <!-- くり返し -->
+      <g class="gs" data-s="6">
+        <path d="M810 200 C810 286 90 286 90 206" fill="none" class="flow" stroke="#ff8f3a" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round" marker-end="url(#customize1-arrow-o)"/>
+        <rect x="250" y="252" width="400" height="34" rx="17" fill="#fff3e8" stroke="#ff8f3a" stroke-width="2"/>
+        <text x="450" y="274" font-size="14" font-weight="700" fill="#c25a12">2本目からは①の質問が減り、直しも少なくなっていく</text>
+      </g>
     </g>
   </svg>
   </div>
+</section>
+
+<section>
+  <h2 id="mine">🌱 自分好みの画面</h2>
+  <p>上のバーの <b>🌱 自分好み</b> を押すと開きます。6つのタブで、自分好みに育てたものを見る・直す・増やすことができます。</p>
+  <figure><img src="images/app-mine.jpg" alt="自分好みの画面。マイスタイルのタブに、保存した見た目とメモが並んでいる"><figcaption>マイスタイルのタブ。保存した見た目の中身と、毎回守るルール（メモ）が見られます。</figcaption></figure>
+  <div class="scroll"><table class="tbl"><thead><tr><th>タブ</th><th>できること</th></tr></thead><tbody>
+    <tr><td>🎨 マイスタイル</td><td>一覧・中身の確認・メモの編集・名前の変更・削除。<b>前に作った動画から</b>マイスタイルを作る</td></tr>
+    <tr><td>🧩 スキル</td><td>自作スキルを書いて作る・AI に作ってもらう・直す・消す。TotonouMovie の17スキルの一覧</td></tr>
+    <tr><td>📖 表記辞書</td><td>全部の動画で使う「誤字の直し」と「字幕で途中で切らない言葉」</td></tr>
+    <tr><td>⚙ 設定</td><td>確認者の名前・完成動画のコピー先・美肌の強さ・撮影中の合図・章カードの秒数と効果音。言葉で AI に頼むこともできます</td></tr>
+    <tr><td>🔊 効果音</td><td>自分の音に置き換えた効果音の確認と、置き場所のフォルダを開く</td></tr>
+    <tr><td>🏠 拠点・引き継ぎ</td><td>全部がまとまっている場所の確認、17スキルを読み込む範囲の切り替え、前の版で作った動画の引き継ぎ</td></tr>
+  </tbody></table></div>
 </section>
 
 <section>
@@ -40,45 +110,80 @@
   <ul>
     <li>ショート用・ロング用・アフレコ用は別々に作ります（種類の違うマイスタイルは使えません）</li>
     <li>BGM は曲の名前だけを覚えています。次に使うときは、同じ曲を置くように頼まれます</li>
-    <li>一覧は「マイスタイルの一覧を見せて」、消すときは「マイスタイル『〇〇』を消して」と AI に頼みます</li>
+    <li>一覧・確認・削除は <a href="#mine">🌱 自分好み</a> の画面でできます（AI に「マイスタイルの一覧を見せて」と頼んでもかまいません）</li>
+  </ul>
+  <h3 id="mystyle-app">画面で選ぶ・育てる</h3>
+  <ul>
+    <li><b>選ぶ</b>：「🎬 AIで作る」の「マイスタイル」で選びます。「AI に任せる」なら、今までどおり最初に「前回と同じで」と聞かれます。「使わない」を選ぶと、新しく決めます</li>
+    <li><b>メモ</b>：そのマイスタイルで毎回守ってほしいこと（例「人名は必ず確認してから字幕に」）を書いておきます。<a href="#prompts">いつもの指示</a>は「＋」のボタンでメモに入れられます。メモは Claude Code だけで使うときにも守られます</li>
+    <li><b>動画から作る</b>：前に作った動画（前の版や Claude Code だけで作ったものも）を選んで名前を付けると、その動画の見た目を取り出して保存します</li>
   </ul>
 </section>
 
 <section>
-  <h2 id="prompts">オリジナルの指示とプロンプト（totonoumovie）</h2>
-  <p>上の <b>✍ プロンプト</b> で、AI に渡す文章を自分好みにできます。保存先はあなたのパソコンの中（<code>~/.totonoumovie/prompts.json</code>）です。</p>
-  <figure><img src="images/app-prompts.jpg" alt="プロンプトの画面"><figcaption>プロンプトの画面。いちばん上がオリジナルの指示。</figcaption></figure>
+  <h2 id="skills">スキルを選ぶ・自分のスキルを作る</h2>
+  <p>スキルは、AI が従う手順書です。TotonouMovie の17スキル（<a href="features.html#skills">機能の一覧</a>）に加えて、自分の編集ルールを「自作スキル」として残せます。</p>
+  <figure><img src="images/app-mine-skill.jpg" alt="自分好みの画面のスキルのタブ。自作スキルと TotonouMovie のスキルが並んでいる"><figcaption>スキルのタブ。自作スキルは書いて作るか、AI に作ってもらいます。</figcaption></figure>
+  <ul>
+    <li><b>作る</b>：🧩 スキル のタブで「＋ 自分で書いて作る」（名前・いつ使うか・中身）か、やりたいことを書いて「AI に作ってもらう」</li>
+    <li><b>使う</b>：「🎬 AIで作る」と「AI」タブの「AI に頼む」で、「使うスキルを選ぶ」を開いてチェックします。17スキルは選ばなくても AI が必要なものを使います。「この作業は字幕のスキルで」のように指定したいときに選びます</li>
+    <li><b>置き場所</b>：自作スキルは totonoumovie のフォルダの中（<code>.claude/skills</code>）にだけ作ります。動画編集以外の作業では読み込まれません</li>
+  </ul>
+</section>
+</section>
+
+<section>
+  <h2 id="prompts">いつもの指示とプロンプト（totonoumovie）</h2>
+  <p>上の <b>✍ プロンプト</b> で、AI に渡す文章を自分好みにできます。保存先は totonoumovie のフォルダの中（<code>my/app/prompts.json</code>）です。</p>
+  <figure><img src="images/app-prompts.jpg" alt="プロンプトの画面"><figcaption>プロンプトの画面。いちばん上がいつもの指示。</figcaption></figure>
   <div class="scroll"><table class="tbl"><thead><tr><th>欄</th><th>使いどころ</th></tr></thead><tbody>
-    <tr><td>オリジナルの指示</td><td>名前を付けて保存し、「AIで作る」「AI に頼む」のときにチェックで足せます。例「テンポよく：迷ったらテンポを詰める方向で提案して」「固有名詞：人名は必ず確認してから字幕にして」</td></tr>
+    <tr><td>いつもの指示</td><td>名前を付けて保存し、「AIで作る」「AI に頼む」のときにチェックで足せます。例「テンポよく：迷ったらテンポを詰める方向で提案して」「固有名詞：人名は必ず確認してから字幕にして」</td></tr>
     <tr><td>毎回足す指示</td><td>すべての依頼の最後に足されます</td></tr>
     <tr><td>AIで作る／直してもらう／自由に頼む</td><td>種類ごとに渡す文章そのもの。<code>{video}</code> などは実行時に置き換わります</td></tr>
     <tr><td>AI への前提（上級者向け）</td><td>AI が画面で確認を出すための決まり（tm-ask）が書いてあります。<b>消すと確認が画面に出なくなります</b></td></tr>
   </tbody></table></div>
   <p>書き換えたものは「既定に戻す」でいつでも元に戻せます。</p>
+  <div class="callout info"><b>Claude Code だけで使うときにも効かせたい</b><p>いつもの指示は totonoumovie の画面の中のものです。Claude Code だけで編集するときにも同じ指示を守らせたいときは、<a href="#mystyle-app">マイスタイルのメモ</a>に入れておきます。</p></div>
 </section>
 
 <section>
   <h2 id="settings">設定を変える</h2>
-  <p>セットアップで決めたことや既定の値は、AI に言葉で頼めば変えてくれます（totonoumovie の「AI」タブの「自由に頼む」でも、Claude Code でも）。</p>
+  <p>セットアップで決めたことや既定の値は、<a href="#mine">🌱 自分好み</a> の「⚙ 設定」タブで変えられます。AI に言葉で頼んでも変えてくれます（設定タブの「言葉で頼む」でも、Claude Code でも）。</p>
   <div class="scroll"><table class="tbl"><thead><tr><th>変えたいこと</th><th>頼み方の例</th></tr></thead><tbody>
-    <tr><td>作業フォルダ・完成動画のコピー先・名前</td><td>「TotonouMovie の作業フォルダを変えたい」（totonoumovie は起動したフォルダが作業フォルダです）</td></tr>
+    <tr><td>完成動画のコピー先・名前</td><td>「完成動画を〇〇のフォルダにもコピーしたい」（動画のプロジェクトは、いつも totonoumovie のフォルダの <code>projects</code> に作られます）</td></tr>
     <tr><td>美肌の強さ（既定は縦60・横40。横は出演者が女性なら60）</td><td>「縦動画の美肌を40にしたい」</td></tr>
     <tr><td>撮影中の合図の言い方</td><td>「合図の言い方を『カメラさん、ここに章』に変えたい」</td></tr>
     <tr><td>章カードの秒数と効果音</td><td>「章カードを3秒にしたい」「章カードの効果音をなしにしたい」</td></tr>
     <tr><td>いまの設定を見る</td><td>「TotonouMovie の設定を見せて」</td></tr>
   </tbody></table></div>
-  <p>設定は、作業フォルダや作った動画とは別の場所に保存されます。新しい版に入れ替えても消えません。</p>
+  <p>設定は totonoumovie のフォルダの中（<code>my/config</code>）に保存されます。新しい版に入れ替えても消えません。</p>
 </section>
 
 <section>
   <h2 id="dict">表記辞書を育てる</h2>
-  <p>人名・社名・商品名・専門用語の正しい表記を伝えると、その動画の辞書に入り、文字起こし・誤字の修正・字幕・検査で使われます。2本以上の動画で同じ直しが出ると、全部の動画で使う共通の辞書に足すかを提案されます。</p>
+  <p>人名・社名・商品名・専門用語の正しい表記を伝えると、その動画の辞書に入り、文字起こし・誤字の修正・字幕・検査で使われます。2本以上の動画で同じ直しが出ると、全部の動画で使う共通の辞書に足すかを提案されます。共通の辞書は <a href="#mine">🌱 自分好み</a> の「📖 表記辞書」タブで、見る・足す・消すができます。</p>
   <div class="cmd tm"><span class="lab">例</span><pre>表記は「山田太郎」（「山田たろう」「山田太朗」と出ることがある）</pre></div>
 </section>
 
 <section>
   <h2 id="se">効果音を自分の音にする</h2>
-  <p>同梱の効果音の代わりに、自分で用意した音（効果音ラボなどで手に入れた音）を使えます。設定フォルダの <code>se-library</code> に、同梱の音と同じファイル名で置くと、そちらが優先されます。置き場所とファイル名は、AI に「自分の効果音を使いたい」と伝えると案内します。量は動画ごとに「効果音を少なめに」「効果音なしで」と頼めます。totonoumovie の編集画面でも、1つずつ足したり消したりできます。</p>
+  <p>同梱の効果音の代わりに、自分で用意した音（効果音ラボなどで手に入れた音）を使えます。<a href="#mine">🌱 自分好み</a> の「🔊 効果音」タブの「自分の効果音のフォルダを開く」で開くフォルダ（<code>my/config/se-library</code>）に、同梱の音と同じファイル名で置くと、そちらが優先されます。タブには、どの音を自分の音に置き換えたかが出ます。置き場所とファイル名は、AI に「自分の効果音を使いたい」と伝えると案内します。量は動画ごとに「効果音を少なめに」「効果音なしで」と頼めます。totonoumovie の編集画面でも、1つずつ足したり消したりできます。</p>
+</section>
+
+<section>
+  <h2 id="base">全部ひとつのフォルダに（Claude Code だけで使うときも）</h2>
+  <p>動画も自分好みも、totonoumovie のフォルダ（入れた場所。ふつうはホームの <code>totonoumovie</code>）の中にまとまっています。フォルダごと別の場所へ移しても、そのまま使えます。</p>
+  <div class="scroll"><table class="tbl"><thead><tr><th>フォルダ</th><th>中身</th></tr></thead><tbody>
+    <tr><td><code>projects</code></td><td>動画のプロジェクト（作った動画・書き出した完成動画）</td></tr>
+    <tr><td><code>my</code></td><td>マイスタイル・設定・表記辞書・自分の効果音・いつもの指示</td></tr>
+    <tr><td><code>.claude/skills</code></td><td>自作スキル</td></tr>
+  </tbody></table></div>
+  <ul>
+    <li><b>Claude Code だけで編集する</b>：このフォルダで <code>claude</code> を起動して「この動画を編集して」と頼みます。画面と同じマイスタイル・設定・自作スキルが使え、Claude Code で保存したマイスタイルも画面に出ます</li>
+    <li><b>17スキルを動画の作業だけで使う</b>：「🏠 拠点・引き継ぎ」タブの「この拠点でだけ使う」を押すと、動画と関係ない Claude Code の作業では17スキルが読み込まれなくなります（読み込みの分だけ軽くなります）。totonoumovie から AI を動かすときは、どちらでも使えます</li>
+    <li><b>前の版（Claude Code だけ）を使っていた方</b>：最初の起動で、設定・マイスタイル・表記辞書・自分の効果音を自動で引き継ぎます（元の場所にも残ります）。前の作業フォルダ（ムービーの中の totonou など）の動画は、「🏠 拠点・引き継ぎ」タブで選んで移せます。移さなくても、<a href="#mystyle-app">動画からマイスタイルを作る</a>で見た目だけ取り出せます</li>
+  </ul>
+  <div class="callout warn"><b>クラウド同期のフォルダに置くとき</b><p>Dropbox などの中に置くと、書き出し中に同期とぶつかって止まることがあります。止まるときは、書き出しの間だけ同期を一時停止してください。</p></div>
 </section>
 
 <section>
@@ -100,6 +205,6 @@
     <li><b>1回に1つ</b>：直したいことが多いときは、大事なものから1つずつ</li>
     <li><b>理由を聞く</b>：「なぜこの候補を切ろうとしたの？」と聞くと、根拠を教えてくれます</li>
     <li><b>案を出してもらう</b>：「最後の案内文の案を3つ出して」のように、選べる形で頼みます</li>
-    <li><b>自分のルールを残す</b>：毎回伝えたいことは、totonoumovie の「オリジナルの指示」に保存しておきます</li>
+    <li><b>自分のルールを残す</b>：毎回伝えたいことは「いつもの指示」か、マイスタイルのメモに。手順ごと残したいときは自作スキルにします</li>
   </ul>
 </section>

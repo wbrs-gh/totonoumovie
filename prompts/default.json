@@ -5,6 +5,7 @@
   "voiceover": "TotonouMovie の produce スキル（totonou-movie:produce）を使って、アフレコ動画を作ってください。\n\n声の録音: {video}\n素材フォルダ: {materials}\n{extra}",
   "fix": "TotonouMovie のプロジェクト「{project}」について、次の依頼を fix スキル（totonou-movie:fix）の手順で直してください。直したら qa_static を通し、書き出し直すかどうかを tm-ask で聞いてください。\n\n依頼:\n{request}\n{extra}",
   "free": "TotonouMovie のプロジェクト「{project}」について、次の依頼に対応してください。必要なスキル（totonou-movie:*）の手順に従ってください。\n\n依頼:\n{request}\n{extra}",
+  "base": "TotonouMovie の設定・マイスタイル・表記辞書・自作スキルについて、次の依頼に対応してください（特定の動画の編集ではありません）。設定は tm_settings.py、マイスタイルは tm_style.py、共通の表記辞書は設定フォルダの typo_dict.json と protected_terms.json を使います。自作スキルを作る・直すときは、この拠点の .claude/skills/<英小文字の名前>/SKILL.md に書きます（~/.claude/skills には作らない）。変える前に、何をどう変えるかを tm-ask で確認してください。\n\n依頼:\n{request}\n{extra}",
   "always": "",
   "presets": [
     {

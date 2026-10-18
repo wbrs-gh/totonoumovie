@@ -19,6 +19,7 @@ SRC = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(os.path.dirname(SRC), "site")
 VERSION = "v1.0.0"
 UPDATED = "2026年10月16日"
+BUILD = str(int(__import__("time").time()))  # トトノちゃんの絵・声の読み直し用
 
 # 左の目次（順番どおりに前後ページもつながる）
 NAV = [
@@ -59,6 +60,43 @@ def text_only(s):
     return re.sub(r"\s+", " ", html.unescape(s)).strip()
 
 
+def bust(page):
+    """ブラウザに古い画像・動画・CSS が残らないよう、ファイルの更新時刻を ?v= に付ける"""
+    def rep(m):
+        attr, url = m.group(1), m.group(2)
+        path = os.path.join(OUT, url)
+        if not os.path.isfile(path):
+            return m.group(0)
+        return f'{attr}="{url}?v={int(os.path.getmtime(path))}"'
+    page = re.sub(r'\b(src|href|poster)="((?:assets|images|videos)/[^"?#]+)"', rep, page)
+    def rep_url(m):
+        path = os.path.join(OUT, m.group(1))
+        return f"url({m.group(1)}?v={int(os.path.getmtime(path))})" if os.path.isfile(path) else m.group(0)
+    return re.sub(r'url\(((?:assets|images|videos)/[^)?#]+)\)', rep_url, page)
+
+
+def video_len(name):
+    """videos/<name>.mp4 の長さを「1:28」の形で返す（無ければ None）"""
+    import subprocess
+    path = os.path.join(SRC, "videos", name + ".mp4")
+    if not os.path.isfile(path):
+        return None
+    try:
+        d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path]).decode())
+    except Exception:
+        return None
+    sec = int(round(d))
+    return f"{sec // 60}:{sec % 60:02d}"
+
+
+def fill_lengths(body):
+    """動画のカードの長さを、実際の mp4 から入れる（書いてある長さと実物をずらさない）"""
+    def rep(m):
+        ln = video_len(m.group(2))
+        return m.group(1) + (ln or m.group(3)) + "</span>"
+    return re.sub(r'(videos/([\w-]+)\.jpg\)"><span class="no">\d+</span><span class="du">)([^<]*)</span>', rep, body)
+
+
 def build():
     os.makedirs(OUT, exist_ok=True)
     for d in ("assets", "images", "videos"):
@@ -67,7 +105,9 @@ def build():
             dst = os.path.join(OUT, d)
             if os.path.isdir(dst):
                 shutil.rmtree(dst)
-            shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".*", "*.wav"))
+            shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".*", "*.wav", "*.len.json"))
+    # ファビコン：/favicon.ico を直接見に来るブラウザ向けに、一番上にも置く
+    shutil.copy2(os.path.join(SRC, "assets", "favicon.ico"), os.path.join(OUT, "favicon.ico"))
     # トトノちゃん（アプリと同じ絵と仕組みを使う）
     app_static = os.path.join(os.path.dirname(os.path.dirname(SRC)), "static")
     tt_out = os.path.join(OUT, "assets", "totono")
@@ -76,6 +116,12 @@ def build():
         if fn.endswith((".png", ".json", ".svg")):
             shutil.copy2(os.path.join(app_static, "totono", fn), os.path.join(tt_out, fn))
     shutil.copy2(os.path.join(app_static, "totono.js"), os.path.join(OUT, "assets", "totono.js"))
+    # アプリのアイコン（図の中でも使う）
+    ic_out = os.path.join(OUT, "assets", "icons")
+    os.makedirs(ic_out, exist_ok=True)
+    for fn in os.listdir(os.path.join(app_static, "icons")):
+        if fn.endswith(".png"):
+            shutil.copy2(os.path.join(app_static, "icons", fn), os.path.join(ic_out, fn))
     layout = open(os.path.join(SRC, "layout.html"), encoding="utf-8").read()
     index = []
     for i, slug in enumerate(ORDER):
@@ -90,14 +136,14 @@ def build():
         page = (layout.replace("{{TITLE}}", html.escape(title))
                 .replace("{{DESC}}", html.escape(meta.get("desc", "")))
                 .replace("{{NAV}}", nav_html(slug))
-                .replace("{{BODY}}", body)
+                .replace("{{BODY}}", fill_lengths(body))
                 .replace("{{PAGER}}", pager if slug != "index" else "")
                 .replace("{{SLUG}}", slug)
                 .replace("{{VERSION}}", VERSION)
-                .replace("{{UPDATED}}", UPDATED)
+                .replace("{{UPDATED}}", UPDATED).replace("{{BUILD}}", BUILD)
                 .replace("{{BODYCLASS}}", meta.get("bodyClass", "")))
         with open(os.path.join(OUT, slug + ".html"), "w", encoding="utf-8") as f:
-            f.write(page)
+            f.write(bust(page))
         # 検索用：見出しごとに区切って本文を入れる
         parts = re.split(r'(<h[23][^>]*id="([^"]+)"[^>]*>(.*?)</h[23]>)', body, flags=re.S)
         index.append({"p": slug, "t": title, "h": "", "a": "", "x": text_only(parts[0])[:1200]})
@@ -117,10 +163,13 @@ def build():
         bodies.append(f'<article class="print-page" id="p-{slug}">{body}</article>')
     allpage = (layout.replace("{{TITLE}}", "全ページ（印刷用）").replace("{{DESC}}", "")
                .replace("{{NAV}}", nav_html("")).replace("{{BODY}}", "\n".join(bodies)).replace("{{PAGER}}", "")
-               .replace("{{SLUG}}", "all").replace("{{VERSION}}", VERSION).replace("{{UPDATED}}", UPDATED)
+               .replace("{{SLUG}}", "all").replace("{{VERSION}}", VERSION).replace("{{UPDATED}}", UPDATED).replace("{{BUILD}}", BUILD)
                .replace("{{BODYCLASS}}", "print-all"))
     with open(os.path.join(OUT, "all.html"), "w", encoding="utf-8") as f:
-        f.write(allpage)
+        f.write(bust(allpage))
+    # ページ（HTML）は毎回確かめさせる。画像・動画は ?v= が変わったときだけ読み直される
+    with open(os.path.join(OUT, ".htaccess"), "w", encoding="utf-8") as f:
+        f.write('<FilesMatch "\\.html$">\n  Header set Cache-Control "no-cache"\n</FilesMatch>\n')
     # 旧 URL（introduction.html）は新しいトップへ案内する
     with open(os.path.join(OUT, "introduction.html"), "w", encoding="utf-8") as f:
         f.write('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=index.html">'

@@ -17,3 +17,26 @@ _docs/site/
 _docs/site_src/videos/*.mp4
 _docs/site_src/video/.cache/
 _docs/site_src/video/img/*.png
+
+# 拠点の中身（その人の動画と自分好み。リポジトリに入れない）
+projects/
+my/
+.claude/skills/
+.claude/settings.local.json
+
+# 秘密の情報（うっかり入れないように）
+.env
+.env.*
+*.pem
+*.key
+*.p12
+credentials*.json
+*secret*
+*token*.json
+
+# 手元だけのメモ（配布元のプラグインの中身に触れるため、リポジトリに入れない）
+_docs/理解メモ_*.md
+_docs/空き容量*.md
+
+# ナレーション音声の作業用キャッシュ（作り直せる・大きい）
+_docs/site_src/video/specs/.cache/

@@ -22,6 +22,7 @@
 座標はすべて画像に対する割合（0〜1）。
 """
 import argparse
+import hashlib
 import io
 import json
 import math
@@ -39,11 +40,17 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 W, H, FPS = 1920, 1080, 30
 FONT_B = "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc"
 FONT_R = "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc"
-FONT_M = "/Users/you/Library/Fonts/HackGen35-Regular.ttf"
+FONT_M = os.path.expanduser("~/Library/Fonts/HackGen35-Regular.ttf")
 VOICEVOX = "http://127.0.0.1:50021"
-ACCENT = (45, 107, 95)
-ORANGE = (255, 122, 48)
-CAP_BG = (16, 20, 26, 215)
+ACCENT = (47, 143, 208)      # トトノちゃんの水色
+ACCENT_D = (27, 95, 150)
+SKY = (168, 216, 245)
+ORANGE = (255, 143, 58)
+CAP_BG = (18, 42, 68, 222)
+_FD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+FONT_RB = os.path.join(_FD, "ZenMaruGothic-Bold.ttf")     # 見出し・字幕（丸ゴシック）
+FONT_RK = os.path.join(_FD, "ZenMaruGothic-Black.ttf")
+FONT_RM = os.path.join(_FD, "ZenMaruGothic-Medium.ttf")
 
 _fonts = {}
 
@@ -63,21 +70,33 @@ def ease(t):
 # ======================================================================
 # 読み上げ（VOICEVOX）
 # ======================================================================
-def tts(text, speaker, path, speed=1.08):
-    """VOICEVOX で text を読み上げて wav に保存し、長さ（秒）を返す。キャッシュあり"""
-    if os.path.exists(path):
-        with wave.open(path) as w:
-            return w.getnframes() / w.getframerate()
-    # 読み間違えやすい英字の読みを直す
+def yomi_fix(text):
+    """読み間違えやすい英字の読みを直す"""
     say = text
     for a, b in (("totonoumovie", "ととのうムービー"), ("TotonouMovie", "ととのうムービー"), ("Claude Code", "クロードコード"),
-                 ("Claude", "クロード"), ("PowerShell", "パワーシェル"), ("Homebrew", "ホームブルー"), ("GitHub", "ギットハブ"),
+                 ("Claude", "クロード"), ("PowerShell", "パワーシェル"), ("Homebrew", "ホームブルー"), ("GitHub", "ぎっとはぶ"), ("ギットハブ", "ぎっとはぶ"), ("かんたん", "簡単"), ("いちばん上", "いちばんうえ"),
                  ("Mac", "マック"), ("Windows", "ウィンドウズ"), ("BGM", "ビージーエム"), ("SRT", "エスアールティー"),
                  ("AI", "エーアイ"), ("PASS", "パス"), ("YouTube", "ユーチューブ"), ("MP4", "エムピーフォー"),
                  ("Enter", "エンター"), ("Python", "パイソン"), ("uv", "ユーブイ"), ("ffmpeg", "エフエフエムペグ"),
                  ("Node.js", "ノードジェイエス"), ("CTA", "シーティーエー"), ("Finder", "ファインダー"), ("gh", "ジーエイチ"),
                  ("⌘", "コマンド"), ("Ctrl", "コントロール"), ("Delete", "デリート"), ("zip", "ジップ"), ("OK", "オーケー")):
         say = say.replace(a, b)
+    return say
+
+
+def kana(text, speaker=8):
+    """VOICEVOX がどう読むか（カタカナ）を返す。点検用"""
+    q = urllib.request.urlopen(urllib.request.Request(
+        f"{VOICEVOX}/audio_query?speaker={speaker}&text={urllib.parse.quote(yomi_fix(text))}", method="POST")).read()
+    return json.loads(q).get("kana", "")
+
+
+def tts(text, speaker, path, speed=1.08):
+    """VOICEVOX で text を読み上げて wav に保存し、長さ（秒）を返す。キャッシュあり"""
+    if os.path.exists(path):
+        with wave.open(path) as w:
+            return w.getnframes() / w.getframerate()
+    say = yomi_fix(text)
     q = urllib.request.urlopen(urllib.request.Request(
         f"{VOICEVOX}/audio_query?speaker={speaker}&text={urllib.parse.quote(say)}", method="POST")).read()
     qd = json.loads(q)
@@ -108,24 +127,34 @@ def tts(text, speaker, path, speed=1.08):
 # 描画の部品
 # ======================================================================
 def wrap(text, fnt, maxw):
-    """日本語を幅に合わせて折り返す（句読点で切れやすくする）"""
+    """日本語を幅に合わせて折り返す。英単語は途中で切らず、行の頭に句読点・「ー」・小さい字が来ないようにする"""
+    NOHEAD = "、。」）！？ーぁぃぅぇぉっゃゅょァィゥェォッャュョ，．・"
+    toks = re.findall(r"[A-Za-z0-9._~\-/:@$%\\'\"]+|\n|.", text)
     lines, cur = [], ""
-    for ch in text:
-        if ch == "\n":
+    for tk in toks:
+        if tk == "\n":
             lines.append(cur)
             cur = ""
             continue
-        if fnt.getlength(cur + ch) > maxw and cur:
-            # 行頭に句読点が来ないようにする
-            if ch in "、。」）！？":
-                cur += ch
+        if fnt.getlength(cur + tk) > maxw and cur.strip():
+            if tk[0] in NOHEAD:
+                # 行頭に来てはいけない字は、前の行の終わりに付ける
+                cur += tk
                 lines.append(cur)
                 cur = ""
                 continue
-            lines.append(cur)
-            cur = ch
+            if len(tk) > 1 and fnt.getlength(tk) > maxw:
+                # 1語だけで幅を超える長い英字（URL など）は、しかたなく字で切る
+                for ch in tk:
+                    if fnt.getlength(cur + ch) > maxw and cur:
+                        lines.append(cur)
+                        cur = ""
+                    cur += ch
+                continue
+            lines.append(cur.rstrip())
+            cur = tk.lstrip()
         else:
-            cur += ch
+            cur += tk
     if cur:
         lines.append(cur)
     return lines
@@ -150,8 +179,8 @@ def draw_caption(img, sentences, t, dur, shift=False):
             cur = s
             break
         acc += len(s)
-    fnt = font(FONT_B, 44)
-    lines = wrap(cur.strip(), fnt, 1360 if shift else 1500)[:2]
+    fnt = font(FONT_RB, 46)
+    lines = wrap(cur.strip(), fnt, 1180 if shift == "big" else 1360 if shift else 1500)[:2]
     if not lines:
         return
     lh = 64
@@ -159,10 +188,10 @@ def draw_caption(img, sentences, t, dur, shift=False):
     ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(ov)
     bw = max(fnt.getlength(l) for l in lines) + 80
-    cx = (W - 250) / 2 if shift == "right" else (250 + W) / 2 if shift else W / 2
+    cx = (W - 560) / 2 + 20 if shift == "big" else (W - 250) / 2 if shift == "right" else (250 + W) / 2 if shift else W / 2
     x0 = cx - bw / 2
     y0 = H - bh - 44
-    rounded(d, (x0, y0, x0 + bw, y0 + bh), 18, fill=CAP_BG)
+    rounded(d, (x0, y0, x0 + bw, y0 + bh), 26, fill=CAP_BG, outline=(*SKY, 200), width=3)
     for i, l in enumerate(lines):
         d.text((cx, y0 + 17 + i * lh + lh / 2), l, font=fnt, fill=(255, 255, 255), anchor="mm")
     img.alpha_composite(ov)
@@ -180,25 +209,25 @@ def draw_step(img, step):
     if not step:
         return
     d = ImageDraw.Draw(img)
-    fnt = font(FONT_B, 30)
+    fnt = font(FONT_RB, 31)
     tw = fnt.getlength(step)
-    rounded(d, (36, 32, 36 + tw + 48, 32 + 58), 29, fill=(*ACCENT, 235))
+    rounded(d, (36, 32, 36 + tw + 48, 32 + 58), 29, fill=(*ACCENT, 240), outline=(255, 255, 255, 230), width=3)
     d.text((60, 61), step, font=fnt, fill=(255, 255, 255), anchor="lm")
 
 
 def draw_brand(img, label):
     d = ImageDraw.Draw(img)
-    fnt = font(FONT_B, 22)
+    fnt = font(FONT_RB, 22)
     txt = "totonoumovie 使い方" + (f"｜{label}" if label else "")
     tw = fnt.getlength(txt)
     rounded(d, (W - tw - 70, 32, W - 36, 74), 21, fill=(255, 255, 255, 200))
-    d.text((W - 53, 53), txt, font=fnt, fill=(40, 46, 56), anchor="rm")
+    d.text((W - 53, 53), txt, font=fnt, fill=ACCENT_D, anchor="rm")
 
 
 def draw_progress(img, p):
     d = ImageDraw.Draw(img)
-    d.rectangle((0, H - 8, W, H), fill=(0, 0, 0, 120))
-    d.rectangle((0, H - 8, W * p, H), fill=(*ORANGE, 255))
+    d.rectangle((0, H - 8, W, H), fill=(220, 236, 248, 200))
+    d.rectangle((0, H - 8, W * p, H), fill=(*ACCENT, 255))
 
 
 _img_cache = {}
@@ -303,6 +332,7 @@ def render_shot(sc, t, dur, base_dir):
     d = ImageDraw.Draw(ov)
     # 光る枠（現れて脈打つ）
     tt = t / dur
+    _placed = []
     for i, r in enumerate(sc.get("hl") or []):
         start = (sc.get("hlAt") or [0.25] * 10)[i] if i < len(sc.get("hlAt") or []) else 0.25
         if tt < start:
@@ -319,12 +349,32 @@ def render_shot(sc, t, dur, base_dir):
         # 番号や名前のラベル
         labels = sc.get("hlLabel") or []
         if i < len(labels) and labels[i]:
-            fnt = font(FONT_B, 30)
+            fnt = font(FONT_RB, 30)
             tw = fnt.getlength(labels[i])
             lx, ly = x0 - pad, y0 - pad - 54
-            if ly < 90:
+            if (sc.get("hlLabelPos") or [None] * 10)[i:i + 1] == ["right"]:
+                lx, ly = x1 + pad + 14, (y0 + y1) / 2 - 23     # 枠の右に出す（上の行を隠さない）
+            elif ly < 90:
                 ly = y1 + pad + 10
             lx = max(20, min(W - tw - 60, lx))
+            # 札が、ほかの光る枠や前の札に重なるときは、枠の下に出す
+            box = (lx, ly, lx + tw + 36, ly + 46)
+            def _hit(b):
+                for j, r2 in enumerate(sc.get("hl") or []):
+                    if j == i:
+                        continue
+                    ax, ay = to_screen(r2[0], r2[1])
+                    bx, by = to_screen(r2[0] + r2[2], r2[1] + r2[3])
+                    if b[0] < bx + pad and b[2] > ax - pad and b[1] < by + pad and b[3] > ay - pad:
+                        return True
+                return any(b[0] < q[2] and b[2] > q[0] and b[1] < q[3] and b[3] > q[1] for q in _placed)
+            if _hit(box) and y1 + pad + 56 < H - 190:
+                ly = y1 + pad + 10
+                box = (lx, ly, lx + tw + 36, ly + 46)
+            if ly + 46 > H - 190:      # 字幕の帯に入るなら、枠の上へ
+                ly = max(90, y0 - pad - 54)
+                box = (lx, ly, lx + tw + 36, ly + 46)
+            _placed.append(box)
             rounded(d, (lx, ly, lx + tw + 36, ly + 46), 12, fill=(*ORANGE, int(255 * a)))
             d.text((lx + 18, ly + 23), labels[i], font=fnt, fill=(255, 255, 255, int(255 * a)), anchor="lm")
     # 画面を暗くして、光る枠の中だけ見せる（spotlight）
@@ -360,6 +410,39 @@ def render_shot(sc, t, dur, base_dir):
     return img
 
 
+# ======================================================================
+# 背景（空色と、ロゴの波）
+# ======================================================================
+_bg = {}
+
+
+def sky_bg(light=False):
+    k = ("sky", light)
+    if k not in _bg:
+        top, bot = ((240, 248, 254), (214, 236, 251)) if light else ((226, 243, 253), (180, 222, 248))
+        g = Image.new("RGBA", (1, H))
+        for y in range(H):
+            f = y / H
+            g.putpixel((0, y), tuple(int(top[i] + (bot[i] - top[i]) * f) for i in range(3)) + (255,))
+        _bg[k] = g.resize((W, H))
+    return _bg[k].copy()
+
+
+def draw_waves(img, t, alpha=255, light=False):
+    """画面の下に、ゆっくり流れる白い波を2本"""
+    ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ov)
+    for k, (amp, base, speed, a) in enumerate([(26, H - 150, 60, 0.45), (20, H - 95, -90, 0.9)]):
+        pts = [(x, base + amp * math.sin((x + t * speed) / 150 + k * 1.7)) for x in range(0, W + 20, 20)]
+        d.polygon(pts + [(W, H), (0, H)], fill=(255, 255, 255, int(alpha * a)))
+    img.alpha_composite(ov)
+
+
+def wave_line(d, x, y, w, color, width=6):
+    pts = [(x + i, y + 5 * math.sin(i / w * math.pi * 4)) for i in range(0, w + 1, 3)]
+    d.line(pts, fill=color, width=width, joint="curve")
+
+
 def render_title(sc, t, dur, base_dir):
     if sc.get("image"):
         bg = cover(load_img(os.path.join(base_dir, sc["image"])), W, H)
@@ -367,48 +450,56 @@ def render_title(sc, t, dur, base_dir):
         bg = bg.resize((int(W * z), int(H * z)), Image.BICUBIC).crop(
             (int((W * z - W) / 2), int((H * z - H) / 2), int((W * z - W) / 2) + W, int((H * z - H) / 2) + H))
         img = bg.convert("RGBA")
-        shade = Image.new("RGBA", (W, H), (10, 22, 20, 0))
+        shade = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         sd = ImageDraw.Draw(shade)
         for x in range(W):
-            a = int(220 * max(0, 1 - x / (W * 0.75)))
-            sd.line([(x, 0), (x, H)], fill=(12, 30, 27, a))
+            a = int(225 * max(0, 1 - x / (W * 0.72)))
+            sd.line([(x, 0), (x, H)], fill=(14, 52, 92, a))
         img.alpha_composite(shade)
     else:
-        img = Image.new("RGBA", (W, H), (20, 52, 46, 255))
+        img = sky_bg()
+    draw_waves(img, t, alpha=150)
     d = ImageDraw.Draw(img)
     a = ease(t / 0.6)
     y = 380 + (1 - a) * 30
-    d.text((140, y - 90), sc.get("kicker", "totonoumovie 使い方動画"), font=font(FONT_B, 34), fill=(180, 230, 215, int(255 * a)))
+    kick = sc.get("kicker", "totonoumovie 使い方動画")
+    kf = font(FONT_RB, 32)
+    rounded(d, (136, y - 102, 136 + kf.getlength(kick) + 44, y - 46), 28, fill=(255, 255, 255, int(235 * a)))
+    d.text((158, y - 74), kick, font=kf, fill=(*ACCENT_D, int(255 * a)), anchor="lm")
     for i, line in enumerate(sc["title"].split("\n")):
-        d.text((136, y + i * 112), line, font=font(FONT_B, 92), fill=(255, 255, 255, int(255 * a)))
+        d.text((136, y + i * 116), line, font=font(FONT_RK, 96), fill=(255, 255, 255, int(255 * a)),
+               stroke_width=3, stroke_fill=(20, 70, 120, int(120 * a)))
     if sc.get("sub"):
-        d.text((140, y + 112 * len(sc["title"].split("\n")) + 30), sc["sub"], font=font(FONT_R, 38),
-               fill=(230, 240, 236, int(255 * a)))
+        d.text((140, y + 116 * len(sc["title"].split("\n")) + 30), sc["sub"], font=font(FONT_RM, 40),
+               fill=(232, 245, 253, int(255 * a)))
     return img
 
 
 def render_card(sc, t, dur, base_dir):
-    img = Image.new("RGBA", (W, H), (247, 245, 240, 255))
+    img = sky_bg(light=True)
+    draw_waves(img, t, alpha=255, light=True)
     d = ImageDraw.Draw(img)
     has_img = bool(sc.get("image"))
     left = 140
-    maxw = 860 if has_img else 1600
-    d.text((left, 150), sc.get("title", ""), font=font(FONT_B, 66), fill=(31, 35, 40))
-    d.rectangle((left, 250, left + 120, 258), fill=ACCENT)
+    maxw = 860 if has_img else 1180
+    d.text((left, 150), sc.get("title", ""), font=font(FONT_RK, 70), fill=(31, 45, 61))
+    wave_line(d, left, 262, 150, ACCENT, 7)
     pts = sc.get("points") or []
     y = 310
     n = len(pts)
     for i, p in enumerate(pts):
-        appear = 0.12 + i * (0.6 / max(1, n))
+        appear = 0.06 + i * (0.36 / max(1, n))   # 前半のうちに全部出す
         a = ease((t / dur - appear) / 0.08)
         if a <= 0:
             continue
-        d.ellipse((left, y + 12, left + 40, y + 52), fill=(*ACCENT, int(255 * a)))
-        d.text((left + 20, y + 32), str(i + 1), font=font(FONT_B, 24), fill=(255, 255, 255, int(255 * a)), anchor="mm")
-        lines = wrap(p, font(FONT_R, 40), maxw - 70)
+        pop = 1 + 0.25 * max(0.0, 1 - a) if a < 1 else 1
+        r = 22 * pop
+        d.ellipse((left + 20 - r, y + 32 - r, left + 20 + r, y + 32 + r), fill=(*ACCENT, int(255 * a)))
+        d.text((left + 20, y + 32), str(i + 1), font=font(FONT_RB, 26), fill=(255, 255, 255, int(255 * a)), anchor="mm")
+        lines = wrap(p, font(FONT_RB, 42), maxw - 70)
         for j, l in enumerate(lines):
-            d.text((left + 66, y + 10 + j * 56), l, font=font(FONT_R, 40), fill=(31, 35, 40, int(255 * a)))
-        y += 56 * len(lines) + 34
+            d.text((left + 66 + 18 * (1 - a), y + 8 + j * 58), l, font=font(FONT_RB, 42), fill=(31, 45, 61, int(255 * a)))
+        y += 58 * len(lines) + 34
     if has_img:
         pic = load_img(os.path.join(base_dir, sc["image"]))
         bw, bh = 760, 760
@@ -417,10 +508,15 @@ def render_card(sc, t, dur, base_dir):
         px = 1100 + (bw - pic.width) // 2
         py = 160 + (bh - pic.height) // 2
         sh = Image.new("RGBA", (pic.width + 40, pic.height + 40), (0, 0, 0, 0))
-        ImageDraw.Draw(sh).rounded_rectangle((20, 24, pic.width + 20, pic.height + 24), 18, fill=(0, 0, 0, 60))
-        sh = sh.filter(ImageFilter.GaussianBlur(12))
+        ImageDraw.Draw(sh).rounded_rectangle((20, 24, pic.width + 20, pic.height + 24), 28, fill=(20, 70, 120, 60))
+        sh = sh.filter(ImageFilter.GaussianBlur(14))
         img.alpha_composite(sh, (px - 20, py - 20))
-        img.paste(pic, (px, py))
+        mask = Image.new("L", pic.size, 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, pic.width - 1, pic.height - 1), 28, fill=255)
+        frame = Image.new("RGBA", (pic.width + 16, pic.height + 16), (0, 0, 0, 0))
+        ImageDraw.Draw(frame).rounded_rectangle((0, 0, pic.width + 15, pic.height + 15), 34, fill=(255, 255, 255, 255))
+        img.alpha_composite(frame, (px - 8, py - 8))
+        img.paste(pic.convert("RGB"), (px, py), mask)
     return img
 
 
@@ -443,7 +539,13 @@ def render_terminal(sc, t, dur, base_dir):
         for i, c in enumerate([(255, 95, 86), (255, 189, 46), (39, 201, 63)]):
             d.ellipse((x0 + 22 + i * 30, y0 + 19, x0 + 40 + i * 30, y0 + 37), fill=c)
         d.text(((x0 + x1) / 2, y0 + 28), "ターミナル", font=font(FONT_R, 24), fill=(200, 204, 210), anchor="mm")
-    prompt = "PS C:\\Users\\you> " if win else "you@Mac ~ % "
+    cwd = ["~"]   # cd したら、プロンプトの場所も変える
+
+    def prompt_now():
+        if win:
+            p = cwd[0].replace("$HOME", "C:\\Users\\you").replace('"', "")
+            return ("PS C:\\Users\\you> " if p in ("~", "") else f"PS {p}> ")
+        return f"you@Mac {cwd[0].rstrip('/').split('/')[-1] or '~'} % "
     mono = font(FONT_M, 36)
     lines = sc.get("lines") or []
     # 打つ文字の総量に合わせて、場面の前半70%で打ち切る
@@ -456,8 +558,12 @@ def render_terminal(sc, t, dur, base_dir):
         if kind == "cmd":
             shown = text[:int(budget)]
             budget -= len(text)
+            prompt = prompt_now()
             d.text((x0 + 40, y), prompt, font=mono, fill=(130, 210, 160) if not win else (230, 230, 230))
             px = x0 + 40 + mono.getlength(prompt)
+            m = re.search(r'(?:^|&&|;)\s*cd\s+("[^"]+"|[^\s;&]+)', text)
+            if m and len(shown) == len(text):
+                cwd[0] = m.group(1).strip('"').replace("~/", "~/") or "~"
             for seg in wrap(shown, mono, x1 - px - 40) or [""]:
                 d.text((px, y), seg, font=mono, fill=(255, 255, 255))
                 y += 54
@@ -476,13 +582,18 @@ def render_terminal(sc, t, dur, base_dir):
 
 
 def render_end(sc, t, dur, base_dir):
-    img = Image.new("RGBA", (W, H), (20, 52, 46, 255))
+    img = sky_bg()
+    draw_waves(img, t, alpha=255, light=True)
     d = ImageDraw.Draw(img)
-    d.text((W / 2, 420), sc.get("title", "おつかれさまでした"), font=font(FONT_B, 80), fill=(255, 255, 255), anchor="mm")
+    cx = 720
+    d.text((cx, 400), sc.get("title", "おつかれさまでした"), font=font(FONT_RK, 84), fill=(31, 45, 61), anchor="mm")
     if sc.get("sub"):
-        d.text((W / 2, 530), sc["sub"], font=font(FONT_R, 40), fill=(200, 235, 225), anchor="mm")
-    d.text((W / 2, 680), "totonoumovie.aisys.earth", font=font(FONT_B, 36), fill=(255, 210, 160), anchor="mm")
-    d.text((W / 2, H - 70), sc.get("credit", ""), font=font(FONT_R, 24), fill=(160, 190, 182), anchor="mm")
+        d.text((cx, 510), sc["sub"], font=font(FONT_RM, 40), fill=(75, 91, 110), anchor="mm")
+    uf = font(FONT_RB, 36)
+    u = "totonoumovie.aisys.earth"
+    rounded(d, (cx - uf.getlength(u) / 2 - 36, 600, cx + uf.getlength(u) / 2 + 36, 670), 35, fill=(*ACCENT, 255))
+    d.text((cx, 635), u, font=uf, fill=(255, 255, 255), anchor="mm")
+    d.text((cx, 720), sc.get("credit", ""), font=font(FONT_RM, 24), fill=(90, 110, 130), anchor="mm")
     return img
 
 
@@ -573,6 +684,121 @@ def vowel_at(sc, t):
     return "n"
 
 
+# ----------------------------------------------------------------------
+# トトノちゃんの動き：場面のあいだを歩いて移動・文ごとにポーズ・跳ねて登場
+# ----------------------------------------------------------------------
+TT_H = 330           # ふだんの高さ
+TT_BIG = 620         # タイトル・終わりの高さ
+WALK = 1.0           # 歩いて移動する秒数
+
+
+def tt_place(sc):
+    typ = sc.get("type", "shot")
+    if typ in ("title", "end"):
+        return (1360 if typ == "title" else 1300), (1020 if typ == "title" else 1040), TT_BIG, False
+    # 画像のないカードは、右に大きく立って、左の箇条書きを指さす
+    if typ == "card" and not sc.get("image") and not sc.get("ttSide"):
+        sc["_side"] = "right"
+        return W - 520, 1050, 560, True
+    side = sc.get("ttSide")
+    if not side:
+        hl0 = (sc.get("hl") or [None])[0]
+        side = "right" if isinstance(hl0, list) and hl0[0] + hl0[2] / 2 < 0.4 else "left"
+    sc["_side"] = side
+    return (W - 300, 1072, TT_H, True) if side == "right" else (10, 1072, TT_H, False)
+
+
+def tt_poses(sc):
+    """文ごとのポーズの並び"""
+    typ = sc.get("type", "shot")
+    if sc.get("poses"):
+        return sc["poses"]
+    if sc.get("pose"):
+        base = sc["pose"]
+    else:
+        base = {"title": "wave", "end": "cheer", "card": "explain", "terminal": "point"}.get(typ) or ("point" if sc.get("hl") or sc.get("cursor") else "explain")
+    alt = {"point": "explain", "explain": "point", "wave": "explain", "cheer": "good", "think": "explain", "good": "cheer"}.get(base, "explain")
+    if typ == "card" and not sc.get("image"):
+        return ["point", "explain"]
+    if typ == "shot" and not (sc.get("hl") or sc.get("cursor")):
+        alt = "good" if base == "explain" else alt
+    return [base, alt]
+
+
+def plan_totono(scenes):
+    prev = None
+    for sc in scenes:
+        x, y, h, flip = tt_place(sc)
+        sc["_tt"] = (x, y, h, flip)
+        if prev is None:
+            sc["_tt_in"] = "walk_in" if h == TT_H else "hop"
+        elif prev[2] != h:
+            sc["_tt_in"] = "hop"
+        elif abs(prev[0] - x) > 5:
+            sc["_tt_in"] = ("walk", prev[0])
+        else:
+            sc["_tt_in"] = None
+        prev = (x, y, h, flip)
+
+
+def sentence_at(sc, t):
+    """いま何文目を話しているか（字幕と同じ数え方）"""
+    sents = split_sentences(sc.get("say", ""))
+    if len(sents) < 2 or not sc.get("_alen"):
+        return 0
+    total = sum(len(x) for x in sents)
+    pos = max(0.0, t - 0.25) / sc["_alen"] * total
+    acc = 0
+    for i, x in enumerate(sents):
+        acc += len(x)
+        if pos < acc:
+            return i
+    return len(sents) - 1
+
+
+def totono_frame(img, sc, t, dur, typ):
+    x, y, h, flip = sc["_tt"]
+    mode = sc.get("_tt_in")
+    poses = tt_poses(sc)
+    i = sentence_at(sc, t)
+    pose = poses[i % len(poses)]
+    vowel = vowel_at(sc, t)
+    dy = 0
+    # 文が変わった直後は、小さく跳ねる
+    if i > 0:
+        sents = split_sentences(sc.get("say", ""))
+        total = sum(len(z) for z in sents)
+        t_sw = 0.25 + sum(len(z) for z in sents[:i]) / total * sc["_alen"]
+        if 0 <= t - t_sw < 0.28:
+            dy = -16 * math.sin(math.pi * (t - t_sw) / 0.28)
+    if isinstance(mode, tuple) and mode[0] == "walk" and t < WALK:
+        x0 = mode[1]
+        f = ease(t / WALK)
+        x = x0 + (x - x0) * f
+        pose = "walk1" if int(t / 0.16) % 2 == 0 else "walk2"
+        flip = x0 > sc["_tt"][0]      # 左へ歩くときは左を向く
+        vowel = "n"
+        dy = -6 * abs(math.sin(t / 0.16 * math.pi))
+    elif mode == "walk_in" and t < WALK:
+        x0 = -260 if x < W / 2 else W + 20
+        f = ease(t / WALK)
+        x = x0 + (x - x0) * f
+        pose = "walk1" if int(t / 0.16) % 2 == 0 else "walk2"
+        flip = x0 > sc["_tt"][0]
+        vowel = "n"
+        dy = -6 * abs(math.sin(t / 0.16 * math.pi))
+    elif mode == "hop" and t < 0.5:
+        dy = -60 * math.sin(math.pi * t / 0.5) * (1 - t / 0.5) - 0.0
+        if t < 0.12:
+            return       # 一瞬おいてから、ぴょんと出る
+    # 終わりの場面は、ときどきぴょんと跳ねる
+    if typ == "end" and t > 1.2:
+        ph = (t - 1.2) % 2.4
+        if ph < 0.4:
+            dy = -34 * math.sin(math.pi * ph / 0.4)
+    draw_totono(img, pose, vowel, x, y + dy, h, t, flip=flip)
+
+
 RENDER = {"shot": render_shot, "title": render_title, "card": render_card, "terminal": render_terminal, "end": render_end}
 
 
@@ -590,9 +816,11 @@ def build(spec_path, out, preview=False):
     for i, sc in enumerate(scenes):
         say = sc.get("say", "")
         if say:
-            key = re.sub(r"[^\w]", "", f"{speaker}_{say}")[:60] + f"_{abs(hash(say)) % 10**8}"
+            yomi = sc.get("yomi", say)     # 読み上げ用（読み間違いを直した文）。字幕は say
+            hk = hashlib.md5(f"{speaker}|{yomi}".encode()).hexdigest()[:10]
+            key = re.sub(r"[^\w]", "", f"{speaker}_{say}")[:40] + "_" + hk
             sc["_wav"] = os.path.join(work, key + ".wav")
-            sc["_alen"] = tts(say, speaker, sc["_wav"], spec.get("speed", 1.08))
+            sc["_alen"] = tts(yomi, speaker, sc["_wav"], spec.get("speed", 1.08))
             vp = sc["_wav"] + ".vis.json"
             sc["_vis"] = json.load(open(vp)) if os.path.exists(vp) else None
         else:
@@ -600,6 +828,16 @@ def build(spec_path, out, preview=False):
         sc["_dur"] = max(float(sc.get("min", 2.4)), sc["_alen"] + float(sc.get("pad", 0.7)))
     total = sum(sc["_dur"] for sc in scenes)
     print(f"{os.path.basename(spec_path)}: {len(scenes)} 場面・{total:.1f} 秒", file=sys.stderr)
+    # 「{len}」を実際の長さ（約1分半 など）に置き換える。言っている長さと実物をずらさないため
+    half = max(1, round(total / 30))
+    ln = f"{half // 2}分" + ("半" if half % 2 else "") if half >= 2 else "30秒"
+    for sc in scenes:
+        for k in ("title", "kicker", "sub"):
+            if isinstance(sc.get(k), str):
+                sc[k] = sc[k].replace("{len}", ln)
+    if isinstance(spec.get("label"), str):
+        spec["label"] = spec["label"].replace("{len}", ln)
+    json.dump({"sec": round(total, 1), "len": ln}, open(os.path.splitext(out)[0] + ".len.json", "w"))
 
     # 音声：場面の頭からナレーションを置く
     tmp = tempfile.mkdtemp()
@@ -634,6 +872,7 @@ def build(spec_path, out, preview=False):
                 "-map", "0:v", "-map", "[a]"]
     cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
             "-movflags", "+faststart", "-shortest", out]
+    plan_totono(scenes)
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     elapsed = 0.0
     for sc in scenes:
@@ -648,26 +887,15 @@ def build(spec_path, out, preview=False):
             # 場面の切り替わりは短いフェード
             if sc.get("type") not in ("title", "end"):
                 draw_step(img, sc.get("step"))
-                draw_brand(img, spec.get("label"))
+                if sc.get("type", "shot") != "shot":     # アプリの画面ではボタンに重なるので出さない
+                    draw_brand(img, spec.get("label"))
             typ = sc.get("type", "shot")
             if spec.get("totono", True):
-                pose = sc.get("pose") or {"title": "wave", "end": "cheer", "card": "explain", "terminal": "point"}.get(typ) or ("point" if sc.get("hl") or sc.get("cursor") else "explain")
-                # 説明している場所が左側にあるときは、右下に立って邪魔をしない
-                side = sc.get("ttSide")
-                if not side:
-                    hl0 = (sc.get("hl") or [None])[0]
-                    side = "right" if isinstance(hl0, list) and hl0[0] + hl0[2] / 2 < 0.4 else "left"
-                sc["_side"] = side
-                if typ in ("title", "end"):
-                    draw_totono(img, pose, vowel_at(sc, t), 1360, 1020, 620, t)
-                elif side == "right":
-                    draw_totono(img, pose, vowel_at(sc, t), W - 300, 1072, 330, t, flip=True)
-                else:
-                    draw_totono(img, pose, vowel_at(sc, t), 10, 1072, 330, t)
+                totono_frame(img, sc, t, dur, typ)
             if sc.get("say") and not sc.get("noCaption"):
                 ta = max(0.0, t - 0.25)
                 shift = spec.get("totono", True) and typ not in ("title", "end")
-                draw_caption(img, sents, ta, max(0.01, sc["_alen"]), shift=("right" if sc.get("_side") == "right" else "left") if shift else False)
+                draw_caption(img, sents, ta, max(0.01, sc["_alen"]), shift=("big" if sc.get("_tt", (0, 0, 0))[2] == 560 else "right" if sc.get("_side") == "right" else "left") if shift else False)
             draw_progress(img, (elapsed + t) / total)
             if t < 0.2:
                 black = Image.new("RGBA", (W, H), (0, 0, 0, int(255 * (1 - t / 0.2) * 0.6)))

@@ -6,31 +6,27 @@
 </header>
 <div class="tt-tip" data-pose="wave" data-id="site_videos">どの動画も字幕つきだよ。音を出せない場所でも見られるよ。</div>
 
+<section class="vplayer-wrap">
+  <div class="vplayer">
+    <div class="video"><video id="vmain" controls preload="none" playsinline></video></div>
+    <div class="vnow"><span class="vno"></span><h2 id="now" class="vtitle"></h2><p class="vdesc"></p></div>
+  </div>
+  <div class="vguide" data-vguide></div>
+</section>
 
 <section>
-  <h2 id="v01">3分でわかる totonoumovie</h2>
-  <div class="video"><video src="videos/v01-overview.mp4" poster="videos/v01-overview.jpg" controls preload="none" playsinline></video></div>
-  <p>何ができて、どんな流れで動画ができるのか。最初に見る1本です。</p>
-
-  <h2 id="v02">入れかた（<span class="os-mac" style="display:inline">Mac</span><span class="os-win" style="display:inline">Windows</span>）</h2>
-  <div class="video"><video class="os-mac" src="videos/v02-install-mac.mp4" poster="videos/v02-install-mac.jpg" controls preload="none" playsinline></video><video class="os-win" src="videos/v03-install-win.mp4" poster="videos/v03-install-win.jpg" controls preload="none" playsinline></video></div>
-  <p>コマンドを貼る場所と、成功したときの表示がわかります。手順は <a href="install.html">入れかた</a> のページと同じです。</p>
-
-  <h2 id="v04">はじめての1本（動画を渡して完成まで）</h2>
-  <div class="video"><video src="videos/v04-first.mp4" poster="videos/v04-first.jpg" controls preload="none" playsinline></video></div>
-
-  <h2 id="v05">字幕を直す</h2>
-  <div class="video"><video src="videos/v05-telop.mp4" poster="videos/v05-telop.jpg" controls preload="none" playsinline></video></div>
-
-  <h2 id="v06">カットを承認する・戻す</h2>
-  <div class="video"><video src="videos/v06-cut.mp4" poster="videos/v06-cut.jpg" controls preload="none" playsinline></video></div>
-
-  <h2 id="v07">効果音・寄り・画像・BGM を入れる</h2>
-  <div class="video"><video src="videos/v07-effects.mp4" poster="videos/v07-effects.jpg" controls preload="none" playsinline></video></div>
-
-  <h2 id="v08">確かめて書き出す</h2>
-  <div class="video"><video src="videos/v08-export.mp4" poster="videos/v08-export.jpg" controls preload="none" playsinline></video></div>
-
-  <h2 id="v09">AI に直してもらう・プロンプトを育てる</h2>
-  <div class="video"><video src="videos/v09-ai.mp4" poster="videos/v09-ai.jpg" controls preload="none" playsinline></video></div>
+  <h2 id="list">動画の一覧</h2>
+  <p>見たい動画を押すと、上の画面で再生します。上から順に見ると、入れるところから仕上げまで、ひと通りわかります。</p>
+  <div class="vgrid">
+    <a class="vcard" id="v01" href="#v01" data-v="v01"><div class="th" style="background-image:url(videos/v01-overview.jpg)"><span class="no">1</span><span class="du">1:28</span><span class="pl">▶</span></div><div class="bd"><h3>まず見る：totonoumovie の全体像</h3><p>何ができて、どんな流れで動画ができるのか。最初に見る1本です。</p></div></a>
+    <a class="vcard os-mac" id="v02" href="#v02" data-v="v02"><div class="th" style="background-image:url(videos/v02-install-mac.jpg)"><span class="no">2</span><span class="du">2:08</span><span class="pl">▶</span></div><div class="bd"><h3>入れかた（Mac）</h3><p>コマンドを貼る場所と、成功したときの表示がわかります。</p></div></a>
+    <a class="vcard os-win" id="v03" href="#v03" data-v="v03"><div class="th" style="background-image:url(videos/v03-install-win.jpg)"><span class="no">3</span><span class="du">2:00</span><span class="pl">▶</span></div><div class="bd"><h3>入れかた（Windows）</h3><p>PowerShell に貼る場所と、成功したときの表示がわかります。</p></div></a>
+    <a class="vcard" id="v04" href="#v04" data-v="v04"><div class="th" style="background-image:url(videos/v04-first.jpg)"><span class="no">4</span><span class="du">1:37</span><span class="pl">▶</span></div><div class="bd"><h3>はじめての1本</h3><p>動画を渡してから、4つの確認に答えて完成するまで。</p></div></a>
+    <a class="vcard" id="v05" href="#v05" data-v="v05"><div class="th" style="background-image:url(videos/v05-telop.jpg)"><span class="no">5</span><span class="du">0:50</span><span class="pl">▶</span></div><div class="bd"><h3>字幕を直す</h3><p>一覧で書き換える・タイムラインでずらす・見た目を変える。</p></div></a>
+    <a class="vcard" id="v06" href="#v06" data-v="v06"><div class="th" style="background-image:url(videos/v06-cut.jpg)"><span class="no">6</span><span class="du">0:54</span><span class="pl">▶</span></div><div class="bd"><h3>カットを承認する・戻す</h3><p>元とカット後を聞き比べて、残すか切るかを選びます。</p></div></a>
+    <a class="vcard" id="v07" href="#v07" data-v="v07"><div class="th" style="background-image:url(videos/v07-effects.jpg)"><span class="no">7</span><span class="du">0:58</span><span class="pl">▶</span></div><div class="bd"><h3>効果音・寄り・文字の動き・画像・BGM</h3><p>演出をドラッグで入れて、すぐに重ねて確かめます。</p></div></a>
+    <a class="vcard" id="v08" href="#v08" data-v="v08"><div class="th" style="background-image:url(videos/v08-export.jpg)"><span class="no">8</span><span class="du">0:46</span><span class="pl">▶</span></div><div class="bd"><h3>確かめて書き出す</h3><p>検査・静止画・試作で確かめてから、完成を書き出します。</p></div></a>
+    <a class="vcard" id="v09" href="#v09" data-v="v09"><div class="th" style="background-image:url(videos/v09-ai.jpg)"><span class="no">9</span><span class="du">0:41</span><span class="pl">▶</span></div><div class="bd"><h3>AI に直してもらう・プロンプトを育てる</h3><p>言葉で直しを頼む方法と、いつもの指示を保存する方法。</p></div></a>
+  </div>
 </section>
+<script type="application/json" id="vdata">[{"v": "v01", "f": "v01-overview", "t": "まず見る：totonoumovie の全体像", "d": "何ができて、どんな流れで動画ができるのか。最初に見る1本です。", "line": "最初はこれ！totonoumovie で何ができるか、全体の流れがわかるよ。", "id": "site_vid_v01"}, {"v": "v02", "f": "v02-install-mac", "t": "入れかた（Mac）", "d": "コマンドを貼る場所と、成功したときの表示がわかります。", "line": "マックへの入れかただよ。コマンドを貼る場所を、いっしょに見てね。", "id": "site_vid_v02"}, {"v": "v03", "f": "v03-install-win", "t": "入れかた（Windows）", "d": "PowerShell に貼る場所と、成功したときの表示がわかります。", "line": "ウィンドウズへの入れかただよ。PowerShellに貼っていくよ。", "id": "site_vid_v03"}, {"v": "v04", "f": "v04-first", "t": "はじめての1本", "d": "動画を渡してから、4つの確認に答えて完成するまで。", "line": "はじめての1本だよ。動画を渡して、確認に答えていけば完成するよ。", "id": "site_vid_v04"}, {"v": "v05", "f": "v05-telop", "t": "字幕を直す", "d": "一覧で書き換える・タイムラインでずらす・見た目を変える。", "line": "字幕の直し方だよ。文字も、出るタイミングも、画面で直せるよ。", "id": "site_vid_v05"}, {"v": "v06", "f": "v06-cut", "t": "カットを承認する・戻す", "d": "元とカット後を聞き比べて、残すか切るかを選びます。", "line": "カットの承認だよ。聞き比べて、切るか残すかを選んでね。", "id": "site_vid_v06"}, {"v": "v07", "f": "v07-effects", "t": "効果音・寄り・文字の動き・画像・BGM", "d": "演出をドラッグで入れて、すぐに重ねて確かめます。", "line": "効果音や画像の入れ方だよ。ダブルクリックで足して、ドラッグで動かせるよ。", "id": "site_vid_v07"}, {"v": "v08", "f": "v08-export", "t": "確かめて書き出す", "d": "検査・静止画・試作で確かめてから、完成を書き出します。", "line": "書き出しの前に、検査と試作で確かめる方法だよ。", "id": "site_vid_v08"}, {"v": "v09", "f": "v09-ai", "t": "AI に直してもらう・プロンプトを育てる", "d": "言葉で直しを頼む方法と、いつもの指示を保存する方法。", "line": "AIに直しを頼む方法と、指示を育てる方法だよ。", "id": "site_vid_v09"}]</script>
