@@ -66,10 +66,6 @@
     ],
     [
      "cmd",
-     "winget install --id=GitHub.cli -e"
-    ],
-    [
-     "cmd",
      "winget install --id=Python.Python.3.12 -e"
     ],
     [
@@ -87,11 +83,11 @@
    "lines": [
     [
      "cmd",
-     "uv --version; node -v; ffmpeg -version; gh --version; python --version"
+     "uv --version; node -v; ffmpeg -version; git --version; python --version"
     ],
     [
      "out",
-     "uv 0.9.x / v22.x / ffmpeg 7.1 / gh 2.6x / Python 3.12"
+     "uv 0.9.x / v22.x / ffmpeg 7.1 / git 2.4x / Python 3.12"
     ]
    ],
    "say": "開き直したら、この1行で確かめます。どれもバージョンが出れば成功です。認識されません、と出たら、パソコンを再起動してから試します。"
@@ -208,61 +204,46 @@
    "yomi": "PowerShellで、シーディー チルダ、と、クロード、と打って開き、入力欄に、ととのうムービーのセットアップをして、と送ります。聞かれたことに答えていけば、最後にパスと出て完了です。"
   },
   {
-   "type": "card",
-   "title": "B-1 GitHub の招待を受ける",
-   "points": [
-    "届いた招待メールを開く",
-    "「Accept invitation」を押す",
-    "アカウントが無ければ、先に github.com で作って配布者に連絡"
-   ],
-   "say": "ここからは、画面のアプリです。まず、届いた招待メールを開いて、Accept invitation を押します。",
-   "yomi": "ここからは、画面のアプリです。まず、届いた招待メールを開いて、アクセプト インビテーションを押します。"
-  },
-  {
    "type": "terminal",
    "os": "win",
-   "step": "B-2〜4 ログインして、入れて、設定する",
+   "step": "B-1〜2 入れて、設定する",
    "lines": [
     [
      "cmd",
-     "gh auth login"
+     "git clone https://github.com/wbrs-gh/totonoumovie.git \"$HOME\\totonoumovie\""
     ],
     [
      "out",
-     "✓ Logged in as your-account"
-    ],
-    [
-     "cmd",
-     "gh repo clone wbrs-gh/totonoumovie \"$HOME\\totonoumovie\""
+     "Cloning into 'C:\\Users\\you\\totonoumovie'..."
     ],
     [
      "cmd",
      "$p = [Environment]::GetEnvironmentVariable(\"Path\",\"User\"); [Environment]::SetEnvironmentVariable(\"Path\",\"$p;$HOME\\totonoumovie\",\"User\")"
     ]
    ],
-   "say": "GitHub にログインして、画面のアプリを入れ、どこからでも起動できるように設定します。終わったら、PowerShell を開き直します。",
-   "yomi": "ギットハブにログインして、画面のアプリを入れ、どこからでも起動できるように設定します。終わったら、PowerShellを開き直します。"
+   "say": "ここからは、画面のアプリです。1行目で画面のアプリを入れ、次の行で、どこからでも起動できるように設定します。GitHub のアカウントやログインは要りません。終わったら、PowerShell を開き直します。",
+   "yomi": "ここからは、画面のアプリです。1ぎょう目で画面のアプリを入れ、次のぎょうで、どこからでも起動できるように設定します。ギットハブのアカウントやログインは要りません。終わったら、パワーシェルを開き直します。"
   },
   {
    "type": "terminal",
    "os": "win",
-   "step": "B-5 起動する",
+   "step": "B-3 起動する",
    "lines": [
-    [
-     "cmd",
-     "mkdir \"$HOME\\Videos\\totonou\" -Force; cd \"$HOME\\Videos\\totonou\""
-    ],
     [
      "cmd",
      "totonoumovie"
     ],
     [
      "out",
+     "拠点: C:\\Users\\you\\totonoumovie"
+    ],
+    [
+     "out",
      "totonoumovie を起動しました → http://127.0.0.1:8780/"
     ]
    ],
-   "say": "作業フォルダに移動して、totonoumovie、と打てば起動します。起動したフォルダが、作業フォルダになります。",
-   "yomi": "作業フォルダに移動して、ととのうムービー、と打てば起動します。起動したフォルダが、作業フォルダになります。"
+   "say": "totonoumovie、と打てば、どこからでも起動します。動画のプロジェクトや、自分好みの設定は、totonoumovie のフォルダの中にまとまります。",
+   "yomi": "ととのうムービー、と打てば、どこからでも起動します。動画のプロジェクトや、自分好みの設定は、ととのうムービーのフォルダの中にまとまります。"
   },
   {
    "type": "shot",
@@ -273,7 +254,7 @@
    ],
    "hlLabel": [
     "この画面が出れば成功",
-    "保存先: totonou"
+    "保存先: projects"
    ],
    "step": "完了",
    "say": "ブラウザが開いて、トトノちゃんのいる最初の画面が出れば、準備は完了です。赤い帯が出たときは、マニュアルの、困ったとき、のページを見てください。"

@@ -4,6 +4,14 @@
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  // いつやったかの表示（例：10/19（日）7:52 にできた）。前の版で付けたチェック（日時なし）は「済み」だけ出す
+  function whenText(v, verb) {
+    var t = typeof v === "string" ? new Date(v) : null;
+    if (!t || isNaN(t)) return "✓ " + verb + "済み";
+    var wd = "日月火水木金土".charAt(t.getDay());
+    var y = t.getFullYear() !== new Date().getFullYear() ? t.getFullYear() + "/" : "";
+    return "✓ " + y + (t.getMonth() + 1) + "/" + t.getDate() + "（" + wd + "）" + t.getHours() + ":" + ("0" + t.getMinutes()).slice(-2) + " に" + verb;
+  }
   function toast(msg) {
     var t = $(".toast"); t.textContent = msg; t.hidden = false;
     clearTimeout(toast.t); toast.t = setTimeout(function () { t.hidden = true; }, 1800);
@@ -79,10 +87,16 @@
       var b = document.createElement("button");
       b.type = "button"; b.className = "done-btn"; b.textContent = "できた";
       s.appendChild(b);
+      var when = document.createElement("span");
+      when.className = "done-when";
+      s.appendChild(when);
+      function mark() { when.textContent = done[s.dataset.id] ? whenText(done[s.dataset.id], "できた") : ""; }
       if (done[s.dataset.id]) s.classList.add("done");
+      mark();
       b.addEventListener("click", function () {
-        done[s.dataset.id] = !done[s.dataset.id];
+        if (done[s.dataset.id]) delete done[s.dataset.id]; else done[s.dataset.id] = new Date().toISOString();
         s.classList.toggle("done", !!done[s.dataset.id]);
+        mark();
         store(key, JSON.stringify(done)); update();
         if (done[s.dataset.id]) {
           var next = steps().filter(function (x) { return !done[x.dataset.id]; })[0];
@@ -92,7 +106,8 @@
     });
     $(".reset", bar).addEventListener("click", function (e) {
       e.preventDefault(); done = {}; store(key, "{}");
-      $$(".step", wrap).forEach(function (s) { s.classList.remove("done"); }); update();
+      $$(".step", wrap).forEach(function (s) { s.classList.remove("done"); });
+      $$(".done-when", wrap).forEach(function (w) { w.textContent = ""; }); update();
     });
     $$(".os-switch button, .os-pick button").forEach(function (b) { b.addEventListener("click", update); });
     update();
@@ -361,11 +376,24 @@
     });
   });
   // チェックリストの文は1つにまとめる（文が列に割れないように）
-  $$(".checklist label").forEach(function (l) {
+  // チェックは、ページごとに日時つきで覚えておく（次に開いたときも残る）
+  var ckKey = "tm-check-" + (location.pathname.split("/").pop() || "index.html");
+  var ck = {};
+  try { ck = JSON.parse(store(ckKey) || "{}") || {}; } catch (e) { ck = {}; }
+  $$(".checklist label").forEach(function (l, i) {
     var inp = $("input", l); if (!inp) return;
     var sp = document.createElement("span");
     while (inp.nextSibling) sp.appendChild(inp.nextSibling);
     l.appendChild(sp);
+    var id = sp.textContent.replace(/\s+/g, " ").trim().slice(0, 40) || "c" + i, when = document.createElement("small");
+    when.className = "done-when";
+    sp.appendChild(when);
+    function mark() { inp.checked = !!ck[id]; when.textContent = ck[id] ? whenText(ck[id], "用意した") : ""; }
+    mark();
+    inp.addEventListener("change", function () {
+      if (inp.checked) ck[id] = new Date().toISOString(); else delete ck[id];
+      store(ckKey, JSON.stringify(ck)); mark();
+    });
   });
 
   // ---- 動画の再生の速さ（1倍／1.25倍／1.5倍／2倍。選んだ速さは覚えておく） ----

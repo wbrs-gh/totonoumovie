@@ -476,3 +476,8 @@ details.more summary { cursor: pointer; color: var(--accent-d); font-weight: 700
 .rate-bar button { border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 4px 12px; font: inherit; font-size: 13px; font-weight: 700; color: var(--accent-d); cursor: pointer; }
 .rate-bar button.on { background: linear-gradient(135deg, var(--sky2), var(--accent)); border-color: transparent; color: #fff; }
 @media print { .rate-bar { display: none; } }
+
+/* いつやったか（手順の「できた」・用意するもののチェック） */
+.step .done-when { margin-left: 10px; font-size: 13px; font-weight: 700; color: var(--ok); }
+.checklist .done-when { display: block; font-size: 12.5px; font-weight: 700; color: var(--ok); margin-top: 2px; }
+.checklist .done-when:empty, .step .done-when:empty { display: none; }

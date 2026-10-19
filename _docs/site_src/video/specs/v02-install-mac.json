@@ -61,7 +61,7 @@
    "lines": [
     [
      "cmd",
-     "brew install uv ffmpeg node gh python"
+     "brew install uv ffmpeg node python"
     ],
     [
      "out",
@@ -190,32 +190,13 @@
    "os": "mac"
   },
   {
-   "type": "card",
-   "title": "B-1 GitHub の招待を受ける",
-   "points": [
-    "届いた招待メールを開く",
-    "「Accept invitation」を押す",
-    "アカウントが無ければ、先に github.com で作って配布者に連絡"
-   ],
-   "say": "ここからは、画面のアプリです。まず、届いた招待メールを開いて、Accept invitation を押します。",
-   "yomi": "ここからは、画面のアプリです。まず、届いた招待メールを開いて、アクセプト インビテーションを押します。"
-  },
-  {
    "type": "terminal",
    "os": "mac",
-   "step": "B-2〜4 ログインして、入れて、設定する",
+   "step": "B-1〜2 入れて、設定する",
    "lines": [
     [
      "cmd",
-     "gh auth login"
-    ],
-    [
-     "out",
-     "✓ Logged in as your-account"
-    ],
-    [
-     "cmd",
-     "gh repo clone wbrs-gh/totonoumovie ~/totonoumovie"
+     "git clone https://github.com/wbrs-gh/totonoumovie.git ~/totonoumovie"
     ],
     [
      "out",
@@ -230,29 +211,29 @@
      "source ~/.zshrc"
     ]
    ],
-   "say": "GitHub にログインして、画面のアプリを入れ、どこからでも起動できるように設定します。最後の行で、その設定を読み込みます。",
-   "yomi": "ギットハブにログインして、画面のアプリを入れ、どこからでも起動できるように設定します。最後のぎょうで、その設定を読み込みます。"
+   "say": "ここからは、画面のアプリです。1行目で画面のアプリを入れ、残りの2行で、どこからでも起動できるように設定します。GitHub のアカウントやログインは要りません。",
+   "yomi": "ここからは、画面のアプリです。1ぎょう目で画面のアプリを入れ、残りの2ぎょうで、どこからでも起動できるように設定します。ギットハブのアカウントやログインは要りません。"
   },
   {
    "type": "terminal",
    "os": "mac",
-   "step": "B-5 起動する",
+   "step": "B-3 起動する",
    "lines": [
-    [
-     "cmd",
-     "mkdir -p ~/Movies/totonou && cd ~/Movies/totonou"
-    ],
     [
      "cmd",
      "totonoumovie"
     ],
     [
      "out",
+     "拠点: /Users/you/totonoumovie"
+    ],
+    [
+     "out",
      "totonoumovie を起動しました → http://127.0.0.1:8780/"
     ]
    ],
-   "say": "作業フォルダに移動して、totonoumovie、と打てば起動します。起動したフォルダが、作業フォルダになります。",
-   "yomi": "作業フォルダに移動して、ととのうムービー、と打てば起動します。起動したフォルダが、作業フォルダになります。"
+   "say": "totonoumovie、と打てば、どこからでも起動します。動画のプロジェクトや、自分好みの設定は、totonoumovie のフォルダの中にまとまります。",
+   "yomi": "ととのうムービー、と打てば、どこからでも起動します。動画のプロジェクトや、自分好みの設定は、ととのうムービーのフォルダの中にまとまります。"
   },
   {
    "type": "shot",
@@ -263,7 +244,7 @@
    ],
    "hlLabel": [
     "この画面が出れば成功",
-    "保存先: totonou"
+    "保存先: projects"
    ],
    "step": "完了",
    "say": "ブラウザが開いて、トトノちゃんのいる最初の画面が出れば、準備は完了です。赤い帯が出たときは、マニュアルの、困ったとき、のページを見てください。"
